@@ -24,10 +24,11 @@ CREATE TABLE persons (
 
 CREATE TABLE tables (
   id            SERIAL PRIMARY KEY,
-  table_date    DATE NOT NULL,
+  lunch_time    TIMESTAMPTZ NOT NULL,
   restaurant_id INT REFERENCES restaurants (id),
   owner_id      INT REFERENCES persons (id),
-  max_size      INT  DEFAULT 4
+  anon          BOOLEAN,
+  max_size      INT DEFAULT 4
 );
 
 CREATE TABLE participants (
