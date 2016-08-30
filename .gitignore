@@ -62,3 +62,6 @@ server.pid
 *.eml
 /dist/
 .cache
+.sass-cache/
+node_modules/
+typings/
