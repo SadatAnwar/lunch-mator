@@ -21,9 +21,8 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
   val messages = TableQuery[Messages]
   def findQuery(id: Int) = messages.filter(_.id === id)
 
-  def index = Action.async {
-    val message = dbConfig.db.run(messages.result)
-    message.map(msg => Ok(Json.obj("status" -> "Ok", "messages" -> Json.toJson(msg))))
+  def index(any: String) = Action {
+    Ok(views.html.index())
   }
 
   def create = Action.async(BodyParsers.parse.json) { request =>

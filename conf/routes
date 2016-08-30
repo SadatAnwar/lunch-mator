@@ -2,8 +2,6 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET           /                                         controllers.Application.index
 POST           /createTable/:restaurantName/:name        @controllers.TableController.createTable(name: String, restaurantName: String)
 
 GET           /:id                                      controllers.Application.show(id: Int)
@@ -11,4 +9,8 @@ PUT           /:id                                      controllers.Application.
 DELETE        /:id                                      controllers.Application.delete(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file                             controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                                           controllers.Assets.versioned(path="/public", file: Asset)
+
+# Make HTML5 links work
+GET     /                                                       controllers.Application.index(any: String ?= "none")
+GET     /*any                                                   controllers.Application.index(any: String)
