@@ -13,6 +13,8 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1204-jdbc4",
   "com.typesafe.play" %% "play-slick" % "1.1.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.0",
+  "com.typesafe" % "config" % "1.3.0",
+  "io.argonaut" %% "argonaut" % "6.1",
   "org.webjars.npm" % "angular__common" % "2.0.0-rc.5",
   "org.webjars.npm" % "angular__compiler" % "2.0.0-rc.5",
   "org.webjars.npm" % "angular__core" % "2.0.0-rc.5",
