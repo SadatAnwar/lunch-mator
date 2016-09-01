@@ -15,7 +15,8 @@
       "@angular/core": ["@angular/core/index"],
       "@angular/platform-browser": ["@angular/platform-browser/index"],
       "@angular/platform-browser-dynamic": ["@angular/platform-browser-dynamic/index"],
-      "@angular/common": ["@angular/common/index"]
+      "@angular/common": ["@angular/common/index"],
+      "@angular/router": ["@angular/router/index"]
     },
     "outDir": "target/karma/javascripts"
   },

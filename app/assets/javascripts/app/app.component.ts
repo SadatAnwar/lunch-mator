@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 @Component({
     selector: 'lunch-mator',
-    template: '<h1>Welcome to Lunch-Mator</h1>'
+    templateUrl: 'assets/javascripts/app/app.component.html'
 })
 export class AppComponent { }
