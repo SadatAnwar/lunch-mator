@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/SadatAnwar/lunch-mator.svg?branch=master)](https://travis-ci.org/SadatAnwar/lunch-mator)
 ### Lunch-Mator
 The lunch meetup app. 
 
