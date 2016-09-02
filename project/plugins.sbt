@@ -1,4 +1,4 @@
-resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 
 addSbtPlugin("com.arpnetworking" % "sbt-typescript" % "0.2.2")
 
