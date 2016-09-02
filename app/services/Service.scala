@@ -1,14 +1,13 @@
 package services
 
-trait Service {
-  protected def mapFilters(params: Map[String, Seq[String]]): Seq[(String, String)] = {
-    val filters: Map[String, Option[Seq[String]]] = params.map(t => t._1 -> Some(t._2.toSeq))
-    filters.toSeq.flatMap { case (key, value) =>
-      value match {
-        case None => Seq()
-        case Some(x) if x.isEmpty => Seq((key, ""))
-        case Some(x) => x.flatMap(y => Seq((key, y)))
-      }
-    }
+import slick.dbio.{DBIOAction, NoStream}
+import play.api.db.slick.DatabaseConfigProvider
+import slick.driver.PostgresDriver.api._
+
+class Service(dbConfigDataProvider: DatabaseConfigProvider) {
+  private val db = Database.forConfig("slick.dbs.default.db")
+
+  def usingDB[T](f: => DBIOAction[T, NoStream, Nothing]) = {
+    db.run(f)
   }
 }

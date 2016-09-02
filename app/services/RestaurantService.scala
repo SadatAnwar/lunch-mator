@@ -1,16 +1,19 @@
 package services
 
 import javax.inject.Inject
+
+import models.Restaurant
 import play.api.db.slick.DatabaseConfigProvider
 import repository.Restaurants
-import slick.driver.JdbcDriver
 import slick.lifted.TableQuery
+import slick.driver.PostgresDriver.api._
 
-class RestaurantService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) {
+import scala.concurrent.Future
 
-  val db = dbConfigDataProvider[JdbcDriver]
+class RestaurantService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) extends Service(dbConfigDataProvider) {
+  val restaurants = TableQuery[Restaurants]
 
-  def getAllRestaurants = {
-    TableQuery[Restaurants].take(10)
+  def getAllRestaurants: Future[Seq[Restaurant]] = usingDB {
+    restaurants.take(10).result
   }
 }
