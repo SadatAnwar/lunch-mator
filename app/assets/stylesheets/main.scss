@@ -1,5 +1,27 @@
 @import "lib/bootstrap-sass/assets/stylesheets/bootstrap";
+
+body { padding-top: 50px; }
+
+header {
+  .navbar {
+    margin-bottom: 0;
+  }
+}
+
 .lm-btn-welcome {
   margin: 10px;
   width: 150px;
+}
+
+lunch-list {
+  .list-group-item {
+    border-left: 0;
+    border-right: 0;
+    &:first-child {
+      border-radius: 0;
+    }
+    &:last-child {
+      border-radius: 0;
+    }
+  }
 }

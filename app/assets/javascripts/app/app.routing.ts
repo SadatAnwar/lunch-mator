@@ -1,6 +1,6 @@
 import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {WelcomeComponent} from "app/common/components/welcome/welcome.component";
+import {WelcomeComponent} from 'app/common/components/welcome/welcome.component';
 
 const appRoutes: Routes = [
     {
