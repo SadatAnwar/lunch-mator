@@ -1,12 +1,16 @@
 package services
 
+import javax.inject.Inject
+
 import play.api.db.slick.DatabaseConfigProvider
-import slick.dbio.{DBIOAction, NoStream}
-import slick.driver.PostgresDriver.api._
+import slick.driver.JdbcProfile
 
-class Service(dbConfigDataProvider: DatabaseConfigProvider) {
+class Service @Inject()(dbConfigProvider: DatabaseConfigProvider) {
 
-  private val db = Database.forConfig("slick.dbs.default.db")
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val db = dbConfig.db
+
+  import dbConfig.driver.api._
 
   def usingDB[T](f: => DBIOAction[T, NoStream, Nothing]) = {
     db.run(f)

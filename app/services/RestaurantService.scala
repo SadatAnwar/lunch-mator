@@ -1,22 +1,22 @@
 package services
 
 import javax.inject.Inject
-import persistence.models.Restaurant
+import models.Restaurant
 import persistence.repository.Restaurants
 import play.api.db.slick.DatabaseConfigProvider
-import slick.driver.PostgresDriver.api._
-import slick.lifted.TableQuery
 import scala.concurrent.Future
 
 class RestaurantService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) extends Service(dbConfigDataProvider) {
 
-  val restaurants = TableQuery[Restaurants]
-
-  def createNewRestaurant(restaurant: Restaurant) = usingDB {
-    restaurants += restaurant
+  def createNewRestaurant(restaurant: Restaurant) = usingDB{
+    Restaurants.addRestraurant(restaurant)
   }
 
-  def getAllRestaurants: Future[Seq[Restaurant]] = usingDB {
-    restaurants.result
+  def getAllRestaurants: Future[Seq[Restaurant]] = usingDB{
+    Restaurants.getAll
+  }
+
+  def getRestaurantByName(name: String) = usingDB {
+    Restaurants.getRestaurantsByName(name)
   }
 }
