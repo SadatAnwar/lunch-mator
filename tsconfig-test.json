@@ -9,16 +9,16 @@
     "removeComments": false,
     "noImplicitAny": false,
     "noImplicitReturns": true,
+    "baseUrl": "node_modules",
     "rootDir": "app/assets/javascripts",
-    "baseUrl": "target/web/web-modules/main/webjars/lib",
     "paths": {
-      "@angular/common": ["angular__common/index"],
-      "@angular/compiler": ["angular__compiler/index"],
-      "@angular/core": ["angular__core/index"],
-      "@angular/core/testing": ["angular__core/testing/index"],
-      "@angular/platform-browser": ["angular__platform-browser/index"],
-      "@angular/platform-browser-dynamic": ["angular__platform-browser-dynamic/index"],
-      "@angular/router": ["angular__router/index"]
+      "@angular/common": ["@angular/common/index"],
+      "@angular/compiler": ["@angular/compiler/index"],
+      "@angular/core": ["@angular/core/index"],
+      "@angular/core/testing": ["@angular/core/testing/index"],
+      "@angular/platform-browser": ["@angular/platform-browser/index"],
+      "@angular/platform-browser-dynamic": ["@angular/platform-browser-dynamic/index"],
+      "@angular/router": ["@angular/router/index"]
     },
     "outDir": "target/karma/javascripts"
   },
@@ -27,6 +27,7 @@
     ".sass-cache",
     "logs",
     "target",
+    "test",
     "project",
     "etc",
     "conf",
