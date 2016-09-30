@@ -1,3 +1,5 @@
+import com.arpnetworking.sbt.typescript.Import.TypescriptKeys
+
 name := """lunch-mator"""
 
 version := "1.0-SNAPSHOT"
@@ -5,6 +7,8 @@ version := "1.0-SNAPSHOT"
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
 
 scalaVersion := "2.11.6"
+
+TypescriptKeys.configFile := "tsconfig.json"
 
 libraryDependencies ++= Seq(
   cache,
@@ -29,31 +33,6 @@ libraryDependencies ++= Seq(
   "org.webjars.npm" % "zone.js" % "0.6.17",
   "org.webjars.npm" % "angular2-in-memory-web-api" % "0.0.18",
   "org.webjars.npm" % "bootstrap-sass" % "3.3.6"
-)
-
-TypescriptKeys.moduleKind := "commonjs"
-
-TypescriptKeys.sourceMap := true
-
-TypescriptKeys.experimentalDecorators := true
-
-TypescriptKeys.emitDecoratorMetadata := true
-
-TypescriptKeys.moduleResolutionKind := "Classic"
-
-TypescriptKeys.paths := Map(
-  "@angular/common" -> List("angular__common/index"),
-  "@angular/compiler" -> List("angular__compiler/index"),
-  "@angular/core" -> List("angular__core/index"),
-  "@angular/core/testing" -> List("angular__core/testing/index"),
-  "@angular/forms" -> List("angular__forms/index"),
-  "@angular/http" -> List("angular__http/index"),
-  "@angular/platform-browser" -> List("angular__platform-browser/index"),
-  "@angular/platform-browser-dynamic" -> List("angular__platform-browser-dynamic/index"),
-  "@angular/router" -> List("angular__router/index"),
-  "@angular/router-deprecated" -> List("angular__router-deprecated/index"),
-  "@angular/upgrade" -> List("angular__upgrade/index"),
-  "@angular/http/testing" -> List("angular__http/testing")
 )
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"

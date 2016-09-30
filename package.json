@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
-    "build": "rm -rf target/karma && tsc -p ./ && rsync -avm --include='*.html' -f 'hide,! */' app/assets/javascripts target/karma",
+    "build": "rm -rf target/karma && tsc -p ./tsconfig-test.json && rsync -avm --include='*.html' -f 'hide,! */' app/assets/javascripts target/karma",
     "pretest": "npm run build",
     "test": "karma start --single-run --browsers PhantomJS",
     "lite": "lite-server",
