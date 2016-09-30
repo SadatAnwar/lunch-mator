@@ -1,13 +1,24 @@
 package controllers
 
-import javax.inject.Inject
-import persistence.models.Formats._
-import persistence.models.Restaurant
+import com.google.inject.Inject
+import models.Formats._
+import models.Restaurant
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent, Controller}
 import services.RestaurantService
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+/**
+  * Should provide endpoints for
+  * 1. Create a new restaurant
+  * 2. Update a restaurant
+  * 3. Delete restaurant (?) maybe only if super user or admin
+  * 4.
+  *
+  * @param restaurantsService
+  */
 class RestaurantController @Inject()(restaurantsService: RestaurantService) extends Controller {
 
   def listRestaurants(): Action[AnyContent] = Action.async { request =>
@@ -16,9 +27,18 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
     )
   }
 
-  def createRestaurant() = Action(parse.json) { request =>
+  def createRestaurant() = Action.async(parse.json) { request =>
     val restaurant = request.body.as[Restaurant]
-    restaurantsService.createNewRestaurant(restaurant)
-    Created
+    restaurantsService.createNewRestaurant(restaurant).map {
+      result => Created
+    }.recoverWith {
+      case e: Exception => Future(InternalServerError("Already exists " + e.getMessage))
+    }
+  }
+
+  def findRestaurant(name: String) = Action.async { request =>
+    restaurantsService.getRestaurantByName(name).map(restaurants =>
+      Ok(Json.toJson(restaurants))
+    )
   }
 }

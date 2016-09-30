@@ -1,9 +1,9 @@
 export interface LunchDto {
-    restaurant: RestaurantDto;
-    seatsLeft: number;
+  restaurant: RestaurantDto;
+  seatsLeft: number;
 }
 
 export interface RestaurantDto {
-    name: string;
-    description: string;
+  name: string;
+  description: string;
 }
