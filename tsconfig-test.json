@@ -15,10 +15,13 @@
       "@angular/common": ["@angular/common/index"],
       "@angular/compiler": ["@angular/compiler/index"],
       "@angular/core": ["@angular/core/index"],
+      "@angular/forms": ["@angular/forms/index"],
       "@angular/core/testing": ["@angular/core/testing/index"],
       "@angular/platform-browser": ["@angular/platform-browser/index"],
       "@angular/platform-browser-dynamic": ["@angular/platform-browser-dynamic/index"],
-      "@angular/router": ["@angular/router/index"]
+      "@angular/router": ["@angular/router/index"],
+      "@angular/http": ["@angular/http/index"],
+      "rxjs": ["rxjs/Rx"]
     },
     "outDir": "target/karma/javascripts"
   },

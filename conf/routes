@@ -18,3 +18,5 @@ GET         /assets/*file                  controllers.Assets.versioned(path="/p
 
 # Make HTML5 links work
 GET         /                              controllers.Application.index(any: String ?= "none")
+GET         /welcome                       controllers.Application.index(any: String ?= "none")
+GET         /login                         controllers.Application.index(any: String ?= "none")
