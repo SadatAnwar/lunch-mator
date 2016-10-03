@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {UserIdenty} from 'app/authentication/types/user-identity';
+import {UserIdentity} from 'app/authentication/types/user-identity';
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
@@ -11,7 +11,7 @@ export class AuthenticationService {
     this.url = '/rest/login'
   }
 
-  signIn(userIdentity: UserIdenty): Observable<any> {
+  signIn(userIdentity: UserIdentity): Observable<any> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post(this.url, userIdentity, {headers}).map((response: Response) => {

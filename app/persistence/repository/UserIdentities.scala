@@ -21,7 +21,7 @@ object UserIdentities {
   val userIdentities = TableQuery[UserIdentities]
 
   def getUserIdentity(email: String) = {
-    userIdentities.filter(_.userEmail === email).result.head
+    userIdentities.filter(_.userEmail === email).result
   }
 
   def createNewUser(userIdentity: UserIdentityStore) = {

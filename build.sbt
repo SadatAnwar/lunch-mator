@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1204-jdbc4",
   "com.typesafe.play" %% "play-slick" % "2.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
+  "org.mindrot" % "jbcrypt" % "0.3m",
   "org.scalaz.stream" %% "scalaz-stream" % "0.8",
   "org.webjars" %% "webjars-play" % "2.4.0-2",
   "org.webjars.npm" % "angular__common" % "2.0.1",

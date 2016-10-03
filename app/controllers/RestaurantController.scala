@@ -4,17 +4,17 @@ import com.google.inject.Inject
 import models.Formats._
 import models.Restaurant
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, Controller}
+import play.api.mvc.{Action, AnyContent}
 import services.RestaurantService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RestaurantController @Inject()(restaurantsService: RestaurantService) extends Controller {
+class RestaurantController @Inject()(restaurantsService: RestaurantService) extends AuthenticatedBaseController {
 
   def listRestaurants(): Action[AnyContent] = Action.async { request =>
     val email: Option[String] = request.session.get("email")
     email match {
-      case Some(email) => restaurantsService.getAllRestaurants.map(restaurants =>
+      case Some(e) => restaurantsService.getAllRestaurants.map(restaurants =>
         Ok(Json.toJson(restaurants))
       )
       case None => Future(Unauthorized)
@@ -30,9 +30,14 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
     }
   }
 
-  def findRestaurant(name: String) = Action.async { request =>
-    restaurantsService.getRestaurantByName(name).map(restaurants =>
-      Ok(Json.toJson(restaurants))
-    )
+
+
+  def findRestaurant(name: String) = Action.async {
+    request =>
+        withUser(request) {
+        restaurantsService.getRestaurantByName(name).map(restaurants =>
+          Ok(Json.toJson(restaurants))
+        )
+      }
   }
 }

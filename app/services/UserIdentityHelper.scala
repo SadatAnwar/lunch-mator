@@ -1,6 +1,9 @@
-package models
+package services
 
+import models.{UserIdentity, UserIdentityStore, UserSession}
 import org.mindrot.jbcrypt.BCrypt
+import persistence.repository.UserIdentities
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object UserIdentityHelper {
 
@@ -16,12 +19,23 @@ object UserIdentityHelper {
     UserIdentity(userIdentityStore.email, userIdentityStore.password, Some(userIdentityStore.sessionUuid))
   }
 
-  def validate(requestingUser: UserIdentity, createdUser: UserIdentityStore) = {
+  def validateUserIdentity(requestingUser: UserIdentity, createdUser: UserIdentityStore) = {
     val enteredPassword = requestingUser.password
 
-    if (BCrypt.checkpw(enteredPassword, createdUser.password))
+    if (BCrypt.checkpw(enteredPassword, createdUser.password)) {
       createdUser
-    else
+    }
+    else {
       throw new RuntimeException("Invalid password")
+    }
+  }
+
+  def validateUserSession(userSession: UserSession, userIdentityStore: UserIdentityStore) = {
+    if (userSession.sessionUuid.equals(userIdentityStore.sessionUuid)) {
+      true
+    }
+    else {
+      false
+    }
   }
 }
