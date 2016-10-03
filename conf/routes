@@ -3,20 +3,23 @@
 # ~~~~
 
 #Restaurant
-GET         /rest/restaurants              controllers.RestaurantController.listRestaurants()
-GET         /rest/restaurants/:name        controllers.RestaurantController.findRestaurant(name)
-POST        /rest/restaurants              controllers.RestaurantController.createRestaurant()
+GET         /rest/restaurants                  controllers.RestaurantController.listRestaurants()
+GET         /rest/restaurants/:name            controllers.RestaurantController.findRestaurant(name)
+POST        /rest/restaurants                  controllers.RestaurantController.createRestaurant()
 
-GET         /rest/users                    controllers.UserController.getAllUsers()
-POST        /rest/users                    controllers.UserController.createUser()
+GET         /rest/users                        controllers.UserController.getAllUsers()
+POST        /rest/users                        controllers.UserController.createUser()
 
-GET         /rest/lunch-tables/:id         controllers.LunchController.getLunchById(id)
+POST        /rest/authentication/login         controllers.AuthenticationController.authenticate()
+POST        /rest/authentication/signUp        controllers.AuthenticationController.signUp()
+
+GET         /rest/lunch-tables/:id             controllers.LunchController.getLunchById(id)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                  controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                      controllers.Assets.versioned(path="/public", file: Asset)
 
 
 # Make HTML5 links work
-GET         /                              controllers.Application.index(any: String ?= "none")
-GET         /welcome                       controllers.Application.index(any: String ?= "none")
-GET         /login                         controllers.Application.index(any: String ?= "none")
+GET         /                                  controllers.Application.index(any: String ?= "none")
+GET         /home                              controllers.Application.index(any: String ?= "none")
+GET         /login                             controllers.Application.index(any: String ?= "none")

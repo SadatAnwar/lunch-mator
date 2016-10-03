@@ -6,7 +6,7 @@ import persistence.repository.Restaurants
 import play.api.db.slick.DatabaseConfigProvider
 import scala.concurrent.Future
 
-class RestaurantService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) extends Service(dbConfigDataProvider) {
+class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvider) {
 
   def createNewRestaurant(restaurant: Restaurant) = usingDB{
     Restaurants.addRestraurant(restaurant)

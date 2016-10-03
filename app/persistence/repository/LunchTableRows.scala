@@ -1,14 +1,13 @@
 package persistence.repository
 
 import java.sql.Timestamp
-import models.LunchTableRow
+import models.{LunchTable, LunchTableRow}
 import slick.driver.PostgresDriver.api._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class LunchTableRows(tag: Tag) extends Table[LunchTableRow](tag, Some("lunch_world"), "lunch_tables") {
 
   def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
-
-  def ownerId = column[Int]("owner_id")
 
   def restaurantId = column[Int]("restaurant_id")
 
@@ -18,23 +17,23 @@ class LunchTableRows(tag: Tag) extends Table[LunchTableRow](tag, Some("lunch_wor
 
   def anonymous = column[Boolean]("anonymous")
 
-  override def * = (id.?, ownerId, restaurantId, maxSize, startTime, anonymous) <> (LunchTableRow.tupled, LunchTableRow.unapply _)
+  override def * = (id.?, restaurantId, maxSize, startTime.?, anonymous.?) <> (LunchTableRow.tupled, LunchTableRow.unapply _)
 }
 
 object LunchTableRows {
 
   lazy val lunchTableRows = TableQuery[LunchTableRows]
 
-  def getListOfTablesById(id: Int) = {
+  def getLunchTableById(id: Int) = {
     val q = for {
-      lunch <- lunchTableRows.filter(_.id === id)
-      restaurant <- Restaurants.restaurants
-      owner <- Users.users
-      if owner.id === lunch.ownerId && restaurant.id === lunch.restaurantId
+      lunch <- lunchTableRows.filter(_.id === id).result.head
+      restaurant <- Restaurants.restaurants.filter(_.id === lunch.restaurantId).result.head
     } yield {
-      (lunch, owner, restaurant)
+      (lunch, restaurant)
     }
-    q.result.head
+    q.map {
+      (a) => LunchTable(restaurant = a._2, size = 6)
+    }
   }
 
   def saveLunchTable(lunchTableRow: LunchTableRow) = {
