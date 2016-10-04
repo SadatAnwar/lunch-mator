@@ -14,6 +14,6 @@ Role "app" with password "root" on database lunch_mator
 ```
 * typings
 ```bash
-npm i -g typings
+npm install -g typings
 typings install
 ```
