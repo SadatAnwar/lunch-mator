@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1204-jdbc4",
   "com.typesafe.play" %% "play-slick" % "2.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
+  "org.scalaz.stream" %% "scalaz-stream" % "0.8",
   "org.webjars.npm" % "angular__common" % "2.0.1",
   "org.webjars.npm" % "angular__compiler" % "2.0.1",
   "org.webjars.npm" % "angular__core" % "2.0.1",
@@ -34,8 +35,6 @@ libraryDependencies ++= Seq(
   "org.webjars.npm" % "angular-in-memory-web-api" % "0.1.1",
   "org.webjars.npm" % "bootstrap-sass" % "3.3.7"
 )
-
-resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
