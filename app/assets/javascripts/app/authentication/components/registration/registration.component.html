@@ -1,0 +1,60 @@
+<div class="container">
+  <form class="form-horizontal" action='' method="POST">
+    <fieldset>
+      <div id="legend">
+        <legend class="">Register</legend>
+      </div>
+      <div class="control-group">
+        <!-- First Name -->
+        <label class="control-label" for="firstName">First Name</label>
+        <div class="controls">
+          <input [(ngModel)]="firstName" type="text" id="firstName" name="firstName" placeholder=""
+                 class="input-xlarge">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- Last Name -->
+        <label class="control-label" for="lastName">Last Name</label>
+        <div class="controls">
+          <input [(ngModel)]="lastName" type="text" id="lastName" name="lastName" placeholder="" class="input-xlarge">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- E-mail -->
+        <label class="control-label" for="email">E-mail</label>
+        <div class="controls">
+          <input [(ngModel)]="email" type="text" id="email" name="email" placeholder="" class="input-xlarge">
+          <p class="help-block">Please provide your E-mail</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- Password-->
+        <label class="control-label" for="password">Password</label>
+        <div class="controls">
+          <input type="password" [(ngModel)]="password" id="password" name="password" placeholder=""
+                 class="input-xlarge">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- Password -->
+        <label class="control-label" for="confirmPassword">Password (Confirm)</label>
+        <div class="controls">
+          <input type="password" [(ngModel)]="confirmPassword" id="confirmPassword" name="confirmPassword"
+                 placeholder="" class="input-xlarge">
+          <p class="help-block">Please confirm password</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <!-- Button -->
+        <div class="controls">
+          <button class="btn btn-success" (click)="register()">Register</button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

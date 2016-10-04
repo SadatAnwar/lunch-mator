@@ -7,6 +7,7 @@ import {HeaderComponent} from 'app/common/components/header/header.component';
 import {LunchModule} from 'app/lunch/lunch.module';
 import {WelcomeComponent} from 'app/common/components/welcome/welcome.component';
 import {AuthenticationModule} from 'app/authentication/authentication.module';
+import {HttpModule} from '@angular/http';
 
 @NgModule({
     imports: [

@@ -13,6 +13,7 @@ POST        /rest/users                    controllers.UserController.createUser
 POST        /rest/login                    controllers.AuthenticationController.authenticate()
 POST        /rest/signUp                   controllers.AuthenticationController.signUp()
 
+
 GET         /rest/lunch-tables/:id         controllers.LunchController.getLunchById(id)
 
 # Map static resources from the /public folder to the /assets URL path
@@ -23,3 +24,4 @@ GET         /assets/*file                  controllers.Assets.versioned(path="/p
 GET         /                              controllers.Application.index(any: String ?= "none")
 GET         /welcome                       controllers.Application.index(any: String ?= "none")
 GET         /login                         controllers.Application.index(any: String ?= "none")
+GET         /registration                  controllers.Application.index(any: String ?= "none")
