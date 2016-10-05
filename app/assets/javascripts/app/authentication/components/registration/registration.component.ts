@@ -18,6 +18,10 @@ export class RegistrationComponent {
   constructor(private registrationService: RegistrationService, private router: Router) {
   }
 
+  ngAfterViewInit() {
+    $('#passwordMismatch').hide();
+  }
+
   register() {
     if (this.validatePassword()) {
       var user = {
@@ -39,7 +43,9 @@ export class RegistrationComponent {
   }
 
   private static alertPasswordMismatch() {
-    alert("password mismatch");
+    console.log("password mismatch");
+    $('#passwordMismatch').show(300);
+    $('#passwordMismatch').hide(300);
   }
 
   private validatePassword() {

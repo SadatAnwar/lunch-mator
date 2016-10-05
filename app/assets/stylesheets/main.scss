@@ -1,7 +1,9 @@
-@import "lib/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "signin-form";
+@import "registration-form";
+@import "theme";
 
-body { padding-top: 50px; }
+body {
+  padding-top: 50px;
+}
 
 header {
   .navbar {

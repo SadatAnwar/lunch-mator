@@ -1,60 +1,61 @@
 <div class="container">
-  <form class="form-horizontal" action='' method="POST">
-    <fieldset>
-      <div id="legend">
-        <legend class="">Register</legend>
-      </div>
-      <div class="control-group">
-        <!-- First Name -->
-        <label class="control-label" for="firstName">First Name</label>
-        <div class="controls">
-          <input [(ngModel)]="firstName" type="text" id="firstName" name="firstName" placeholder=""
-                 class="input-xlarge">
-        </div>
-      </div>
+  <div class="alert alert-danger" id="passwordMismatch" style="text-align: center">
+    <strong>Looks like you got the password wrong</strong>
+  </div>
+</div>
 
-      <div class="control-group">
-        <!-- Last Name -->
-        <label class="control-label" for="lastName">Last Name</label>
-        <div class="controls">
-          <input [(ngModel)]="lastName" type="text" id="lastName" name="lastName" placeholder="" class="input-xlarge">
+<div class=" container">
+  <div class="row centered-form">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title">Please sign up for Lunch-Mator
+            <br>
+            <small>It's awesome, and you know it!</small>
+          </h1>
         </div>
-      </div>
+        <div class="panel-body">
+          <form role="form">
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input [(ngModel)]="firstName" type="text" name="first_name" id="first_name"
+                         class="form-control input-sm floatlabel" placeholder="First Name">
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input [(ngModel)]="lastName" type="text" name="last_name" id="last_name"
+                         class="form-control input-sm" placeholder="Last Name">
+                </div>
+              </div>
+            </div>
 
-      <div class="control-group">
-        <!-- E-mail -->
-        <label class="control-label" for="email">E-mail</label>
-        <div class="controls">
-          <input [(ngModel)]="email" type="text" id="email" name="email" placeholder="" class="input-xlarge">
-          <p class="help-block">Please provide your E-mail</p>
-        </div>
-      </div>
+            <div class="form-group">
+              <input [(ngModel)]="email" type="email" name="email" id="email" class="form-control input-sm"
+                     placeholder="Email Address">
+            </div>
 
-      <div class="control-group">
-        <!-- Password-->
-        <label class="control-label" for="password">Password</label>
-        <div class="controls">
-          <input type="password" [(ngModel)]="password" id="password" name="password" placeholder=""
-                 class="input-xlarge">
-        </div>
-      </div>
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input [(ngModel)]="password" type="password" name="password" id="password"
+                         class="form-control input-sm" placeholder="Password">
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input [(ngModel)]="confirmPassword" type="password" name="confirmPassword" id="confirmPassword"
+                         class="form-control input-sm" placeholder="Confirm Password">
+                </div>
+              </div>
+            </div>
 
-      <div class="control-group">
-        <!-- Password -->
-        <label class="control-label" for="confirmPassword">Password (Confirm)</label>
-        <div class="controls">
-          <input type="password" [(ngModel)]="confirmPassword" id="confirmPassword" name="confirmPassword"
-                 placeholder="" class="input-xlarge">
-          <p class="help-block">Please confirm password</p>
-        </div>
-      </div>
+            <input type="submit" value="Register" (click)="register()" class="btn btn-info btn-block">
 
-      <div class="control-group">
-        <!-- Button -->
-        <div class="controls">
-          <button class="btn btn-success" (click)="register()">Register</button>
+          </form>
         </div>
       </div>
-    </fieldset>
-  </form>
+    </div>
+  </div>
 </div>
