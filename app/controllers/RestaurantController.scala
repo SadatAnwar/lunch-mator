@@ -5,23 +5,21 @@ import models.Formats._
 import models.Restaurant
 import play.api.libs.json._
 import play.api.mvc.{Action, AnyContent}
-import services.RestaurantService
+import services.{Authenticated, RestaurantService}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RestaurantController @Inject()(restaurantsService: RestaurantService) extends AuthenticatedBaseController {
 
-  def listRestaurants(): Action[AnyContent] = Action.async { request =>
-    val email: Option[String] = request.session.get("email")
-    email match {
-      case Some(e) => restaurantsService.getAllRestaurants.map(restaurants =>
+  def listRestaurants() = Authenticated.async {
+    implicit request =>
+      restaurantsService.getAllRestaurants.map(restaurants =>
         Ok(Json.toJson(restaurants))
       )
-      case None => Future(Unauthorized)
-    }
   }
 
-  def createRestaurant() = Action.async(parse.json) { request =>
+  def createRestaurant() = Authenticated.async(parse.json) { request =>
     val restaurant = request.body.as[Restaurant]
     restaurantsService.createNewRestaurant(restaurant).map {
       result => Created
@@ -30,14 +28,10 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
     }
   }
 
-
-
-  def findRestaurant(name: String) = Action.async {
-    request =>
-        withUser(request) {
-        restaurantsService.getRestaurantByName(name).map(restaurants =>
-          Ok(Json.toJson(restaurants))
-        )
-      }
+  def findRestaurant(name: String) = Authenticated.async {
+    implicit request =>
+      restaurantsService.getRestaurantByName(name).map(restaurant =>
+        Ok(Json.toJson(restaurant.get))
+      )
   }
 }

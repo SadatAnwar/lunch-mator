@@ -16,7 +16,7 @@ class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvid
     Restaurants.getAll
   }
 
-  def getRestaurantByName(name: String) = usingDB {
+  def getRestaurantByName(name: String): Future[Option[Restaurant]] = usingDB {
     Restaurants.getRestaurantsByName(name)
   }
 }
