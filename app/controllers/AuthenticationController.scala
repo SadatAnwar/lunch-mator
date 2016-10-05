@@ -21,11 +21,13 @@ class AuthenticationController @Inject()(authenticationService: AuthenticationSe
   }
 
   def authenticate() = Action.async(parse.json) { request =>
-    val requestingUser: UserIdentity = request.body.as[UserIdentity]
-    authenticationService.findCreatedUser(requestingUser).map {
-      createdUser => UserIdentityHelper.validateUserIdentity(requestingUser, createdUser)
-    }.map {
-      user => Ok.withSession("email" -> user.email, "sessionUuid" -> user.sessionUuid)
+    val identity: UserIdentity = request.body.as[UserIdentity]
+    authenticationService.getUserByEmail(identity.email).map {
+      user =>
+        UserIdentityHelper.validatePassword(identity.password, user.password).fold(
+          success => Ok.withSession("email" -> identity.email),
+          error => InternalServerError
+        )
     }
   }
 }

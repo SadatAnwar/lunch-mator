@@ -1,7 +1,10 @@
 package persistence.repository
 
-import models.UserIdentityStore
+import models.{UserIdentity, UserIdentityStore}
+import org.mindrot.jbcrypt.BCrypt
 import slick.driver.PostgresDriver.api._
+
+import scala.concurrent.Future
 
 class UserIdentities(tag: Tag) extends Table[UserIdentityStore](tag, Some("lunch_world"), "user_identity") {
 

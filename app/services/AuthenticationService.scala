@@ -11,7 +11,7 @@ class AuthenticationService @Inject()(dbConfigProvider: DatabaseConfigProvider) 
     UserIdentities.createNewUser(UserIdentityHelper.map(userIdentity))
   }
 
-  def findCreatedUser(identity: UserIdentity) = usingDB {
-    UserIdentities.getUserIdentity(identity.email).head
+  def getUserByEmail(email: String) = usingDB {
+    UserIdentities.getUserIdentity(email).head
   }
 }
