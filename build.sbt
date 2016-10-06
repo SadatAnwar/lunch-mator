@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "2.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
   "org.scalaz.stream" %% "scalaz-stream" % "0.8",
+  "org.webjars" %% "webjars-play" % "2.4.0-2",
   "org.webjars.npm" % "angular__common" % "2.0.1",
   "org.webjars.npm" % "angular__compiler" % "2.0.1",
   "org.webjars.npm" % "angular__core" % "2.0.1",
@@ -39,3 +40,4 @@ libraryDependencies ++= Seq(
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
+
