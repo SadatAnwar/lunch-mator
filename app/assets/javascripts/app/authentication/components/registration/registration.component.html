@@ -1,6 +1,6 @@
 <div class="container">
-  <div class="alert alert-danger" id="passwordMismatch" style="text-align: center">
-    <strong>Looks like you got the password wrong</strong>
+  <div *ngIf="error" class="alert alert-danger" id="passwordMismatch" style="text-align: center">
+    <strong>{{error.message}}</strong>
   </div>
 </div>
 
@@ -11,7 +11,8 @@
         <div class="panel-heading">
           <h1 class="panel-title">Please sign up for Lunch-Mator
             <br>
-            <small>It's awesome, and you know it!</small>
+            <small *ngIf="random">It's awesome, and you know it!</small>
+            <small *ngIf="!random">Lunch made simple</small>
           </h1>
         </div>
         <div class="panel-body">
@@ -39,13 +40,13 @@
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="form-group">
-                  <input [(ngModel)]="password" type="password" name="password" id="password"
+                  <input [(ngModel)]="password" (keypress)="refresh()" type="password" name="password" id="password"
                          class="form-control input-sm" placeholder="Password">
                 </div>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="form-group">
-                  <input [(ngModel)]="confirmPassword" type="password" name="confirmPassword" id="confirmPassword"
+                  <input [(ngModel)]="confirmPassword" (keypress)="refresh()" type="password" name="confirmPassword" id="confirmPassword"
                          class="form-control input-sm" placeholder="Confirm Password">
                 </div>
               </div>
@@ -59,3 +60,4 @@
     </div>
   </div>
 </div>
+

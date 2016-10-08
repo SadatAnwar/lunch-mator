@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {RegistrationService} from 'app/authentication/services/registration.service';
+import {PasswordValidationService} from 'app/authentication/services/passwordvalidation.service';
 import {Http} from '@angular/http';
+import {Error} from "../../types/error";
 
 @Component({
   selector: 'registration',
@@ -14,16 +16,25 @@ export class RegistrationComponent {
   email: string;
   password: string;
   confirmPassword: string;
+  error: Error = null;
+  random = null;
 
-  constructor(private registrationService: RegistrationService, private router: Router) {
+  constructor(private registrationService: RegistrationService,
+              private passwordValidationService: PasswordValidationService,
+              private router: Router) {
   }
 
   ngAfterViewInit() {
-    $('#passwordMismatch').hide();
+    var number = this.randomGenerator();
+    console.log("random number is " + number);
+    if (number % 2 == 0) {
+      this.random = 1;
+    }
   }
 
   register() {
-    if (this.validatePassword()) {
+    this.passwordValidationService.validate(this.password, this.confirmPassword);
+    if (this.passwordValidationService.isValid()) {
       var user = {
         firstName: this.firstName,
         lastName: this.lastName,
@@ -37,24 +48,25 @@ export class RegistrationComponent {
         });
     }
     else {
-      RegistrationComponent.alertPasswordMismatch();
+      this.alertPasswordMismatch();
     }
 
   }
 
-  private static alertPasswordMismatch() {
+  private alertPasswordMismatch() {
     console.log("password mismatch");
-    $('#passwordMismatch').show(300);
-    $('#passwordMismatch').hide(300);
-  }
-
-  private validatePassword() {
-    console.log("password = " + this.password);
-    console.log("confirmPassword = " + this.confirmPassword);
-    return this.password == this.confirmPassword
+    this.error = this.passwordValidationService.getError();
   }
 
   private redirectToWelcome() {
     this.router.navigateByUrl('welcome');
+  }
+
+  private refresh() {
+    this.error = null;
+  }
+
+  private randomGenerator() {
+    return Math.floor((Math.random() * 6) + 1);
   }
 }
