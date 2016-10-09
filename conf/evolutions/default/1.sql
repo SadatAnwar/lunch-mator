@@ -1,5 +1,3 @@
-# Messages SCHEMA
-
 # --- !Ups
 CREATE SCHEMA lunch_world;
 
