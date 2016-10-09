@@ -2,9 +2,8 @@ package services
 
 import models.{UserIdentity, UserIdentityStore, UserSession}
 import org.mindrot.jbcrypt.BCrypt
-import scala.concurrent.ExecutionContext.Implicits.global
 
-object UserIdentityHelper {
+object UserIdentityService {
 
   def map(userIdentity: UserIdentity) = {
     val salt = BCrypt.gensalt(12)

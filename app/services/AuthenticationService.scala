@@ -8,7 +8,7 @@ import play.api.db.slick.DatabaseConfigProvider
 class AuthenticationService @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Service(dbConfigProvider) {
 
   def signUp(userIdentity: UserIdentity) = usingDB {
-    UserIdentities.createNewUser(UserIdentityHelper.map(userIdentity))
+    UserIdentities.createNewUser(UserIdentityService.map(userIdentity))
   }
 
   def getUserByEmail(email: String) = usingDB {

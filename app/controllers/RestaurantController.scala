@@ -4,13 +4,13 @@ import com.google.inject.Inject
 import models.Formats._
 import models.Restaurant
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Controller}
 import services.{Authenticated, RestaurantService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RestaurantController @Inject()(restaurantsService: RestaurantService) extends AuthenticatedBaseController {
+class RestaurantController @Inject()(restaurantsService: RestaurantService) extends Controller {
 
   def listRestaurants() = Authenticated.async {
     implicit request =>
@@ -31,7 +31,7 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
   def findRestaurant(name: String) = Authenticated.async {
     implicit request =>
       restaurantsService.getRestaurantByName(name).map(restaurant =>
-        Ok(Json.toJson(restaurant.get))
+        Ok(Json.toJson(restaurant))
       )
   }
 }
