@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {RegistrationService} from 'app/authentication/services/registration.service';
 import {PasswordValidationService} from 'app/authentication/services/passwordvalidation.service';
 import {Http} from '@angular/http';
-import {Error} from "../../types/error";
+import {Error} from "app/authentication/types/error";
 
 @Component({
   selector: 'registration',
@@ -26,7 +26,6 @@ export class RegistrationComponent {
 
   ngAfterViewInit() {
     var number = this.randomGenerator();
-    console.log("random number is " + number);
     if (number % 2 == 0) {
       this.random = 1;
     }
@@ -54,7 +53,6 @@ export class RegistrationComponent {
   }
 
   private alertPasswordMismatch() {
-    console.log("password mismatch");
     this.error = this.passwordValidationService.getError();
   }
 

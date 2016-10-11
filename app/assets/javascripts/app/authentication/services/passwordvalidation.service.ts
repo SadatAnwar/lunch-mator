@@ -8,14 +8,11 @@ export class PasswordValidationService {
   }
 
   public isValid(): boolean {
-    var b = this.error.message == null || this.error.message.length == 0;
-    console.log(b);
-    return b;
+    return this.error.message == null || this.error.message.length == 0;
   }
 
   public validate(password: string, confirmPassword: string) {
     this.error = new Error();
-    console.log(this.error);
     if (password.length < this.PASSWORD_MIN_LENGTH) {
       var message = "Your password has gotta be at least " + this.PASSWORD_MIN_LENGTH + " characters";
       this.addMessage(this.error, message)
@@ -32,7 +29,6 @@ export class PasswordValidationService {
       message = message.toLocaleLowerCase();
     }
     error.message += message;
-    console.log(error);
   }
 
   public getError() {

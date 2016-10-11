@@ -14,6 +14,7 @@ import {HttpModule} from '@angular/http';
       BrowserModule,
       LunchModule,
       AuthenticationModule,
+      HttpModule,
       routing
     ],
     declarations: [ AppComponent, HeaderComponent, WelcomeComponent ],
