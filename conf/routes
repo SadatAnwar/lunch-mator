@@ -22,7 +22,7 @@ GET         /webjars/*file                 controllers.WebJarAssets.at(file)
 
 
 # Make HTML5 links work
-GET         /                              controllers.Application.index(any: String ?= "none")
-GET         /welcome                       controllers.Application.index(any: String ?= "none")
-GET         /login                         controllers.Application.index(any: String ?= "none")
-GET         /registration                  controllers.Application.index(any: String ?= "none")
+GET         /                              controllers.Application.secured()
+GET         /welcome                       controllers.Application.secured()
+GET         /login                         controllers.Application.unSecure()
+GET         /registration                  controllers.Application.unSecure()

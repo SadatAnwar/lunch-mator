@@ -2,7 +2,7 @@ package controllers
 
 import com.google.inject.Inject
 import models.Formats._
-import models.UserIdentity
+import models.{NewUserDto, UserIdentity}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import services.{AuthenticationService, UserIdentityService}
@@ -13,10 +13,10 @@ import scala.concurrent.Future
 class AuthenticationController @Inject()(authenticationService: AuthenticationService) extends Controller {
 
   def signUp() = Action.async(parse.json) { request =>
-    authenticationService.signUp(request.body.as[UserIdentity]).map {
+    authenticationService.signUp(request.body.as[NewUserDto]).map {
       userIdentityStore => Created(Json.toJson(UserIdentityService.map(userIdentityStore)))
     }.recoverWith {
-      case e: Exception => Future(InternalServerError("User with email already exists " + e.getMessage))
+      case e: Exception => Future(InternalServerError("NewUser with email already exists " + e.getMessage))
     }
   }
 

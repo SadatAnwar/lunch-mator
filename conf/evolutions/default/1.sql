@@ -19,7 +19,6 @@ CREATE TABLE users (
   id         SERIAL PRIMARY KEY,
   first_name VARCHAR              NOT NULL,
   last_name  VARCHAR              NOT NULL,
-  acl_id     INTEGER              NOT NULL REFERENCES acl (id) ON DELETE CASCADE ON UPDATE CASCADE,
   email      VARCHAR UNIQUE       NOT NULL,
   active     BOOLEAN DEFAULT TRUE NOT NULL
 );
@@ -27,8 +26,7 @@ CREATE TABLE users (
 CREATE TABLE user_identity (
   user_email         VARCHAR PRIMARY KEY   NOT NULL REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE,
   encrypted_password VARCHAR               NOT NULL,
-  salt               VARCHAR               NOT NULL,
-  session_uuid       VARCHAR UNIQUE
+  salt               VARCHAR               NOT NULL
 );
 
 CREATE TABLE lunch_tables (

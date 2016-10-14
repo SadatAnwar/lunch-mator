@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import models.Formats._
 import models.Restaurant
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, Controller}
+import play.api.mvc.Controller
 import services.{Authenticated, RestaurantService}
 
 import scala.concurrent.ExecutionContext.Implicits.global

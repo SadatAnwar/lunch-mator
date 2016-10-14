@@ -1,12 +1,12 @@
 package persistence.repository
 
-import models.{UserIdentity, UserIdentityStore}
+import models.{UserIdentity, UserIdentityRow}
 import org.mindrot.jbcrypt.BCrypt
 import slick.driver.PostgresDriver.api._
 
 import scala.concurrent.Future
 
-class UserIdentities(tag: Tag) extends Table[UserIdentityStore](tag, Some("lunch_world"), "user_identity") {
+class UserIdentities(tag: Tag) extends Table[UserIdentityRow](tag, Some("lunch_world"), "user_identity") {
 
   def userEmail = column[String]("user_email", O.PrimaryKey)
 
@@ -14,9 +14,7 @@ class UserIdentities(tag: Tag) extends Table[UserIdentityStore](tag, Some("lunch
 
   def salt = column[String]("salt")
 
-  def sessionUuid = column[String]("session_uuid")
-
-  override def * = (userEmail, password, salt, sessionUuid) <> (UserIdentityStore.tupled, UserIdentityStore.unapply _)
+  override def * = (userEmail, password, salt) <> (UserIdentityRow.tupled, UserIdentityRow.unapply _)
 }
 
 object UserIdentities {
@@ -27,7 +25,7 @@ object UserIdentities {
     userIdentities.filter(_.userEmail === email).result
   }
 
-  def createNewUser(userIdentity: UserIdentityStore) = {
+  def createNewUser(userIdentity: UserIdentityRow) = {
     (userIdentities returning userIdentities) += userIdentity
   }
 }

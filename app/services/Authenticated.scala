@@ -1,8 +1,8 @@
 package services
 
 import play.api.mvc.BodyParsers.parse
-import play.api.mvc._
 import play.api.mvc.Results._
+import play.api.mvc._
 
 import scala.concurrent.Future
 
@@ -30,7 +30,7 @@ object Authenticated {
         username =>
           block(new AuthenticatedRequest(username, request))
       } getOrElse {
-        Forbidden
+        Redirect("/registration")
       }
   }
 }

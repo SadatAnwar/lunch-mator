@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs';
-import {User} from 'app/authentication/types/user';
+import {NewUser} from 'app/authentication/types/user';
 import 'rxjs/Rx';
 
 @Injectable()
@@ -9,13 +9,15 @@ export class RegistrationService {
   url: string;
 
   constructor(private http: Http) {
-    this.url = '/rest/register'
+    this.url = '/rest/signUp'
   }
 
-  register(user: User): Observable<any> {
+  signUp(user: NewUser): Observable<any> {
+    console.log(user);
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post(this.url, user, {headers}).map((response: Response) => {
+      console.log(response);
       return response.json;
     });
   }

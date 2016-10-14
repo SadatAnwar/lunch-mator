@@ -12,6 +12,8 @@ object Formats {
 
   implicit val userFormat = Json.format[User]
 
+  implicit val newUserDtoFormat = Json.format[NewUserDto]
+
   implicit val errorFormat = Json.format[Error]
 
   implicit val userRest = Json.format[(User, Restaurant)]

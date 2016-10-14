@@ -31,7 +31,7 @@ export class RegistrationComponent {
     }
   }
 
-  register() {
+  signUp() {
     this.passwordValidationService.validate(this.password, this.confirmPassword);
     if (this.passwordValidationService.isValid()) {
       var user = {
@@ -41,7 +41,7 @@ export class RegistrationComponent {
         password: this.password
       };
 
-      this.registrationService.register(user)
+      this.registrationService.signUp(user)
         .subscribe(() => {
           this.redirectToWelcome();
         });
