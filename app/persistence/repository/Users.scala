@@ -13,7 +13,9 @@ class Users(tag: Tag) extends Table[User](tag, Some("lunch_world"), "users") {
 
   def email = column[String]("email")
 
-  override def * = (id.?, firstName, lastName, email) <> (User.tupled, User.unapply _)
+  def active = column[Boolean]("active")
+
+  override def * = (id.?, firstName, lastName, email, active) <> (User.tupled, User.unapply _)
 }
 
 object Users {
@@ -28,7 +30,7 @@ object Users {
     users.filter(_.firstName === name).result
   }
 
-  def saveUser(user: User) = {
+  def addNewUser(user: User) = {
     users += user
   }
 

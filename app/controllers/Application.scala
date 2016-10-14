@@ -1,15 +1,20 @@
 package controllers
 
 import javax.inject.Inject
+
 import play.api.db.slick.DatabaseConfigProvider
-import play.api.mvc._
-import slick.driver.JdbcProfile
+import play.api.mvc.{Action, Controller}
+import services.Authenticated
+
 
 class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controller {
 
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  def secured() = Authenticated {
+    request =>
+      Ok(views.html.index())
+  }
 
-  def index(any: String) = Action {
+  def unSecure() =  Action {
     Ok(views.html.index())
   }
 }

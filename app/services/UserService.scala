@@ -8,7 +8,7 @@ import play.api.db.slick.DatabaseConfigProvider
 class UserService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) extends Service(dbConfigDataProvider) {
 
   def addUser(user: User) = usingDB {
-    Users.saveUser(user)
+    Users.addNewUser(user)
   }
 
   def getAllUsers = usingDB {

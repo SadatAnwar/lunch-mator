@@ -1,20 +1,19 @@
 package services
 
-import models.{UserIdentity, UserIdentityStore, UserSession}
+import models.{NewUserDto, UserIdentity, UserIdentityRow}
 import org.mindrot.jbcrypt.BCrypt
 
 object UserIdentityService {
 
-  def map(userIdentity: UserIdentity) = {
+  def map(newUserDto: NewUserDto): UserIdentityRow = {
     val salt = BCrypt.gensalt(12)
-    val passwordHash = BCrypt.hashpw(userIdentity.password, salt)
-    val sessionUuid = java.util.UUID.randomUUID().toString
+    val passwordHash = BCrypt.hashpw(newUserDto.password, salt)
 
-    UserIdentityStore(userIdentity.email, passwordHash, salt, sessionUuid)
+    UserIdentityRow(newUserDto.email, passwordHash, salt)
   }
 
-  def map(userIdentityStore: UserIdentityStore) = {
-    UserIdentity(userIdentityStore.email, userIdentityStore.password, Some(userIdentityStore.sessionUuid))
+  def map(userIdentityRow: UserIdentityRow) = {
+    UserIdentity(userIdentityRow.email, userIdentityRow.password)
   }
 
   def validatePassword(unhashedPassword: String, hashedPassword: String): Either[String, String] = {
@@ -25,7 +24,4 @@ object UserIdentityService {
       Right("error")
     }
   }
-
-  def validateUserSession(userSession: UserSession, userIdentityStore: UserIdentityStore) =
-    userSession.sessionUuid.equals(userIdentityStore.sessionUuid)
 }
