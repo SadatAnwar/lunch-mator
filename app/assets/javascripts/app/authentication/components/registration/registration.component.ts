@@ -3,7 +3,8 @@ import {Router} from "@angular/router";
 import {RegistrationService} from "app/authentication/services/registration.service";
 import {PasswordValidationService} from "app/authentication/services/passwordvalidation.service";
 import {Http} from "@angular/http";
-import {ErrorDetail} from "app/authentication/types/error";
+import {ErrorDetail} from "app/common/types/error";
+import {ErrorMapper} from "app/mappers/ErrorMapper";
 
 @Component({
   selector: 'registration',
@@ -44,11 +45,9 @@ export class RegistrationComponent {
 
       this.registrationService.signUp(user)
         .subscribe((response: any) => {
-          console.log(response);
           this.redirectToWelcome();
         }, (error: any) => {
-          console.log(error);
-          this.error = error;
+          ErrorMapper.map(error);
         });
     }
     else {

@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-
-import {AuthenticationService} from 'app/authentication/services/authentication.service';
+import {Component} from "@angular/core";
+import {Router} from "@angular/router";
+import {AuthenticationService} from "app/authentication/services/authentication.service";
+import {ErrorDetail} from "app/common/types/error";
+import {ErrorMapper} from "app/mappers/ErrorMapper";
 
 @Component({
   selector: 'login',
@@ -10,16 +11,19 @@ import {AuthenticationService} from 'app/authentication/services/authentication.
 export class LoginComponent {
   email: string;
   password: string;
+  error: ErrorDetail;
 
-  constructor(
-    private authenticationService: AuthenticationService,
-    private router: Router
-  ) {}
+  constructor(private authenticationService: AuthenticationService,
+              private router: Router) {
+  }
 
   signIn() {
     this.authenticationService.signIn({email: this.email, password: this.password})
-      .subscribe(() => {
+      .subscribe((response: any) => {
+        console.log(response);
         this.redirectToWelcome();
+      }, (error: any) => {
+        ErrorMapper.map(error);
       });
   }
 

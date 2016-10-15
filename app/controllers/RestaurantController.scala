@@ -23,8 +23,6 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
     val restaurant = request.body.as[Restaurant]
     restaurantsService.createNewRestaurant(restaurant).map {
       result => Created
-    }.recoverWith {
-      case e: Exception => Future(InternalServerError("Already exists " + e.getMessage))
     }
   }
 

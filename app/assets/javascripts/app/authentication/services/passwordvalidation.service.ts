@@ -1,4 +1,4 @@
-import {ErrorDetail} from "app/authentication/types/error";
+import {ErrorDetail} from "../../common/types/error";
 
 export class PasswordValidationService {
   PASSWORD_MIN_LENGTH = 5;

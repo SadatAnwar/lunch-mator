@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {ErrorDetail} from "app/authentication/types/error"
+import {ErrorDetail} from "../../types/error"
 
 @Component({
   selector: 'error-detail',
