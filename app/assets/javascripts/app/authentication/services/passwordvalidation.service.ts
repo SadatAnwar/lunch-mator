@@ -1,4 +1,4 @@
-import {ErrorDetail} from "../../common/types/error";
+import {ErrorDetail} from "app/common/types/error";
 
 export class PasswordValidationService {
   PASSWORD_MIN_LENGTH = 5;
@@ -24,7 +24,7 @@ export class PasswordValidationService {
   }
 
   private addMessage(error: ErrorDetail, message: string) {
-    if (error!= null && error.message != null && error.message.length > 0) {
+    if (error != null && error.message != null && error.message.length > 0) {
       error.message += " and ";
       message = message.toLocaleLowerCase();
     }
