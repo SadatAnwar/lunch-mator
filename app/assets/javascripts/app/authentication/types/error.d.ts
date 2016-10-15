@@ -1,3 +1,4 @@
-export interface Error {
+export interface ErrorDetail {
+  name: string;
   message: string;
 }
