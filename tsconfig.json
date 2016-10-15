@@ -21,7 +21,8 @@
       "@angular/platform-browser-dynamic": ["angular__platform-browser-dynamic/index"],
       "@angular/router": ["angular__router/index"],
       "@angular/http": ["angular__http/index"],
-      "rxjs": ["rxjs/Rx"]
+      "rxjs": ["rxjs/Rx"],
+      "ng2-completer": ["ng2-completer/bundles/src/index"]
     },
     "outDir": "target/karma/javascripts"
   },
