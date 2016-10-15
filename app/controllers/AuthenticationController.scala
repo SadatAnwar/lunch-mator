@@ -8,15 +8,12 @@ import play.api.mvc.{Action, Controller}
 import services.{AuthenticationService, UserIdentityService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class AuthenticationController @Inject()(authenticationService: AuthenticationService) extends Controller {
 
   def signUp() = Action.async(parse.json) { request =>
     authenticationService.signUp(request.body.as[NewUserDto]).map {
       userIdentityStore => Created(Json.toJson(UserIdentityService.map(userIdentityStore)))
-    }.recoverWith {
-      case e: Exception => Future(InternalServerError("NewUser with email already exists " + e.getMessage))
     }
   }
 

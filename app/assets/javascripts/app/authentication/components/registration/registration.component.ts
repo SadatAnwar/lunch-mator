@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {RegistrationService} from 'app/authentication/services/registration.service';
-import {PasswordValidationService} from 'app/authentication/services/passwordvalidation.service';
-import {Http} from '@angular/http';
+import {Component} from "@angular/core";
+import {Router} from "@angular/router";
+import {RegistrationService} from "app/authentication/services/registration.service";
+import {PasswordValidationService} from "app/authentication/services/passwordvalidation.service";
+import {Http} from "@angular/http";
 import {ErrorDetail} from "app/authentication/types/error";
 
 @Component({
@@ -43,8 +43,12 @@ export class RegistrationComponent {
       };
 
       this.registrationService.signUp(user)
-        .subscribe(() => {
+        .subscribe((response: any) => {
+          console.log(response);
           this.redirectToWelcome();
+        }, (error: any) => {
+          console.log(error);
+          this.error = error;
         });
     }
     else {
@@ -54,7 +58,6 @@ export class RegistrationComponent {
   }
 
   private alertPasswordMismatch() {
-    console.log("password mismatch");
     this.error = this.passwordValidationService.getError();
   }
 
