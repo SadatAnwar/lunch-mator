@@ -42,14 +42,15 @@
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6">
                 <div class="form-group">
-                  <input [(ngModel)]="confirmPassword" (keypress)="refresh()" type="password" name="confirmPassword" id="confirmPassword"
+                  <input [(ngModel)]="confirmPassword" (keypress)="refresh()" type="password" name="confirmPassword"
+                         id="confirmPassword"
                          class="form-control input-sm" placeholder="Confirm Password">
                 </div>
               </div>
             </div>
 
             <input type="submit" value="Register" (click)="register()" class="btn btn-info btn-block">
-
+            <small style="color: #485563;">Already have an account? Sign-in <a href="/login"> here</a></small>
           </form>
         </div>
       </div>

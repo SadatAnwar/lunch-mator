@@ -13,7 +13,9 @@ class AuthenticationController @Inject()(authenticationService: AuthenticationSe
 
   def signUp() = Action.async(parse.json) { request =>
     authenticationService.signUp(request.body.as[NewUserDto]).map {
-      userIdentityStore => Created(Json.toJson(UserIdentityService.map(userIdentityStore)))
+      userIdentityStore =>
+        val user: UserIdentity = UserIdentityService.map(userIdentityStore)
+        Created(Json.toJson(user)).withSession("email" -> user.email)
     }
   }
 

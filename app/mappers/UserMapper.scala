@@ -1,4 +1,4 @@
-package mapper
+package mappers
 
 import models.{NewUserDto, User}
 
