@@ -19,6 +19,7 @@ export class RegistrationComponent {
   confirmPassword: string;
   error: ErrorDetail = null;
   random = null;
+  waiting: boolean = false;
 
   constructor(private registrationService: RegistrationService,
               private passwordValidationService: PasswordValidationService,
@@ -45,10 +46,13 @@ export class RegistrationComponent {
 
       this.registrationService.signUp(user)
         .subscribe((response: any) => {
+          this.waiting = false;
           this.redirectToWelcome();
         }, (error: any) => {
+          this.waiting = false;
           this.error = ErrorMapper.map(error);
         });
+      this.waiting = true;
     }
     else {
       this.alertPasswordMismatch();
