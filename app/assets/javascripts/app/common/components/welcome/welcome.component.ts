@@ -5,5 +5,9 @@ import {Component} from "@angular/core";
     templateUrl: 'assets/javascripts/app/common/components/welcome/welcome.component.html'
 })
 export class WelcomeComponent {
+  login: boolean = true;
 
+  constructor(){
+    this.login = true;
+  }
 }

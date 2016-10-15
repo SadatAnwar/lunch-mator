@@ -8,6 +8,7 @@ import play.api.mvc.{Action, Controller}
 import services.{AuthenticationService, UserIdentityService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class AuthenticationController @Inject()(authenticationService: AuthenticationService) extends Controller {
 
@@ -29,4 +30,9 @@ class AuthenticationController @Inject()(authenticationService: AuthenticationSe
         )
     }
   }
+
+  def logOut() = Action.async { request =>
+    Future.successful(Redirect("/login").withNewSession)
+  }
 }
+
