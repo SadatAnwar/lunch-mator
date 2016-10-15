@@ -20,10 +20,9 @@ export class LoginComponent {
   signIn() {
     this.authenticationService.signIn({email: this.email, password: this.password})
       .subscribe((response: any) => {
-        console.log(response);
         this.redirectToWelcome();
       }, (error: any) => {
-        ErrorMapper.map(error);
+        this.error = ErrorMapper.map(error);
       });
   }
 

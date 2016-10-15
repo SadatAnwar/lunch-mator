@@ -47,7 +47,7 @@ export class RegistrationComponent {
         .subscribe((response: any) => {
           this.redirectToWelcome();
         }, (error: any) => {
-          ErrorMapper.map(error);
+          this.error = ErrorMapper.map(error);
         });
     }
     else {

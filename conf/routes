@@ -10,8 +10,10 @@ POST        /rest/restaurants              controllers.RestaurantController.crea
 GET         /rest/users                    controllers.UserController.getAllUsers()
 POST        /rest/users                    controllers.UserController.createUser()
 
+#REST User session
 POST        /rest/login                    controllers.AuthenticationController.authenticate()
 POST        /rest/signUp                   controllers.AuthenticationController.signUp()
+GET        /rest/logOut                   controllers.AuthenticationController.logOut()
 
 
 GET         /rest/lunch-tables/:id         controllers.LunchController.getLunchById(id)
