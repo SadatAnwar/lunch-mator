@@ -2,7 +2,7 @@ package services
 
 import javax.inject.Inject
 
-import mapper.UserMapper
+import mappers.UserMapper
 import models.{NewUserDto, User}
 import persistence.repository.{UserIdentities, Users}
 import play.api.db.slick.DatabaseConfigProvider

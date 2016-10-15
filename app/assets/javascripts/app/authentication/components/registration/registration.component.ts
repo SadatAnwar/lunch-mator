@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {RegistrationService} from 'app/authentication/services/registration.service';
-import {PasswordValidationService} from 'app/authentication/services/passwordvalidation.service';
-import {Http} from '@angular/http';
-import {Error} from "app/authentication/types/error";
+import {Component} from "@angular/core";
+import {Router} from "@angular/router";
+import {RegistrationService} from "app/authentication/services/registration.service";
+import {PasswordValidationService} from "app/authentication/services/passwordvalidation.service";
+import {Http} from "@angular/http";
+import {ErrorDetail} from "app/common/types/error";
+import {ErrorMapper} from "app/mappers/ErrorMapper";
 
 @Component({
   selector: 'registration',
@@ -16,7 +17,7 @@ export class RegistrationComponent {
   email: string;
   password: string;
   confirmPassword: string;
-  error: Error = null;
+  error: ErrorDetail = null;
   random = null;
 
   constructor(private registrationService: RegistrationService,
@@ -26,12 +27,13 @@ export class RegistrationComponent {
 
   ngAfterViewInit() {
     var number = this.randomGenerator();
+    console.log("random number is " + number);
     if (number % 2 == 0) {
       this.random = 1;
     }
   }
 
-  signUp() {
+  register() {
     this.passwordValidationService.validate(this.password, this.confirmPassword);
     if (this.passwordValidationService.isValid()) {
       var user = {
@@ -42,8 +44,10 @@ export class RegistrationComponent {
       };
 
       this.registrationService.signUp(user)
-        .subscribe(() => {
+        .subscribe((response: any) => {
           this.redirectToWelcome();
+        }, (error: any) => {
+          ErrorMapper.map(error);
         });
     }
     else {

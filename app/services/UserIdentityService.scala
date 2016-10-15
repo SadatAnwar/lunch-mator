@@ -1,5 +1,6 @@
 package services
 
+import exceptions.PasswordValidationException
 import models.{NewUserDto, UserIdentity, UserIdentityRow}
 import org.mindrot.jbcrypt.BCrypt
 
@@ -21,7 +22,7 @@ object UserIdentityService {
       Left("success")
     }
     else {
-      Right("error")
+      throw new PasswordValidationException
     }
   }
 }

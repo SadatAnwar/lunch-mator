@@ -17,8 +17,10 @@ export class RegistrationService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post(this.url, user, {headers}).map((response: Response) => {
-      console.log(response);
       return response.json;
+    }).catch((error: any) => {
+      console.log(error);
+      return error;
     });
   }
 }
