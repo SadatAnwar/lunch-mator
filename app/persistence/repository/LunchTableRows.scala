@@ -1,7 +1,7 @@
 package persistence.repository
 
 import java.sql.Timestamp
-import models.{LunchTable, LunchTableRow}
+import models.{Lunch, LunchTableRow}
 import slick.driver.PostgresDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -17,7 +17,7 @@ class LunchTableRows(tag: Tag) extends Table[LunchTableRow](tag, Some("lunch_wor
 
   def anonymous = column[Boolean]("anonymous")
 
-  override def * = (id.?, restaurantId, maxSize, startTime.?, anonymous.?) <> (LunchTableRow.tupled, LunchTableRow.unapply _)
+  override def * = (id.?, restaurantId, maxSize, startTime, anonymous) <> (LunchTableRow.tupled, LunchTableRow.unapply _)
 }
 
 object LunchTableRows {
@@ -32,11 +32,11 @@ object LunchTableRows {
       (lunch, restaurant)
     }
     q.map {
-      (a) => LunchTable(restaurant = a._2, size = 6)
+      (a) => Lunch(restaurant = a._2, size = 6)
     }
   }
 
-  def saveLunchTable(lunchTableRow: LunchTableRow) = {
+  def createLunch(lunchTableRow: LunchTableRow) = {
     lunchTableRows += lunchTableRow
   }
 

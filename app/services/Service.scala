@@ -4,6 +4,8 @@ import com.google.inject.Inject
 import play.api.Play
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class Service @Inject()(val dbConfigProvider: DatabaseConfigProvider) {
 
@@ -18,7 +20,6 @@ class Service @Inject()(val dbConfigProvider: DatabaseConfigProvider) {
   }
 }
 
-
 object usingDB {
 
   @Inject
@@ -32,5 +33,11 @@ object usingDB {
 
   def apply[T](f: => DBIOAction[T, NoStream, Nothing]) = {
     db.run(f)
+  }
+
+  def async[T](f: => Future[DBIOAction[T, NoStream, Nothing]]) = {
+    f.flatMap { query =>
+      db.run(query)
+    }
   }
 }
