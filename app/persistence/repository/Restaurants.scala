@@ -21,7 +21,7 @@ class Restaurants(tag: Tag) extends Table[RestaurantRow](tag, Some("lunch_world"
 object Restaurants {
 
   def searchRestaurant(name: String) = {
-    restaurants.filter(_.name like "%" + name + "%").result
+    restaurants.filter(_.name.toLowerCase like "%" + name.toLowerCase + "%").result
   }
 
 
