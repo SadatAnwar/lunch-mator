@@ -1,15 +1,15 @@
-import {Component} from "@angular/core";
-import {CompleterService, CompleterData} from "ng2-completer";
-import {ErrorMapper} from "../../../mappers/ErrorMapper";
-import {RestaurantService} from "../../services/restaurant.services";
-import {ErrorDetail} from "../../../common/types/error";
-
+import {Component} from '@angular/core';
+import {CompleterService, CompleterData} from 'ng2-completer';
+import {ErrorMapper} from '../../../mappers/ErrorMapper';
+import {RestaurantService} from '../../services/restaurant.services';
+import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {ErrorDetail} from '../../../common/types/ErrorDetail';
 
 @Component({
   selector: 'add-restaurant',
   templateUrl: 'assets/javascripts/app/restaurant/components/addrestaurant/addrestaurant.component.html'
 })
-export class AddRestaurantComponent {
+export class AddRestaurantComponent extends AlertDisplay {
   waiting: boolean = false;
   restaurantName: string;
   website: string;
@@ -17,8 +17,8 @@ export class AddRestaurantComponent {
   error: ErrorDetail;
   dataService: CompleterData;
 
-
   constructor(private completerService: CompleterService, private restaurantService: RestaurantService) {
+    super();
     this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
   }
 
@@ -29,6 +29,7 @@ export class AddRestaurantComponent {
     this.restaurantService.add(restaurantDto)
       .subscribe((response: any) => {
         this.waiting = false;
+        this.displaySuccessWithTimeOut("Yippee!!", 2.5);
       }, (error: any) => {
         this.waiting = false;
         this.error = ErrorMapper.map(error);
