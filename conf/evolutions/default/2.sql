@@ -5,6 +5,7 @@ CREATE TABLE restaurants (
   id               SERIAL PRIMARY KEY,
   name             VARCHAR NOT NULL,
   website          VARCHAR,
+  description      VARCHAR,
   added_by_user_id INTEGER REFERENCES users (id),
   CONSTRAINT uk_restaurants UNIQUE (name, website)
 );
@@ -29,6 +30,6 @@ CREATE TABLE participants (
 
 
 # --- !Downs
-DROP TABLE restaurants;
-DROP TABLE lunch_tables;
-DROP TABLE participants;
+DROP TABLE restaurants CASCADE;
+DROP TABLE lunch_tables CASCADE;
+DROP TABLE participants CASCADE;

@@ -1,16 +1,15 @@
 package controllers
 
 import com.google.inject.Inject
+import mappers.RestaurantMapper
 import models.Formats._
-import models.Restaurant
+import models.RestaurantDto
 import play.api.libs.json._
 import play.api.mvc.Controller
-import services.{Authenticated, RestaurantService}
-
+import services.{Authenticated, RestaurantService, UserService}
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
-class RestaurantController @Inject()(restaurantsService: RestaurantService) extends Controller {
+class RestaurantController @Inject()(restaurantsService: RestaurantService, userService: UserService) extends Controller {
 
   def listRestaurants() = Authenticated.async {
     implicit request =>
@@ -19,16 +18,27 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
       )
   }
 
-  def createRestaurant() = Authenticated.async(parse.json) { request =>
-    val restaurant = request.body.as[Restaurant]
-    restaurantsService.createNewRestaurant(restaurant).map {
-      result => Created
+  def addRestaurant() = Authenticated.async(parse.json) { request =>
+    val restaurant = request.body.as[RestaurantDto]
+    userService.getUserByEmail(request.username).map {
+      user => RestaurantMapper.map(restaurant, user)
+    }.flatMap {
+      restaurant => restaurantsService.createNewRestaurant(restaurant).map {
+        result => Created
+      }
     }
   }
 
   def findRestaurant(name: String) = Authenticated.async {
     implicit request =>
       restaurantsService.getRestaurantByName(name).map(restaurant =>
+        Ok(Json.toJson(restaurant))
+      )
+  }
+
+  def searchRestaurant(name: String) = Authenticated.async {
+    implicit request =>
+      restaurantsService.searchRestaurant(name).map(restaurant =>
         Ok(Json.toJson(restaurant))
       )
   }

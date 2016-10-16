@@ -2,7 +2,7 @@ package controllers
 
 import com.google.inject.Inject
 import models.Formats._
-import models.User
+import models.UserRow
 import play.api.libs.json._
 import play.api.mvc.Controller
 import services.{Authenticated, UserService}
@@ -20,7 +20,7 @@ class UserController @Inject()(userService: UserService) extends Controller {
   }
 
   def createUser() = Authenticated.async(parse.json) { request =>
-    val user = request.body.as[User]
+    val user = request.body.as[UserRow]
      userService.addUser(user).map {
       result => Created
     }.recoverWith {

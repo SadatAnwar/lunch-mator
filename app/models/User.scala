@@ -1,6 +1,8 @@
 package models
 
-case class User(id: Option[Int], firstName: String, lastName: String, email: String, active: Boolean)
+case class User(id: Int, firstName: String, lastName: String, email: String, active: Boolean)
+
+case class UserRow(id: Option[Int], firstName: String, lastName: String, email: String, active: Boolean)
 
 case class NewUserDto(firstName: String, lastName: String, email: String, password: String)
 

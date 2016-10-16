@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {LunchDto} from 'app/lunch/dto/types';
+import {Component, OnInit} from "@angular/core";
+import {LunchDto} from "app/lunch/dto/types";
 
 @Component({
   selector: 'lunch-list',
@@ -18,7 +18,8 @@ export class LunchListComponent implements OnInit {
       {
         restaurant: {
           name: 'Da Dante',
-          description: 'Italian'
+          description: 'Italian',
+          website: ""
         },
         seatsLeft: 0,
         anonymous: true,
@@ -27,7 +28,9 @@ export class LunchListComponent implements OnInit {
       {
         restaurant: {
           name: 'Die Feinbäckerei',
-          description: 'German'
+          description: 'German',
+          website: ""
+
         },
         seatsLeft: 5,
         anonymous: true,
@@ -36,12 +39,12 @@ export class LunchListComponent implements OnInit {
       {
         restaurant: {
           name: 'Imren',
-          description: 'Disgusting Döner'
+          description: 'Disgusting Döner',
+          website: ""
         },
         seatsLeft: 6,
         anonymous: false,
         start: new Date()
-
       }
     ];
   }

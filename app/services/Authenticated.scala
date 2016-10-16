@@ -6,7 +6,8 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 
-class AuthenticatedRequest[A](val username: String, request: Request[A]) extends WrappedRequest[A](request)
+class AuthenticatedRequest[A](val username: String, request: Request[A]) extends WrappedRequest[A](request) {
+}
 
 object Authenticated {
 
