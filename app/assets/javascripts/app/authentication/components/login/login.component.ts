@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "app/authentication/services/authentication.service";
-import {ErrorDetail} from "app/common/types/error";
 import {ErrorMapper} from "app/mappers/ErrorMapper";
 import {UserIdentity} from "../../types/user-identity";
+import {ErrorDetail} from '../../../common/types/ErrorDetail';
 
 @Component({
   selector: 'login',

@@ -2,27 +2,19 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-#Restaurant
+# REST Restaurant
 GET         /rest/restaurants                     controllers.RestaurantController.listRestaurants()
 GET         /rest/restaurants/:name               controllers.RestaurantController.findRestaurant(name)
 GET         /rest/restaurants/search/:name        controllers.RestaurantController.searchRestaurant(name)
 POST        /rest/restaurants                     controllers.RestaurantController.addRestaurant()
 
-GET         /rest/users                           controllers.UserController.getAllUsers()
-POST        /rest/users                           controllers.UserController.createUser()
+# REST Lunch
+GET         /rest/lunch-tables/:id                controllers.LunchController.getLunchById(id)
 
-#REST User session
+# REST User session
 POST        /rest/login                           controllers.AuthenticationController.authenticate()
 POST        /rest/signUp                          controllers.AuthenticationController.signUp()
 GET         /rest/logOut                          controllers.AuthenticationController.logOut()
-
-
-GET         /rest/lunch-tables/:id                controllers.LunchController.getLunchById(id)
-
-# Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
-GET         /webjars/*file                        controllers.WebJarAssets.at(file)
-
 
 # Make HTML5 links work
 GET         /                                     controllers.Application.secured()
@@ -30,3 +22,7 @@ GET         /welcome                              controllers.Application.secure
 GET         /login                                controllers.Application.unSecure()
 GET         /registration                         controllers.Application.unSecure()
 GET         /add-restaurant                       controllers.Application.unSecure()
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
+GET         /webjars/*file                        controllers.WebJarAssets.at(file)

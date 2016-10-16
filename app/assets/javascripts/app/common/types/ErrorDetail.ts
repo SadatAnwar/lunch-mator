@@ -1,4 +1,4 @@
-export interface ErrorDetail {
+export class ErrorDetail {
   name: string;
   message: string;
 }

@@ -46,3 +46,31 @@ lunch-list {
     }
   }
 }
+
+.completer-dropdown {
+  width: 100% !important;
+}
+
+.completer-row {
+  padding: 5px;
+  color: #000000;
+  margin-bottom: 4px;
+  clear: both;
+  display: inline-block;
+  width: 100%;
+}
+
+.completer-dropdown-holder {
+  width: inherit;
+  position: relative;
+}
+
+.completer-selected-row {
+  background-color: lightblue;
+  color: #ffffff;
+  width: 100% !important;;
+}
+
+.match {
+  color: orangered;
+}

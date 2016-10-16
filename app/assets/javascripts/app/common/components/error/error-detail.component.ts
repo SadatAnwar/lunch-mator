@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {ErrorDetail} from "../../types/error"
+import {Component, Input} from '@angular/core';
+import {ErrorDetail} from '../../types/ErrorDetail';
 
 @Component({
   selector: 'error-detail',

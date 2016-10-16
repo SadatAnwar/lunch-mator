@@ -1,14 +1,15 @@
-import {Component} from "@angular/core";
-import {Router} from "@angular/router";
-import {RegistrationService} from "app/authentication/services/registration.service";
-import {PasswordValidationService} from "app/authentication/services/passwordvalidation.service";
-import {ErrorDetail} from "app/common/types/error";
-import {ErrorMapper} from "app/mappers/ErrorMapper";
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {RegistrationService} from 'app/authentication/services/registration.service';
+import {PasswordValidationService} from 'app/authentication/services/passwordvalidation.service';
+import {ErrorMapper} from 'app/mappers/ErrorMapper';
+import {ErrorDetail} from '../../../common/types/ErrorDetail';
 
 @Component({
   selector: 'registration',
   templateUrl: 'assets/javascripts/app/authentication/components/registration/registration.component.html'
 })
+
 export class RegistrationComponent {
   firstName: string;
   lastName: string;

@@ -1,7 +1,7 @@
-import {ErrorDetail} from "app/common/types/error";
+import {ErrorDetail} from '../../common/types/ErrorDetail';
 
 export class PasswordValidationService {
-  PASSWORD_MIN_LENGTH = 5;
+  private PASSWORD_MIN_LENGTH = 5;
   error: ErrorDetail = null;
 
   constructor() {
@@ -12,7 +12,7 @@ export class PasswordValidationService {
   }
 
   public validate(password: string, confirmPassword: string) {
-    this.error = new Error();
+    this.error = new ErrorDetail();
     if (password.length < this.PASSWORD_MIN_LENGTH) {
       var message = "Your password has gotta be at least " + this.PASSWORD_MIN_LENGTH + " characters";
       this.addMessage(this.error, message)

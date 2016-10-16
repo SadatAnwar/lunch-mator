@@ -15,13 +15,13 @@ class Restaurants(tag: Tag) extends Table[RestaurantRow](tag, Some("lunch_world"
 
   def userId = column[Int]("added_by_user_id")
 
-  override def * = (id.?, name, website.?, description.?, userId) <> (RestaurantRow.tupled, RestaurantRow.unapply _)
+  override def * = (id.?, name, website, description.?, userId) <> (RestaurantRow.tupled, RestaurantRow.unapply _)
 }
 
 object Restaurants {
 
   def searchRestaurant(name: String) = {
-    restaurants.filter(_.name like "%" + name + "%").result
+    restaurants.filter(_.name.toLowerCase like "%" + name.toLowerCase + "%").result
   }
 
 
