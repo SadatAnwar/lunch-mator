@@ -5,9 +5,10 @@ import {AddRestaurantComponent} from "./components/addrestaurant/addrestaurant.c
 import {Ng2CompleterModule} from "ng2-completer";
 import {routing} from "./restaurant.routing";
 import {RestaurantService} from "./services/restaurant.services";
+import {CommonModules} from "../common/common.modules";
 
 @NgModule({
-  imports: [CommonModule, FormsModule, Ng2CompleterModule, routing],
+  imports: [CommonModule, FormsModule, Ng2CompleterModule, CommonModules, routing],
   declarations: [AddRestaurantComponent],
   providers: [RestaurantService]
 })

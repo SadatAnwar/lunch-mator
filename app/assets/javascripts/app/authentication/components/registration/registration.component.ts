@@ -2,14 +2,12 @@ import {Component} from "@angular/core";
 import {Router} from "@angular/router";
 import {RegistrationService} from "app/authentication/services/registration.service";
 import {PasswordValidationService} from "app/authentication/services/passwordvalidation.service";
-import {Http} from "@angular/http";
 import {ErrorDetail} from "app/common/types/error";
 import {ErrorMapper} from "app/mappers/ErrorMapper";
 
 @Component({
   selector: 'registration',
-  templateUrl: 'assets/javascripts/app/authentication/components/registration/registration.component.html',
-  providers: [Http]
+  templateUrl: 'assets/javascripts/app/authentication/components/registration/registration.component.html'
 })
 export class RegistrationComponent {
   firstName: string;
