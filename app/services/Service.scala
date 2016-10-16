@@ -7,7 +7,7 @@ import slick.driver.JdbcProfile
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class Service @Inject()(val dbConfigProvider: DatabaseConfigProvider) {
+class Service @Inject()(implicit val dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 

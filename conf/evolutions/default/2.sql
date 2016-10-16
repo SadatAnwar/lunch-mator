@@ -23,8 +23,7 @@ CREATE TABLE lunch_tables (
 CREATE TABLE participants (
   lunch_table_id INTEGER NOT NULL REFERENCES lunch_tables (id) ON DELETE CASCADE ON UPDATE CASCADE,
   user_id        INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  admin          BOOLEAN NOT NULL,
-  joined_on      TIMESTAMPTZ DEFAULT now(),
+  joined_at      TIMESTAMPTZ DEFAULT now(),
   CONSTRAINT pk_participants PRIMARY KEY (lunch_table_id, user_id)
 );
 

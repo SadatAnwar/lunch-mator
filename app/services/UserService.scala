@@ -7,7 +7,7 @@ import persistence.repository.Users
 import play.api.db.slick.DatabaseConfigProvider
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class UserService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) extends Service(dbConfigDataProvider) {
+class UserService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider) extends Service {
 
   def getUserById(userId: Int) = usingDB {
     Users.findById(userId)

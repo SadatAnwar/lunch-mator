@@ -6,7 +6,7 @@ import models.{LunchDto, LunchTableRow}
 import persistence.repository.LunchTableRows
 import play.api.db.slick.DatabaseConfigProvider
 
-class LunchService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) extends Service(dbConfigDataProvider) {
+class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, userService: UserService) extends Service {
 
   def createNewTable(lunchTableRow: LunchTableRow) = usingDB {
     LunchTableRows.createLunch(lunchTableRow)
@@ -23,5 +23,9 @@ class LunchService @Inject()(dbConfigDataProvider: DatabaseConfigProvider) exten
   def createLunch(lunchDto: LunchDto, userName: String) = usingDB {
     val lunch = LunchTableMapper.map(lunchDto)
     LunchTableRows.createLunch(lunch)
+  }
+
+  private def singUpCreatorForLunch(userName: String) = {
+
   }
 }
