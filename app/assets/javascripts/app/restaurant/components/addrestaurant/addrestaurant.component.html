@@ -11,9 +11,10 @@
         <div class="panel-body">
           <form role="form">
             <div class="form-group">
-              <ng2-completer class="form-group" [ngModelOptions]="{standalone: true}" [(ngModel)]="restaurantName"
+              <ng2-completer [ngModelOptions]="{standalone: true}" [(ngModel)]="restaurantName"
                              [dataService]="dataService" [minSearchLength]="0" inputName="Restaurant name"
-                             placeholder="Restaurant name" overrideSuggested="true"></ng2-completer>
+                             placeholder="Restaurant name" overrideSuggested="true">
+              </ng2-completer>
             </div>
             <div class="form-group">
               <input [(ngModel)]="description" type="text" name="description" id="description" class="form-control"
