@@ -7,5 +7,6 @@ export interface LunchDto {
 
 export interface RestaurantDto {
   name: string;
+  website: string;
   description: string;
 }

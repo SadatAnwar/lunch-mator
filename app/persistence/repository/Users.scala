@@ -1,9 +1,9 @@
 package persistence.repository
 
-import models.User
+import models.UserRow
 import slick.driver.PostgresDriver.api._
 
-class Users(tag: Tag) extends Table[User](tag, Some("lunch_world"), "users") {
+class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") {
 
   def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
 
@@ -15,12 +15,16 @@ class Users(tag: Tag) extends Table[User](tag, Some("lunch_world"), "users") {
 
   def active = column[Boolean]("active")
 
-  override def * = (id.?, firstName, lastName, email, active) <> (User.tupled, User.unapply _)
+  override def * = (id.?, firstName, lastName, email, active) <> (UserRow.tupled, UserRow.unapply _)
 }
 
 object Users {
-
   val users = TableQuery[Users]
+
+
+  def getByEmail(email: String) = {
+    users.filter(_.email === email).result.head
+  }
 
   def findById(userId: Int) = {
     users.filter(_.id === userId).result.head
@@ -30,7 +34,7 @@ object Users {
     users.filter(_.firstName === name).result
   }
 
-  def addNewUser(user: User) = {
+  def addNewUser(user: UserRow) = {
     users += user
   }
 

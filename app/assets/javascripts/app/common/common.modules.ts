@@ -7,7 +7,7 @@ import {ErrorDetailComponent} from "app/common/components/error/error-detail.com
 @NgModule({
   imports: [CommonModule, FormsModule, routing],
   declarations: [ErrorDetailComponent],
-  providers: []
+  exports: [ErrorDetailComponent]
 })
 export class CommonModules {
 }

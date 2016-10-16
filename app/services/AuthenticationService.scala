@@ -3,7 +3,7 @@ package services
 import javax.inject.Inject
 
 import mappers.UserMapper
-import models.{NewUserDto, User}
+import models.{NewUserDto, UserRow}
 import persistence.repository.{UserIdentities, Users}
 import play.api.db.slick.DatabaseConfigProvider
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -20,7 +20,7 @@ class AuthenticationService @Inject()(dbConfigProvider: DatabaseConfigProvider) 
     UserIdentities.getUserIdentity(email).head
   }
 
-  private def createUser(user: User) = usingDB {
+  private def createUser(user: UserRow) = usingDB {
     Users.addNewUser(user)
   }
 }

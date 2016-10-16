@@ -1,9 +1,9 @@
 package persistence.repository
 
-import models.Restaurant
+import models.RestaurantRow
 import slick.driver.PostgresDriver.api._
 
-class Restaurants(tag: Tag) extends Table[Restaurant](tag, Some("lunch_world"), "restaurants") {
+class Restaurants(tag: Tag) extends Table[RestaurantRow](tag, Some("lunch_world"), "restaurants") {
 
   def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
 
@@ -11,10 +11,19 @@ class Restaurants(tag: Tag) extends Table[Restaurant](tag, Some("lunch_world"), 
 
   def website = column[String]("website")
 
-  override def * = (id.?, name, website) <> (Restaurant.tupled, Restaurant.unapply _)
+  def description = column[String]("description")
+
+  def userId = column[Int]("added_by_user_id")
+
+  override def * = (id.?, name, website.?, description.?, userId) <> (RestaurantRow.tupled, RestaurantRow.unapply _)
 }
 
 object Restaurants {
+
+  def searchRestaurant(name: String) = {
+    restaurants.filter(_.name like "%" + name + "%").result
+  }
+
 
   lazy val restaurants = TableQuery[Restaurants]
 
@@ -22,7 +31,7 @@ object Restaurants {
     restaurants.result
   }
 
-  def addRestraurant(restaurant: Restaurant) = {
+  def addRestraurant(restaurant: RestaurantRow) = {
     restaurants += restaurant
   }
 
