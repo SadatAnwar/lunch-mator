@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {CompleterService, CompleterData} from 'ng2-completer';
+import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
 import {ErrorMapper} from '../../../mappers/ErrorMapper';
 import {RestaurantService} from '../../services/restaurant.services';
 import {AlertDisplay} from '../../../common/services/AlertDisplay';
@@ -30,10 +30,22 @@ export class AddRestaurantComponent extends AlertDisplay {
       .subscribe((response: any) => {
         this.waiting = false;
         this.displaySuccessWithTimeOut("Yippee!!", 2.5);
+        this.reset();
       }, (error: any) => {
         this.waiting = false;
         this.error = ErrorMapper.map(error);
       });
     this.waiting = true;
+  }
+
+  reset(){
+    this.restaurantName = null;
+    this.description = null;
+    this.website = null;
+  }
+
+  select(selected: CompleterItem) {
+    console.log(selected);
+    console.log(selected.title);
   }
 }

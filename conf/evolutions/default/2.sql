@@ -4,7 +4,7 @@ SET SEARCH_PATH TO lunch_world;
 CREATE TABLE restaurants (
   id               SERIAL PRIMARY KEY,
   name             VARCHAR NOT NULL,
-  website          VARCHAR,
+  website          VARCHAR NOT NULL DEFAULT "",
   description      VARCHAR,
   added_by_user_id INTEGER REFERENCES users (id),
   CONSTRAINT uk_restaurants UNIQUE (name, website)
