@@ -38,10 +38,11 @@ export class AddRestaurantComponent extends AlertDisplay {
     this.waiting = true;
   }
 
-  reset(){
+  reset() {
     this.restaurantName = null;
     this.description = null;
     this.website = null;
+    this.error = null;
   }
 
   select(selected: CompleterItem) {

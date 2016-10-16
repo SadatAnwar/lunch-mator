@@ -9,6 +9,6 @@ object RestaurantMapper {
   }
 
   def map(restaurantDto: RestaurantDto, user: User) = {
-    RestaurantRow(None, restaurantDto.name, restaurantDto.website, restaurantDto.description, user.id)
+    RestaurantRow(None, restaurantDto.name, restaurantDto.website.getOrElse(""), restaurantDto.description, user.id)
   }
 }
