@@ -1,16 +1,17 @@
 package services
 
+import java.sql.Timestamp
+import java.util.Date
 import com.google.inject.Inject
-import mappers.{LunchTableMapper, UserMapper}
-import models.{LunchDto, LunchTableRow}
-import persistence.repository.LunchTableRows
+import exceptions.{ParticipantService, UserNotFoundException}
+import mappers.LunchTableMapper
+import models.{LunchDto, ParticipantRow}
+import persistence.repository.{LunchTableRows, Participants, Users}
+import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, userService: UserService) extends Service {
-
-  def createNewTable(lunchTableRow: LunchTableRow) = usingDB {
-    LunchTableRows.createLunch(lunchTableRow)
-  }
+class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service {
 
   def getAllLunchTables = usingDB {
     LunchTableRows.getAll
@@ -20,12 +21,17 @@ class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPr
     LunchTableRows.getLunchTableById(id)
   }
 
-  def createLunch(lunchDto: LunchDto, userName: String) = usingDB {
+  def createLunch(email: String, lunchDto: LunchDto) = usingDB {
     val lunch = LunchTableMapper.map(lunchDto)
-    LunchTableRows.createLunch(lunch)
+    val lunchId = LunchTableRows.createLunch(lunch)
+    lunchId.flatMap(singUpCreatorForLunch(email, _))
   }
 
-  private def singUpCreatorForLunch(userName: String) = {
-
+  private def singUpCreatorForLunch(email: String, lunchId: Int) = {
+    Users.getByEmail(email).flatMap { user =>
+      val joined = new Date()
+      Logger.info(s"adding user [$user] as participant for lunchId [$lunchId]")
+      Participants.addParticipant(ParticipantRow(lunchId, user.id.getOrElse(throw new UserNotFoundException(user)), new Timestamp(joined.getTime)))
+    }
   }
 }

@@ -18,6 +18,12 @@ class Service @Inject()(implicit val dbConfigProvider: DatabaseConfigProvider) {
   def usingDB[T](f: => DBIOAction[T, NoStream, Nothing]) = {
     db.run(f)
   }
+
+  def usingDBAsync[T](f: => Future[DBIOAction[T, NoStream, Nothing]]) = {
+    f.flatMap { query =>
+      db.run(query)
+    }
+  }
 }
 
 object usingDB {

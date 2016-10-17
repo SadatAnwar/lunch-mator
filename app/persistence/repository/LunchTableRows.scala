@@ -1,11 +1,13 @@
 package persistence.repository
 
 import java.sql.Timestamp
-import models.{Lunch, LunchTableRow}
+import java.util.Date
+import models.{Lunch, LunchRow, ParticipantRow}
+import play.api.Logger
 import slick.driver.PostgresDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class LunchTableRows(tag: Tag) extends Table[LunchTableRow](tag, Some("lunch_world"), "lunch_tables") {
+class LunchTableRows(tag: Tag) extends Table[LunchRow](tag, Some("lunch_world"), "lunch_tables") {
 
   def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
 
@@ -17,7 +19,7 @@ class LunchTableRows(tag: Tag) extends Table[LunchTableRow](tag, Some("lunch_wor
 
   def anonymous = column[Boolean]("anonymous")
 
-  override def * = (id.?, restaurantId, maxSize, startTime, anonymous) <> (LunchTableRow.tupled, LunchTableRow.unapply _)
+  override def * = (id.?, restaurantId, maxSize, startTime, anonymous) <> (LunchRow.tupled, LunchRow.unapply _)
 }
 
 object LunchTableRows {
@@ -32,12 +34,21 @@ object LunchTableRows {
       (lunch, restaurant)
     }
     q.map {
-      (a) => Lunch(restaurant = a._2, size = 6)
+      (a) => Lunch(a._2, a._1.maxSize, a._1.startTime)
     }
   }
 
-  def createLunch(lunchTableRow: LunchTableRow) = {
+  def createLunch(lunchTableRow: LunchRow) = {
     lunchTableRows += lunchTableRow
+  }
+
+  def createLunchII(lunchTableRow: LunchRow) = {
+    lunchTableRows returning lunchTableRows.map(_.id) into {
+      (lunch, lunchId) =>
+        val joined = new Date()
+        Logger.info(s"adding user [1] as participant for lunch [$lunchId]")
+        Participants.addParticipant(ParticipantRow(lunchId, 1, new Timestamp(joined.getTime)))
+    } += lunchTableRow
   }
 
   var getAll = {

@@ -9,7 +9,9 @@ GET         /rest/restaurants/search/:name        controllers.RestaurantControll
 POST        /rest/restaurants                     controllers.RestaurantController.addRestaurant()
 
 # REST Lunch
-GET         /rest/lunch-tables/:id                controllers.LunchController.getLunchById(id)
+GET         /rest/lunch/:id                       controllers.LunchController.getLunchById(id)
+POST        /rest/lunch                           controllers.LunchController.createLunch()
+PUT         /rest/lunch/:id                       controllers.LunchController.joinLunch(id)
 
 # REST User session
 POST        /rest/login                           controllers.AuthenticationController.authenticate()

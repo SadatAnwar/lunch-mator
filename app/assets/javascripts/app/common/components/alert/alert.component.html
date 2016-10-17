@@ -6,12 +6,12 @@
 
 <div class="container" *ngIf="alert && alert.successMessage">
   <div class="alert alert-success" style="text-align: center">
-    <strong>{{alert.successMessage}}</strong>
+    <strong><i class="fa fa-check" aria-hidden="true"></i>{{alert.successMessage}}</strong>
   </div>
 </div>
 
 <div class="container" *ngIf="alert && alert.error">
   <div class="alert alert-danger" style="text-align: center">
-    <strong>{{alert.error}}</strong>
+    <strong><i class="fa fa-times" aria-hidden="true"></i>{{alert.error}}</strong>
   </div>
 </div>
