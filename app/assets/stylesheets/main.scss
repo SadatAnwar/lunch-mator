@@ -74,3 +74,19 @@ lunch-list {
 .match {
   color: orangered;
 }
+
+.alert-box-visible {
+  visibility: visible;
+  -webkit-transition: visibility 1.5s ease-in-out;
+  -moz-transition: visibility 1.5s ease-in-out;
+  -ms-transition: visibility 1.5s ease-in-out;
+  -o-transition: visibility 1.5s ease-in-out;
+}
+
+.alert-box-hidden {
+  visibility: hidden;
+  -webkit-transition: visibility 1.5s ease-in-out;
+  -moz-transition: visibility 1.5s ease-in-out;
+  -ms-transition: visibility 1.5s ease-in-out;
+  -o-transition: visibility 1.5s ease-in-out;
+}

@@ -19,11 +19,15 @@ POST        /rest/signUp                          controllers.AuthenticationCont
 GET         /rest/logOut                          controllers.AuthenticationController.logOut()
 
 # Make HTML5 links work
+# Unsecured welcome pages
+GET         /registration                         controllers.Application.unSecure()
+GET         /login                                controllers.Application.unSecure()
+
+# Secured endpoints
 GET         /                                     controllers.Application.secured()
 GET         /welcome                              controllers.Application.secured()
-GET         /login                                controllers.Application.unSecure()
-GET         /registration                         controllers.Application.unSecure()
-GET         /add-restaurant                       controllers.Application.unSecure()
+GET         /add-restaurant                       controllers.Application.secured()
+GET         /add-lunch                            controllers.Application.secured()
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)

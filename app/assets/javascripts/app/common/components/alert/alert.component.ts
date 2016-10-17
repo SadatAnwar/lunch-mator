@@ -9,5 +9,9 @@ import {Alert} from '../../types/Alert';
 export class AlertComponent {
   @Input()
   alert: Alert;
+
+  @Input()
+  alertClass: string;
 }
+
 
