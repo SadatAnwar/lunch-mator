@@ -7,7 +7,7 @@ import {ErrorDetail} from '../../../common/types/ErrorDetail';
 
 @Component({
   selector: 'add-restaurant',
-  templateUrl: 'assets/javascripts/app/restaurant/components/addrestaurant/addrestaurant.component.html'
+  templateUrl: 'assets/javascripts/app/restaurant/components/addrestaurant/add-restaurant.component.html'
 })
 export class AddRestaurantComponent extends AlertDisplay {
   waiting: boolean = false;

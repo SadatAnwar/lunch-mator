@@ -1,6 +1,6 @@
 import {ModuleWithProviders} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
-import {AddRestaurantComponent} from "./components/addrestaurant/addrestaurant.component";
+import {AddRestaurantComponent} from "./components/addrestaurant/add-restaurant.component";
 
 
 const restaurantRoutes: Routes = [
