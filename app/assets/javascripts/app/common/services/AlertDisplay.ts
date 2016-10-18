@@ -1,20 +1,19 @@
-import {Alert, AlertLevel} from '../types/Alert';
+import {Alert, AlertLevel} from "../types/Alert";
 
 export abstract class AlertDisplay {
-  private alertClass: string = "alert-box-hidden";
   private alert = new Alert();
 
   protected displaySuccessWithTimeOut(message: string, clearAfter: number) {
     this.alert.successMessage = message;
     setTimeout(() => {
-      this.clear();
+      this.clearAlert();
     }, clearAfter * 1000);
 
   }
 
   private clearAfter(timeOut: number) {
     setTimeout(() => {
-      this.clear();
+      this.clearAlert();
     }, timeOut * 1000);
 
   }
@@ -54,11 +53,9 @@ export abstract class AlertDisplay {
       case AlertLevel.SUCCESS:
         this.displaySuccess(message, timeout)
     }
-    this.alertClass = "alert-box-visible"
   }
 
-  protected clear() {
+  protected clearAlert() {
     this.alert = new Alert();
-    this.alertClass = "alert-box-hidden"
   }
 }

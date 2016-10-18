@@ -3,13 +3,15 @@ import {Router} from "@angular/router";
 import {AuthenticationService} from "app/authentication/services/authentication.service";
 import {ErrorMapper} from "app/mappers/ErrorMapper";
 import {UserIdentity} from "../../types/user-identity";
-import {ErrorDetail} from '../../../common/types/ErrorDetail';
+import {ErrorDetail} from "../../../common/types/ErrorDetail";
+import {AlertDisplay} from "../../../common/services/AlertDisplay";
+import {AlertLevel} from "../../../common/types/Alert";
 
 @Component({
   selector: 'login',
   templateUrl: 'assets/javascripts/app/authentication/components/login/login.component.html'
 })
-export class LoginComponent {
+export class LoginComponent extends AlertDisplay {
   email: string;
   password: string;
   error: ErrorDetail;
@@ -18,12 +20,12 @@ export class LoginComponent {
 
   constructor(private authenticationService: AuthenticationService,
               private router: Router) {
+    super();
   }
 
   signIn() {
-    if (! this.formValidation({email: this.email, password: this.password})) {
-      this.error = new Error();
-      this.error.message = "please enter a valid email";
+    if (!this.formValidation({email: this.email, password: this.password})) {
+      this.displayAlert(AlertLevel.ERROR, "please enter a valid email");
       return;
     }
     this.authenticationService.signIn({email: this.email, password: this.password})
@@ -32,7 +34,7 @@ export class LoginComponent {
         this.redirectToWelcome();
       }, (error: any) => {
         this.waiting = false;
-        this.error = ErrorMapper.map(error);
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
       });
     this.waiting = true;
   }
@@ -42,10 +44,10 @@ export class LoginComponent {
   }
 
   formValidation(userIdentity: UserIdentity): boolean {
-    if (userIdentity.email == null || userIdentity.email.length == 0){
+    if (userIdentity.email == null || userIdentity.email.length == 0) {
       return false;
     }
-    if (userIdentity.password == null || userIdentity.password.length == 0){
+    if (userIdentity.password == null || userIdentity.password.length == 0) {
       return false;
     }
     return true;

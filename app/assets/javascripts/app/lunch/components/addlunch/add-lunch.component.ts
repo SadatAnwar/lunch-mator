@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
-import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
-import {AlertLevel} from '../../../common/types/Alert';
+import {Component} from "@angular/core";
+import {CompleterService, CompleterData, CompleterItem} from "ng2-completer";
+import {AlertDisplay} from "../../../common/services/AlertDisplay";
+import {AlertLevel} from "../../../common/types/Alert";
 
 @Component({
   selector: 'add-lunch',
@@ -24,7 +24,7 @@ export class AddLunchComponent extends AlertDisplay {
 
   createTable() {
     console.log(this.restaurantName);
-    this.displayAlert(AlertLevel.SUCCESS, "Yippee!!");
+    this.displayAlert(AlertLevel.SUCCESS, "Yippee!!", 5);
   }
 
   reset() {

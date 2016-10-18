@@ -1,24 +1,20 @@
 <div class="container" *ngIf="alert && alert.message">
-  <div [class]="alertClass">
     <div class="alert alert-info" style="text-align: center">
       <strong>{{alert.message}}</strong>
     </div>
-  </div>
 </div>
 
-<div class="alert-boxes container" *ngIf="alert && alert.successMessage">
-  <div [class]="alertClass">
-    <div class="alert alert-success" style="text-align: center">
+<div class="container" *ngIf="alert && alert.successMessage">
+    <div [@state]="alert.successMessage == null" class="alert alert-success" style="text-align: center">
       <strong>
         <i style="padding-right: 2em" class="fa fa-check fa-lg" aria-hidden="true"></i>
         {{alert.successMessage}}
       </strong>
-    </div>
   </div>
 </div>
 
-<div class="alert-boxes container" *ngIf="alert && alert.error">
+<div class="container" *ngIf="alert && alert.error">
   <div class="alert alert-danger" style="text-align: center">
-    <strong><i class="fa fa-times fa-lg" aria-hidden="true"></i>{{alert.error}}</strong>
+    <strong><i style="padding-right: 2em" class="fa fa-times fa-lg" aria-hidden="true"></i>{{alert.error}}</strong>
   </div>
 </div>
