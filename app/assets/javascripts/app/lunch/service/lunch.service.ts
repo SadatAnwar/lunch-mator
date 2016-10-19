@@ -32,7 +32,10 @@ export class LunchService {
   }
 
   join(id: number): Observable<any> {
-    return this.http.put(this.url + "/" + id, "").map(response => response.json()).catch((error: any) => {
+    return this.http.put(this.url + "/" + id, "").map(response => {
+      console.log(response);
+      response.json();
+    }).catch((error: any) => {
       console.log(error);
       return error;
     });

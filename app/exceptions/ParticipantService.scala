@@ -10,6 +10,8 @@ import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 import services.{LunchNotFoundException, UserService, usingDB}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfigProvider, userService: UserService) {
 
   def addUserToLunch(user: User, lunch: LunchRow) = usingDB {
@@ -20,8 +22,10 @@ class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfig
   }
 
   def addUserToLunch(email: String, lunchId: Int) = usingDB {
+    Users.getByEmail(email)
+  }.flatMap { user =>
     val joined = new Date()
     Logger.info(s"adding user [$email] as participant for lunch [$lunchId]")
-    Participants.addParticipant(ParticipantRow(lunchId, 1, new Timestamp(joined.getTime)))
+    usingDB(Participants.addParticipant(ParticipantRow(lunchId, user.id.getOrElse(-1), new Timestamp(joined.getTime))))
   }
 }
