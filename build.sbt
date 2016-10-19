@@ -37,7 +37,10 @@ libraryDependencies ++= Seq(
   "org.webjars.npm" % "angular-in-memory-web-api" % "0.1.1",
   "org.webjars.npm" % "jquery" % "3.1.1",
   "org.webjars.npm" % "bootstrap-sass" % "3.3.7",
-  "org.webjars.npm" % "ng2-completer" % "0.2.2"
+  "org.webjars.npm" % "ng2-completer" % "0.2.2",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
+  "joda-time" % "joda-time" % "2.7",
+  "org.joda" % "joda-convert" % "1.7"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the

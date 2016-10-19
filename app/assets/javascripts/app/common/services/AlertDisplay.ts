@@ -39,7 +39,7 @@ export abstract class AlertDisplay {
     }
   }
 
-  protected displayAlert(level: AlertLevel, message: string, timeout: number = -1) {
+  displayAlert(level: AlertLevel, message: string, timeout: number = -1) {
     if (level == AlertLevel.INFO) {
       this.displayInfo(message, timeout);
     }
@@ -55,7 +55,7 @@ export abstract class AlertDisplay {
     }
   }
 
-  protected clearAlert() {
+  clearAlert() {
     this.alert = new Alert();
   }
 }

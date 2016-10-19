@@ -1,3 +1,6 @@
+import {Injectable} from "@angular/core";
+
+@Injectable()
 export class PasswordValidationService {
   private PASSWORD_MIN_LENGTH = 5;
   errorMessage: string = null;

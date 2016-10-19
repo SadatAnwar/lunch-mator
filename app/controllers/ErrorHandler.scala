@@ -25,6 +25,7 @@ class ErrorHandler extends HttpErrorHandler {
   }
 
   def onServerError(request: RequestHeader, exception: Throwable) = {
+    Logger.error(s"Serverside error for request [$request] exception thrown: [$exception]")
     val errorMessage = exception match {
       case e: PSQLException => ErrorMessageMapper.map(e, request.path)
       case e: PasswordValidationException => ErrorMessageMapper.map(e)

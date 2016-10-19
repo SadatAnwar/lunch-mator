@@ -1,9 +1,12 @@
 package services
 
 import com.google.inject.Inject
+import models.{LunchRow, RestaurantRow}
+import persistence.repository.{LunchTableRows, Restaurants}
 import play.api.Play
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

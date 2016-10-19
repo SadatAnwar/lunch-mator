@@ -13,15 +13,15 @@
                    placeholder="Give your lunch {{randomWord}} name">
           </div>
           <div class="form-group">
-            <ng2-completer [(ngModel)]="restaurantName" [dataService]="dataService" [minSearchLength]="1"
+            <ng2-completer [(ngModel)]="restaurantName" [dataService]="dataService" [minSearchLength]="2"
                            inputName="Restaurant name" placeholder="Restaurant name" (selected)="select($event)"
-                           [textNoResults]="'Add a new one'" [matchClass]="'match'">
+                           [matchClass]="'match'">
             </ng2-completer>
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6">
             <div class="form-group">
               <div class='input-group date' id='datetimepicker'>
-                <input [(ngModel)]="startTime" type='datetime' class="form-control" placeholder="Lunch starts at"/>
+                <input [(ngModel)]="startTime" type='number' class="form-control" placeholder="Lunch starts at"/>
                 <span class="input-group-addon">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
               </span>
@@ -30,8 +30,14 @@
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6">
             <div class="form-group">
-              <input [(ngModel)]="maxSize" type="number" name="lunch-name" id="lunch-size" class="form-control"
+              <input [(ngModel)]="maxSize" type="number" min="0" max="50" name="lunch-name" id="lunch-size"
+                     class="form-control"
                      placeholder="Table size">
+            </div>
+          </div>
+          <div class="row">
+            <div class="checkbox">
+              <label><input type="checkbox" [(ngModel)]="anonymous">Anonymous</label>
             </div>
           </div>
           <button type="submit" (click)="createTable()" class="btn btn-info btn-block">

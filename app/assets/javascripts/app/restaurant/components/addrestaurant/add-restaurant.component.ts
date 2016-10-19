@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
-import {ErrorMapper} from '../../../mappers/ErrorMapper';
-import {RestaurantService} from '../../services/restaurant.services';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
-import {ErrorDetail} from '../../../common/types/ErrorDetail';
+import {Component} from "@angular/core";
+import {CompleterService, CompleterData} from "ng2-completer";
+import {ErrorMapper} from "../../../mappers/ErrorMapper";
+import {RestaurantService} from "../../services/restaurant.services";
+import {AlertDisplay} from "../../../common/services/AlertDisplay";
+import {ErrorDetail} from "../../../common/types/ErrorDetail";
+import {AlertLevel} from "../../../common/types/Alert";
 
 @Component({
   selector: 'add-restaurant',
@@ -23,17 +24,19 @@ export class AddRestaurantComponent extends AlertDisplay {
   }
 
   add() {
-    console.log(this.restaurantName);
+    if (this.restaurantName == null || this.restaurantName.length == 0) {
+      this.displayAlert(AlertLevel.ERROR, "Restaurant must have a name")
+    }
     var restaurantDto = {name: this.restaurantName, website: this.website, description: this.description};
     console.log(restaurantDto);
     this.restaurantService.add(restaurantDto)
       .subscribe((response: any) => {
         this.waiting = false;
-        this.displaySuccessWithTimeOut("Yippee!!", 2.5);
+        this.displaySuccessWithTimeOut("Restaurant added", 3);
         this.reset();
       }, (error: any) => {
         this.waiting = false;
-        this.error = ErrorMapper.map(error);
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
       });
     this.waiting = true;
   }
@@ -43,10 +46,5 @@ export class AddRestaurantComponent extends AlertDisplay {
     this.description = null;
     this.website = null;
     this.error = null;
-  }
-
-  select(selected: CompleterItem) {
-    console.log(selected);
-    console.log(selected.title);
   }
 }

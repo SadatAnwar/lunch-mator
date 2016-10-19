@@ -1,51 +1,35 @@
 import {Component, OnInit} from "@angular/core";
 import {LunchDto} from "app/lunch/dto/types";
+import {LunchService} from "../../service/lunch.service";
+import {AlertLevel} from "../../../common/types/Alert";
+import {ErrorMapper} from "../../../mappers/ErrorMapper";
+import {AlertDisplay} from "../../../common/services/AlertDisplay";
 
 @Component({
   selector: 'lunch-list',
   templateUrl: 'assets/javascripts/app/lunch/components/list/lunch-list.component.html'
 })
-export class LunchListComponent implements OnInit {
+export class LunchListComponent extends AlertDisplay implements OnInit {
   lunchList: LunchDto[];
 
+  constructor(private lunchService: LunchService) {
+    super();
+  }
+
   ngOnInit(): void {
-    this.lunchList = this.getLunchList();
+    this.getLunchList();
   }
 
   //TODO: replace with the LunchService
   private getLunchList() {
-    return [
-      {
-        restaurant: {
-          name: 'Da Dante',
-          description: 'Italian',
-          website: ""
-        },
-        seatsLeft: 0,
-        anonymous: true,
-        start: new Date()
-      },
-      {
-        restaurant: {
-          name: 'Die Feinbäckerei',
-          description: 'German',
-          website: ""
-
-        },
-        seatsLeft: 5,
-        anonymous: true,
-        start: new Date()
-      },
-      {
-        restaurant: {
-          name: 'Imren',
-          description: 'Disgusting Döner',
-          website: ""
-        },
-        seatsLeft: 6,
-        anonymous: false,
-        start: new Date()
-      }
-    ];
+    let lunch = this.lunchService.getLunchList()
+      .subscribe((response: LunchDto[]) => {
+        console.log(response);
+        this.lunchList = response;
+      }, (error: any) => {
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
+      });
+    console.log(lunch);
+    return null ;
   }
 }
