@@ -34,7 +34,7 @@ export class LoginComponent extends AlertDisplay {
         this.redirectToWelcome();
       }, (error: any) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
       });
     this.waiting = true;
   }

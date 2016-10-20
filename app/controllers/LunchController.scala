@@ -15,9 +15,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class LunchController @Inject()(lunchService: LunchService, participantService: ParticipantService) extends Controller {
 
   def getLunchById(id: String) = Authenticated.async { request =>
-    val a = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//hacksw/handcal//NONSGML v1.0//EN\nBEGIN:VEVENT\nUID:"+ UUID.randomUUID() + "@yourhost.test\nDTSTAMP:\" . gmdate('Ymd').'T'. gmdate('His') . \"Z\nDTSTART:19970714T170000Z\nDTEND:19970715T035959Z\nSUMMARY:Bastille Day Party\nEND:VEVENT\nEND:VCALENDAR;"
+    val a = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//hacksw/handcal//NONSGML v1.0//EN\nBEGIN:VEVENT\nUID:" + UUID.randomUUID() + "@yourhost.test\nDTSTAMP:\" . gmdate('Ymd').'T'. gmdate('His') . \"Z\nDTSTART:19970714T170000Z\nDTEND:19970715T035959Z\nSUMMARY:Bastille Day Party\nEND:VEVENT\nEND:VCALENDAR;"
     lunchService.getLunchById(id.toInt).map(lunch =>
-      Ok(a).withHeaders("Content-type" -> "text/calendar", "Content-Disposition"->"inline" )
+      Ok(a).withHeaders("Content-type" -> "text/calendar", "Content-Disposition" -> "inline")
     )
   }
 
@@ -28,6 +28,7 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
       Created
     )
   }
+
   def joinLunch(lunchId: Int) = Authenticated.async { request =>
     participantService.addUserToLunch(request.username, lunchId).map(participant =>
       Ok(Json.toJson(participant))
@@ -35,7 +36,7 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
   }
 
   def getLunch() = Authenticated.async { reqiest =>
-    lunchService.getAllLunchTables.map { lunchRestSeq =>
+    lunchService.getAllLunchNotPast.map { lunchRestSeq =>
       val lunchSeq = lunchRestSeq.map { (a) =>
         Lunch(a._1.id.getOrElse(-1), a._2, a._1.maxSize, a._1.startTime, a._1.anonymous)
       }

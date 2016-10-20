@@ -7,6 +7,10 @@
     return 'assets/' + partialPath;
   }
 
+  function npm(partialPath) {
+    return 'node_modules/' + partialPath;
+  }
+
   // map tells the System loader where to look for things
   var map = {
     'app': p('javascripts/app'), // 'dist',
@@ -22,14 +26,16 @@
     '@angular/upgrade': p('lib/angular__upgrade'),
     'angular2-in-memory-web-api': p('lib/angular2-in-memory-web-api'),
     'rxjs': p('lib/rxjs'),
-    'ng2-completer': p('lib/ng2-completer/bundles')
+    'ng2-completer': p('lib/ng2-completer/bundles'),
+    'ng2-select': p('lib/ng2-select/bundles')
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
     'app': {main: 'main.js', defaultExtension: 'js'},
     'rxjs': {defaultExtension: 'js'},
     'angular2-in-memory-web-api': {main: 'index.js', defaultExtension: 'js'},
-    'ng2-completer': {main: 'ng2-completer.js', format: 'cjs'}
+    'ng2-completer': {main: 'ng2-completer.js', format: 'cjs'},
+    'ng2-select': {main: 'ng2-select.js', format: 'cjs'}
   };
   var ngPackageNames = [
     'common',

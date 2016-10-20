@@ -27,9 +27,9 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
         console.log(response);
         this.lunchList = response;
       }, (error: any) => {
-        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
       });
     console.log(lunch);
-    return null ;
+    return null;
   }
 }

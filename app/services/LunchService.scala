@@ -2,19 +2,26 @@ package services
 
 import java.sql.Timestamp
 import java.util.Date
+
 import com.google.inject.Inject
 import exceptions.{ParticipantService, UserNotFoundException}
 import mappers.LunchTableMapper
 import models.{CreateLunchDto, ParticipantRow}
+import org.joda.time.DateTime
 import persistence.repository.{LunchTableRows, Participants, Users}
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service {
 
   def getAllLunchTables = usingDB {
     LunchTableRows.getLunchWithRestaurant()
+  }
+
+  def getAllLunchNotPast = usingDB {
+    LunchTableRows.getLunchAfter(new DateTime())
   }
 
   def getLunchById(id: Int) = usingDB {

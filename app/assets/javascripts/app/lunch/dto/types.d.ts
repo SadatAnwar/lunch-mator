@@ -20,3 +20,7 @@ export interface CreateLunchDto {
   anonymous: boolean;
   maxSize: number;
 }
+
+export interface ErrorDto {
+  message: string;
+}

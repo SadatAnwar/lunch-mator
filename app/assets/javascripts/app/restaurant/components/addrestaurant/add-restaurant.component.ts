@@ -36,7 +36,7 @@ export class AddRestaurantComponent extends AlertDisplay {
         this.reset();
       }, (error: any) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
       });
     this.waiting = true;
   }

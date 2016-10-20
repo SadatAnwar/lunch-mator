@@ -15,7 +15,8 @@ export class AddLunchComponent extends AlertDisplay {
   waiting: boolean = false;
   lunchName: string;
   restaurantName: string;
-  startTime: number;
+  startTime: string;
+  startDate: string;
   maxSize: number;
   dataService: CompleterData;
   randomWord: string = "an awesome";
@@ -28,11 +29,10 @@ export class AddLunchComponent extends AlertDisplay {
   }
 
   createTable() {
-    this.displayAlert(AlertLevel.SUCCESS, "Yippee!!", 5);
     let createLunchDto = {
       restaurantId: this.selectedRestaurant.id,
       lunchName: this.lunchName,
-      startTime: this.startTime,
+      startTime: new Date(this.startDate+'T'+this.startTime).getMilliseconds(),
       anonymous: this.anonymous,
       maxSize: this.maxSize
     };
@@ -44,7 +44,7 @@ export class AddLunchComponent extends AlertDisplay {
         this.reset();
       }, (error: any) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
       });
     this.waiting = true;
   }

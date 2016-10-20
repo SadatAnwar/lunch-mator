@@ -24,7 +24,7 @@ export class LunchItemComponent extends AlertDisplay {
         console.log(response);
         this.displayAlert(AlertLevel.SUCCESS, "Joined " + lunch);
       }, (error: any) => {
-        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error))
+        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
       });
   }
 }
