@@ -2,7 +2,8 @@ export interface LunchDto {
   restaurant: RestaurantDto;
   id: number;
   size: number;
-  start: Date;
+  spotsLeft: number;
+  startTime: number;
   anonymous: boolean;
 }
 

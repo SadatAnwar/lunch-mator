@@ -7,9 +7,11 @@ import {CreateLunchDto} from "../dto/types";
 @Injectable()
 export class LunchService {
   url: string;
+  myLunch: string;
 
   constructor(private http: Http) {
-    this.url = '/rest/lunch'
+    this.url = '/rest/lunch';
+    this.myLunch = '/rest/my-lunch';
   }
 
   createLunch(lunch: CreateLunchDto): Observable<any> {
@@ -36,6 +38,13 @@ export class LunchService {
       console.log(response);
       response.json();
     }).catch((error: any) => {
+      console.log(error);
+      return error;
+    });
+  }
+
+  getMyLunchList() {
+    return this.http.get(this.myLunch).map(response => response.json()).catch((error: any) => {
       console.log(error);
       return error;
     });

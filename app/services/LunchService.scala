@@ -2,30 +2,29 @@ package services
 
 import java.sql.Timestamp
 import java.util.Date
-
 import com.google.inject.Inject
 import exceptions.{ParticipantService, UserNotFoundException}
 import mappers.LunchTableMapper
-import models.{CreateLunchDto, ParticipantRow}
+import models.{CreateLunchDto, LunchRow, ParticipantRow, RestaurantRow}
 import org.joda.time.DateTime
 import persistence.repository.{LunchTableRows, Participants, Users}
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service {
 
   def getAllLunchTables = usingDB {
-    LunchTableRows.getLunchWithRestaurant()
+    LunchTableRows.getLunchWithRestaurant
   }
 
-  def getAllLunchNotPast = usingDB {
-    LunchTableRows.getLunchAfter(new DateTime())
+  def getAllLunchNotPast: Future[Vector[(LunchRow, RestaurantRow, Int)]] = usingDB {
+    LunchTableRows.getLunchWithOpenSpotsAfter(new DateTime())
   }
 
-  def getLunchById(id: Int) = usingDB {
-    LunchTableRows.getLunchTableById(id)
+  def getAllLunchNotPastNotByUser(email: String) : Future[Vector[(LunchRow, RestaurantRow, Int)]]= usingDB {
+    LunchTableRows.getLunchWithOpenSpotsAfter(email, new DateTime())
   }
 
   def createLunch(email: String, lunchDto: CreateLunchDto) = usingDB {

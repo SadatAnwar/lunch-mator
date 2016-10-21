@@ -1,6 +1,6 @@
 package mappers
 
-import models.{CreateLunchDto, LunchRow}
+import models.{CreateLunchDto, Lunch2, LunchRow, RestaurantRow}
 import org.joda.time.DateTime
 
 object LunchTableMapper {
@@ -15,5 +15,9 @@ object LunchTableMapper {
 
   def map(lunchRow: LunchRow): CreateLunchDto = {
     CreateLunchDto(lunchRow.restaurantId, lunchRow.lunchName, lunchRow.startTime.getMillis(), Some(lunchRow.anonymous), lunchRow.maxSize)
+  }
+
+  def map(l: LunchRow, r: RestaurantRow, participantCount: Int) = {
+    Lunch2(l.id.getOrElse(-1), r, l.maxSize, l.maxSize-participantCount, l.startTime, l.anonymous)
   }
 }

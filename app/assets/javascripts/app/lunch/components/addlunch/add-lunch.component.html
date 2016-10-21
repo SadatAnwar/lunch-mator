@@ -5,7 +5,7 @@
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h1 class="panel-title">Create {{randomWord}} lunch</h1>
+          <h1 class="panel-title">Start {{randomWord}} lunch</h1>
         </div>
         <div class="panel-body">
           <div class="col-xs-12">
@@ -13,7 +13,6 @@
               <input [(ngModel)]="lunchName" type="text" name="lunch-name" id="lunch-name" class="form-control"
                      placeholder="Give your lunch {{randomWord}} name">
             </div>
-          </div>
           <div class="col-xs-12">
             <div class="form-group">
               <ng2-completer [(ngModel)]="restaurantName" [dataService]="dataService" [minSearchLength]="2"

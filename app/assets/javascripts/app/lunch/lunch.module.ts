@@ -8,10 +8,11 @@ import {Ng2CompleterModule} from "ng2-completer";
 import {AddLunchComponent} from "./components/addlunch/add-lunch.component";
 import {FormsModule} from "@angular/forms";
 import {LunchService} from "./service/lunch.service";
+import {MyLunchListComponent} from './components/mylunch/lunch-list.component';
 
 @NgModule({
   imports: [CommonModule, CommonModules, Ng2CompleterModule, FormsModule, routing],
-  declarations: [LunchItemComponent, LunchListComponent, AddLunchComponent],
+  declarations: [LunchItemComponent, LunchListComponent, MyLunchListComponent, AddLunchComponent],
   providers: [LunchService]
 })
 export class LunchModule {
