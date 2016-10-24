@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
-import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
-import {AlertLevel} from '../../../common/types/Alert';
-import {RestaurantDto, CreateLunchDto} from '../../dto/types';
-import {ErrorMapper} from '../../../mappers/ErrorMapper';
-import {LunchService} from '../../service/lunch.service';
+import {Component} from "@angular/core";
+import {CompleterService, CompleterData, CompleterItem} from "ng2-completer";
+import {AlertDisplay} from "../../../common/services/AlertDisplay";
+import {AlertLevel} from "../../../common/types/Alert";
+import {RestaurantDto, CreateLunchDto, DateTime} from "../../dto/types";
+import {ErrorMapper} from "../../../mappers/ErrorMapper";
+import {LunchService} from "../../service/lunch.service";
 
 @Component({
   selector: 'add-lunch',
@@ -15,13 +15,19 @@ export class AddLunchComponent extends AlertDisplay {
   waiting: boolean = false;
   lunchName: string = "";
   restaurantName: string = "";
-  startTime: string ;
-  startDate: string ;
   maxSize: number = 0;
   dataService: CompleterData;
   randomWord: string = "an awesome";
   selectedRestaurant: RestaurantDto;
   anonymous: boolean = false;
+
+  //Time
+  startYY: number;
+  startDD: number;
+  startMM: number;
+  startHH: number;
+  startMin: number;
+
 
   constructor(private completerService: CompleterService, private lunchService: LunchService) {
     super();
@@ -30,13 +36,13 @@ export class AddLunchComponent extends AlertDisplay {
 
   createTable() {
     if (!this.selectedRestaurant) {
-      this.displayAlert(AlertLevel.ERROR, "Restaurant cant be null <a href='/'> here</a>>");
+      this.displayAlert(AlertLevel.ERROR, "Make sure you select a valid restaurant. You can add one by going to add restaurant");
       return;
     }
     let createLunchDto = {
       restaurantId: this.selectedRestaurant.id,
       lunchName: this.lunchName,
-      startTime: new Date(this.startDate+'T'+this.startTime).getMilliseconds(),
+      startTime: new Date(2000 + this.startYY, this.startMM, this.startDD, this.startHH, this.startMin).getTime(),
       anonymous: this.anonymous,
       maxSize: this.maxSize
     };
@@ -60,9 +66,13 @@ export class AddLunchComponent extends AlertDisplay {
   reset() {
     this.lunchName = null;
     this.restaurantName = null;
-    this.startTime = null;
     this.maxSize = null;
     this.anonymous = false;
+    this.startYY = null;
+    this.startDD = null;
+    this.startMM = null;
+    this.startHH = null;
+    this.startMin = null;
   }
 
   select(selected: CompleterItem) {
@@ -70,19 +80,22 @@ export class AddLunchComponent extends AlertDisplay {
   }
 
   private validateForm(createLunchDto: CreateLunchDto): boolean {
+    console.log(createLunchDto);
     if (createLunchDto.anonymous == null) {
       createLunchDto.anonymous = false;
     }
     if (createLunchDto.maxSize > 50) {
-      this.displayAlert(AlertLevel.ERROR, "You surely cant have a place that takes so many people? oO", 3);
+      this.displayAlert(AlertLevel.ERROR, "You surely cant have a place that takes so many people? oO", 5);
       return false;
     }
 
     if (createLunchDto.startTime < new Date().getMilliseconds()) {
-      this.displayAlert(AlertLevel.ERROR, "Pretty sure time travel ain't invented yet! Your lunch cant be in the past", 3);
+      this.displayAlert(AlertLevel.ERROR, "Pretty sure time travel ain't invented yet! Your lunch cant be in the past", 5);
       return false;
     }
 
     return true;
   }
+
+
 }

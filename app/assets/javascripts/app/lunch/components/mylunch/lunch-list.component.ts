@@ -7,7 +7,7 @@ import {AlertDisplay} from '../../../common/services/AlertDisplay';
 
 @Component({
   selector: 'lunch-list',
-  templateUrl: 'assets/javascripts/app/mylunch/components/list/lunch-list.component.html',
+  templateUrl: 'assets/javascripts/app/lunch/components/mylunch/lunch-list.component.html',
 })
 
 @Injectable()

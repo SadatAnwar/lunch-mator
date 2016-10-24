@@ -25,3 +25,12 @@ export interface CreateLunchDto {
 export interface ErrorDto {
   message: string;
 }
+
+export interface DateTime{
+  YY: number;
+  MM: number;
+  DD: number;
+  hh: number;
+  mm: number;
+
+}

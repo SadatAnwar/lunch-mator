@@ -76,9 +76,9 @@ object LunchTableRows {
             rt.website,
             rt.description,
             rt.added_by_user_id,
-            pt.participants
+            coalesce(pt.participants, 0) as participants
           FROM lunch_world.lunch_tables lt
-            JOIN
+            LEFT OUTER JOIN
             (SELECT
                p.lunch_table_id,
                count(*) AS participants
@@ -86,7 +86,7 @@ object LunchTableRows {
              GROUP BY p.lunch_table_id) pt ON lt.id = pt.lunch_table_id
             JOIN lunch_world.restaurants rt ON rt.id = lt.restaurant_id
           WHERE lt.start_time > ${time}
-          AND lt.max_size > pt.participants
+          AND lt.max_size > coalesce(pt.participants, 0)
          ;
       """.as[(LunchRow, RestaurantRow, Int)]
   }

@@ -1,4 +1,3 @@
-<error-detail [error]="error"></error-detail>
 <alert-detail [alert]="alert"></alert-detail>
 
 <div class=" container">
@@ -13,7 +12,6 @@
             <ng2-completer [(ngModel)]="restaurantName" [dataService]="dataService" [minSearchLength]="3"
                            inputName="Restaurant name"
                            placeholder="Restaurant name" overrideSuggested="true"
-                           (selected)="select($event)"
                            [textNoResults]="'Add a new one'" [matchClass]="'match'">
             </ng2-completer>
           </div>
