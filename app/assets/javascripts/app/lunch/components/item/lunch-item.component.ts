@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {LunchDto} from 'app/lunch/dto/types';
-import {LunchService} from '../../service/lunch.service';
 import {LunchListComponent} from '../list/lunch-list.component';
 
 @Component({
@@ -8,7 +7,6 @@ import {LunchListComponent} from '../list/lunch-list.component';
   templateUrl: 'assets/javascripts/app/lunch/components/item/lunch-item.component.html'
 })
 export class LunchItemComponent {
-  static months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   static days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   @Input()

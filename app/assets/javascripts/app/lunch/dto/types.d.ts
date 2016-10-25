@@ -8,7 +8,13 @@ export interface LunchDto {
 }
 
 export interface RestaurantDto {
-  id?: number;
+  id: number;
+  name: string;
+  website: string;
+  description: string;
+}
+
+export interface CreateRestaurantDto {
   name: string;
   website: string;
   description: string;
@@ -26,11 +32,18 @@ export interface ErrorDto {
   message: string;
 }
 
-export interface DateTime{
+export interface DateTime {
   YY: number;
   MM: number;
   DD: number;
   hh: number;
   mm: number;
 
+}
+
+export interface LunchDetailDto {
+  lunchName: string;
+  restaurantName: string;
+  userName: string;
+  joined: Date;
 }

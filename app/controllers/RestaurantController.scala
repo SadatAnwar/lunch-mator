@@ -1,10 +1,10 @@
 package controllers
 
 import com.google.inject.Inject
+import models.CreateRestaurantDto
 import models.Formats._
-import models.RestaurantDto
 import play.api.libs.json._
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.Controller
 import services.{Authenticated, RestaurantService}
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -18,7 +18,7 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
   }
 
   def addRestaurant() = Authenticated.async(parse.json) { request =>
-    val restaurant = request.body.as[RestaurantDto]
+    val restaurant = request.body.as[CreateRestaurantDto]
     restaurantsService.createNewRestaurant(restaurant, request.username).map {
       result => Created
     }

@@ -42,7 +42,7 @@ export class AddLunchComponent extends AlertDisplay {
     let createLunchDto = {
       restaurantId: this.selectedRestaurant.id,
       lunchName: this.lunchName,
-      startTime: new Date(2000 + this.startYY, this.startMM, this.startDD, this.startHH, this.startMin).getTime(),
+      startTime: new Date(2000 + this.startYY, this.startMM-1, this.startDD, this.startHH, this.startMin).getTime(),
       anonymous: this.anonymous,
       maxSize: this.maxSize
     };

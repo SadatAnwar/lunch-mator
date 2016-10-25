@@ -1,7 +1,8 @@
 package persistence.repository
 
-import java.sql.Timestamp
+import com.github.tototoshi.slick.PostgresJodaSupport._
 import models.ParticipantRow
+import org.joda.time.DateTime
 import play.api.Logger
 import slick.driver.PostgresDriver.api._
 import slick.lifted.Tag
@@ -12,7 +13,7 @@ class Participants(tag: Tag) extends Table[ParticipantRow](tag, Some("lunch_worl
 
   def userId = column[Int]("user_id")
 
-  def joinedAt = column[Timestamp]("joined_at")
+  def joinedAt = column[DateTime]("joined_at")
 
   override def * = (lunchId, userId, joinedAt) <> (ParticipantRow.tupled, ParticipantRow.unapply _)
 }
@@ -28,5 +29,16 @@ object Participants {
 
   def getParticipantsForLunch(lunchId: Int) = {
     participants.filter(_.lunchId === lunchId).result
+  }
+
+  def getParticipantsForLunch1(lunchId: Int) = {
+    val q = for {
+      lunch <- LunchTableRows.lunchTableRows.filter(_.id === lunchId)
+      restaurant <- Restaurants.restaurants.filter(_.id === lunch.restaurantId)
+      (participants, user) <- participants.filter(_.lunchId === lunchId) join Users.users on (_.userId === _.id)
+    } yield {
+      (participants, user, lunch, restaurant)
+    }
+    q.result
   }
 }

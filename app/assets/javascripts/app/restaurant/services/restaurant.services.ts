@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {Http, Headers, Response} from "@angular/http";
-import {Observable} from "rxjs";
-import "rxjs/Rx";
-import {RestaurantDto} from "../../lunch/dto/types";
+import {Injectable} from '@angular/core';
+import {Http, Headers, Response} from '@angular/http';
+import {Observable} from 'rxjs';
+import 'rxjs/Rx';
+import {CreateRestaurantDto} from '../../lunch/dto/types';
 
 @Injectable()
 export class RestaurantService {
@@ -12,7 +12,7 @@ export class RestaurantService {
     this.baseUrl = '/rest/restaurants'
   }
 
-  add(restaurantDto: RestaurantDto): Observable<any> {
+  add(restaurantDto: CreateRestaurantDto): Observable<any> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     console.log(restaurantDto);

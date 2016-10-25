@@ -16,10 +16,14 @@ object Formats {
 
   implicit val restaurantFormat = Json.format[Restaurant]
   implicit val restaurantDtoFormat = Json.format[RestaurantDto]
+  implicit val createRestaurantDtoFormat = Json.format[CreateRestaurantDto]
   implicit val restaurantRowFormat = Json.format[RestaurantRow]
 
+  implicit val participantDto = Json.format[ParticipantDto]
+
   implicit val lunchFormat = Json.format[Lunch]
-  implicit val lunchFormat2 = Json.format[Lunch2]
+  implicit val lunchDetailFormat = Json.format[LunchDetailDto]
+
   implicit val lunchDtoFormat = Json.format[CreateLunchDto]
 
   implicit val errorFormat = Json.format[Error]

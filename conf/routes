@@ -12,6 +12,8 @@ POST        /rest/restaurants                     controllers.RestaurantControll
 GET         /rest/lunch                           controllers.LunchController.getLunch()
 POST        /rest/lunch                           controllers.LunchController.createLunch()
 PUT         /rest/lunch/:id                       controllers.LunchController.joinLunch(id: Int)
+GET         /rest/lunch-detail/:id                controllers.LunchController.getLunchDetail(id: Int)
+
 
 # REST User session
 POST        /rest/login                           controllers.AuthenticationController.authenticate()
