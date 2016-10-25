@@ -28,14 +28,11 @@ object Participants {
   }
 
   def getParticipantsForLunch(lunchId: Int) = {
-    participants.filter(_.lunchId === lunchId).result
-  }
-
-  def getParticipantsForLunch1(lunchId: Int) = {
     val q = for {
       lunch <- LunchTableRows.lunchTableRows.filter(_.id === lunchId)
       restaurant <- Restaurants.restaurants.filter(_.id === lunch.restaurantId)
       (participants, user) <- participants.filter(_.lunchId === lunchId) join Users.users on (_.userId === _.id)
+      if (lunch.anonymous != true)
     } yield {
       (participants, user, lunch, restaurant)
     }

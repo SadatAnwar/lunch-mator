@@ -31,7 +31,7 @@ class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfig
   }
 
   def getParticipants(lunchId: Int) = usingDB {
-    Participants.getParticipantsForLunch1(lunchId)
+    Participants.getParticipantsForLunch(lunchId)
   }.map {
     participants => participants.map{p =>
       ParticipantMapper.map(p._1, p._2)}

@@ -1,4 +1,19 @@
-<div class="list-group-item" >
-
+<div *ngIf="lunch">
+  <h4> At {{lunch.restaurant.name}}</h4>
+  <div>
+    {{lunch.restaurant.description}}
+  </div>
+  <div>
+    Starts at: {{lunch.startTime}}
+  </div>
+  <div>
+    Max Size: {{lunch.maxSize}}
+  </div>
+  <div class="list-group" *ngIf="lunch.participants.length > 0">
+    <div *ngFor="let participant of lunch.participants">
+      <div class="list-group-item">{{participant.userName}}</div>
+      <div class="list-group-item">{{participant.joined}}</div>
+    </div>
+  </div>
 
 </div>

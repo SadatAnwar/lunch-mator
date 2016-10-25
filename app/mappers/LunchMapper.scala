@@ -24,12 +24,6 @@ object LunchMapper {
   }
 
   def map(lunchRow: LunchRow, restaurantRow: RestaurantRow, participantDtos: Seq[ParticipantDto]): LunchDetailDto = {
-    LunchDetailDto(lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.startTime, participantDtos)
-  }
-
-  def map(lunchRow: LunchRow, restaurantRow: RestaurantRow, participantDtos: Future[Seq[ParticipantDto]]) = {
-    participantDtos.map { participants =>
-      LunchDetailDto(lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.startTime, participants)
-    }
+    LunchDetailDto(lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.maxSize, lunchRow.startTime, participantDtos)
   }
 }

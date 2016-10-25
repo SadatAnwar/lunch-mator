@@ -8,9 +8,9 @@
         <span *ngIf="lunch.spotsLeft == 0">
           <button type="button" class="btn btn-danger"> Full </button>
         </span>
-        <!--<span *ngIf="!lunch.anonymous">-->
-          <!--<button type="button" class="btn btn-primary"> Details </button>-->
-        <!--</span>-->
+        <span>
+          <button (click)="onSelect(lunch)" type="button" class="btn btn-primary"> Details </button>
+        </span>
       </span>
   </h4>
   <div>

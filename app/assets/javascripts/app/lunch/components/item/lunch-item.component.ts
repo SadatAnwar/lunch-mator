@@ -1,6 +1,7 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {LunchDto} from 'app/lunch/dto/types';
-import {LunchListComponent} from '../list/lunch-list.component';
+import {Component, Input} from "@angular/core";
+import {LunchDto} from "app/lunch/dto/types";
+import {LunchListComponent} from "../list/lunch-list.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'lunch-item',
@@ -14,7 +15,7 @@ export class LunchItemComponent {
 
   startTime: string;
 
-  constructor(private lunchComponent: LunchListComponent) {
+  constructor(private lunchComponent: LunchListComponent, private router: Router) {
   }
 
   ngAfterContentInit() {
@@ -36,4 +37,7 @@ export class LunchItemComponent {
     return mmdd + " (" + LunchItemComponent.days[date.getDay()] + ") " + hhmm;
   }
 
+  onSelect(lunch: LunchDto) {
+    this.router.navigate(['/lunch', lunch.id]);
+  }
 }

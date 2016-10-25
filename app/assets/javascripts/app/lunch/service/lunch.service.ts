@@ -53,7 +53,7 @@ export class LunchService {
   }
 
   getLunchDetails(lunchId: number) {
-    return this.http.get(this.myLunchUrl + lunchId).map(response => response.json()).catch((error: any) => {
+    return this.http.get(this.lunchDetailUrl + lunchId).map(response => response.json()).catch((error: any) => {
       console.log(error);
       return error;
     });
