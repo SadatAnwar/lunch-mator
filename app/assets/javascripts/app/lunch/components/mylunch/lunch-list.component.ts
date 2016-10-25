@@ -7,11 +7,11 @@ import {AlertDisplay} from '../../../common/services/AlertDisplay';
 
 @Component({
   selector: 'lunch-list',
-  templateUrl: 'assets/javascripts/app/lunch/components/list/lunch-list.component.html',
+  templateUrl: 'assets/javascripts/app/lunch/components/mylunch/lunch-list.component.html',
 })
 
 @Injectable()
-export class LunchListComponent extends AlertDisplay implements OnInit {
+export class MyLunchListComponent extends AlertDisplay implements OnInit {
   lunchList: LunchDto[];
   time: string;
 
@@ -20,11 +20,11 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getLunchList();
+    this.getMyLunchList();
   }
 
-  private getLunchList() {
-    let lunch = this.lunchService.getLunchList()
+  private getMyLunchList() {
+    let lunch = this.lunchService.getMyLunchList()
       .subscribe((response: LunchDto[]) => {
         console.log(response);
         this.lunchList = response;
@@ -34,14 +34,4 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
     console.log(lunch);
   }
 
-  join(lunch: LunchDto) {
-    console.log(lunch);
-    this.lunchService.join(lunch.id)
-      .subscribe((response: any) => {
-        console.log(response);
-        this.displayAlert(AlertLevel.SUCCESS, "Joined lunch at" + lunch.restaurant.name);
-      }, (error: any) => {
-        this.displayAlert(AlertLevel.ERROR, "Error while joining lunch, make sure you are not already joined")
-      });
-  }
 }

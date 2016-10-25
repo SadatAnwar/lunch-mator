@@ -22,7 +22,8 @@
       "@angular/router": ["angular__router/index"],
       "@angular/http": ["angular__http/index"],
       "rxjs": ["rxjs/Rx"],
-      "ng2-completer": ["ng2-completer/bundles/src/index"]
+      "ng2-completer": ["ng2-completer/bundles/src/index"],
+      "ng2-select": ["ng2-select/ng2-select"]
     },
     "outDir": "target/karma/javascripts"
   },

@@ -1,28 +1,29 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {RegistrationService} from 'app/authentication/services/registration.service';
-import {PasswordValidationService} from 'app/authentication/services/passwordvalidation.service';
-import {ErrorMapper} from 'app/mappers/ErrorMapper';
-import {ErrorDetail} from '../../../common/types/ErrorDetail';
+import {Component} from "@angular/core";
+import {Router} from "@angular/router";
+import {RegistrationService} from "app/authentication/services/registration.service";
+import {ErrorMapper} from "app/mappers/ErrorMapper";
+import {AlertDisplay} from "../../../common/services/AlertDisplay";
+import {AlertLevel} from "../../../common/types/Alert";
+import {PasswordValidationService} from "../../services/passwordvalidation.service";
 
 @Component({
   selector: 'registration',
   templateUrl: 'assets/javascripts/app/authentication/components/registration/registration.component.html'
 })
 
-export class RegistrationComponent {
+export class RegistrationComponent extends AlertDisplay {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
-  error: ErrorDetail = null;
   random = null;
   waiting: boolean = false;
 
   constructor(private registrationService: RegistrationService,
               private passwordValidationService: PasswordValidationService,
               private router: Router) {
+    super();
   }
 
   ngAfterViewInit() {
@@ -49,7 +50,7 @@ export class RegistrationComponent {
           this.redirectToWelcome();
         }, (error: any) => {
           this.waiting = false;
-          this.error = ErrorMapper.map(error);
+          this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
         });
       this.waiting = true;
     }
@@ -60,7 +61,7 @@ export class RegistrationComponent {
   }
 
   private alertPasswordMismatch() {
-    this.error = this.passwordValidationService.getError();
+    this.displayAlert(AlertLevel.ERROR, this.passwordValidationService.getError());
   }
 
   private redirectToWelcome() {
@@ -68,7 +69,7 @@ export class RegistrationComponent {
   }
 
   private refresh() {
-    this.error = null;
+    this.clearAlert()
   }
 
   private randomGenerator() {

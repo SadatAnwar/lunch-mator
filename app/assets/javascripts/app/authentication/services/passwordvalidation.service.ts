@@ -1,37 +1,41 @@
-import {ErrorDetail} from '../../common/types/ErrorDetail';
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class PasswordValidationService {
   private PASSWORD_MIN_LENGTH = 5;
-  error: ErrorDetail = null;
+  errorMessage: string = null;
 
   constructor() {
   }
 
   public isValid(): boolean {
-    return this.error.message == null || this.error.message.length == 0;
+    return this.errorMessage == null || this.errorMessage.length == 0;
   }
 
   public validate(password: string, confirmPassword: string) {
-    this.error = new ErrorDetail();
+    this.errorMessage = null;
     if (password.length < this.PASSWORD_MIN_LENGTH) {
       var message = "Your password has gotta be at least " + this.PASSWORD_MIN_LENGTH + " characters";
-      this.addMessage(this.error, message)
+      this.addMessage(message)
     }
     if (password != confirmPassword) {
       var message = "Your passwords don't match";
-      this.addMessage(this.error, message)
+      this.addMessage(message)
     }
   }
 
-  private addMessage(error: ErrorDetail, message: string) {
-    if (error != null && error.message != null && error.message.length > 0) {
-      error.message += " and ";
-      message = message.toLocaleLowerCase();
+  private addMessage(message: string) {
+    if (this.errorMessage == null) {
+      this.errorMessage = message;
     }
-    error.message += message;
+    else {
+      this.errorMessage += " and ";
+      message = message.toLocaleLowerCase();
+      this.errorMessage += message;
+    }
   }
 
   public getError() {
-    return this.error;
+    return this.errorMessage;
   }
 }

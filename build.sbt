@@ -19,6 +19,10 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "org.scalaz.stream" %% "scalaz-stream" % "0.8",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
+  "joda-time" % "joda-time" % "2.7",
+  "org.joda" % "joda-convert" % "1.7",
+
   "org.webjars" %% "webjars-play" % "2.4.0-2",
   "org.webjars.npm" % "angular__common" % "2.0.1",
   "org.webjars.npm" % "angular__compiler" % "2.0.1",
@@ -37,7 +41,8 @@ libraryDependencies ++= Seq(
   "org.webjars.npm" % "angular-in-memory-web-api" % "0.1.1",
   "org.webjars.npm" % "jquery" % "3.1.1",
   "org.webjars.npm" % "bootstrap-sass" % "3.3.7",
-  "org.webjars.npm" % "ng2-completer" % "0.2.2"
+  "org.webjars.npm" % "ng2-completer" % "0.2.2",
+  "org.webjars.npm" % "ng2-select" % "1.1.1"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the

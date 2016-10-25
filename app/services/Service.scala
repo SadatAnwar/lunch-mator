@@ -1,11 +1,16 @@
 package services
 
 import com.google.inject.Inject
+import models.{LunchRow, RestaurantRow}
+import persistence.repository.{LunchTableRows, Restaurants}
 import play.api.Play
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
 
-class Service @Inject()(val dbConfigProvider: DatabaseConfigProvider) {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+class Service @Inject()(implicit val dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
@@ -16,8 +21,13 @@ class Service @Inject()(val dbConfigProvider: DatabaseConfigProvider) {
   def usingDB[T](f: => DBIOAction[T, NoStream, Nothing]) = {
     db.run(f)
   }
-}
 
+  def usingDBAsync[T](f: => Future[DBIOAction[T, NoStream, Nothing]]) = {
+    f.flatMap { query =>
+      db.run(query)
+    }
+  }
+}
 
 object usingDB {
 
@@ -32,5 +42,11 @@ object usingDB {
 
   def apply[T](f: => DBIOAction[T, NoStream, Nothing]) = {
     db.run(f)
+  }
+
+  def async[T](f: => Future[DBIOAction[T, NoStream, Nothing]]) = {
+    f.flatMap { query =>
+      db.run(query)
+    }
   }
 }

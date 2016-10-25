@@ -8,7 +8,7 @@ import persistence.repository.{UserIdentities, Users}
 import play.api.db.slick.DatabaseConfigProvider
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class AuthenticationService @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Service(dbConfigProvider) {
+class AuthenticationService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider) extends Service {
 
   def signUp(newUserDto: NewUserDto) = {
     createUser(UserMapper.map(newUserDto)).flatMap {

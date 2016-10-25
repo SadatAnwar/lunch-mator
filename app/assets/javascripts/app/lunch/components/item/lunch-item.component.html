@@ -2,10 +2,10 @@
   <h4>
     {{lunch?.restaurant?.name}}
     <span class="pull-right">
-        <span *ngIf="lunch.seatsLeft > 0">
-          <button type="button" class="btn btn-success" onclick="alert('Join');"> Join </button>
+        <span *ngIf="lunch.spotsLeft > 0">
+          <button type="button" class="btn btn-success" (click)="join(lunch)"> Join </button>
         </span>
-        <span *ngIf="lunch.seatsLeft == 0">
+        <span *ngIf="lunch.spotsLeft == 0">
           <button type="button" class="btn btn-danger"> Full </button>
         </span>
         <span *ngIf="!lunch.anonymous">
@@ -17,9 +17,9 @@
     {{lunch?.restaurant?.description}}
   </div>
   <div>
-    Starts at: {{lunch?.start}}
+    Starts at: {{startTime}}
   </div>
   <div>
-    Seats left: {{lunch?.seatsLeft}}
+    Seats left: {{lunch?.spotsLeft}}
   </div>
 </a>
