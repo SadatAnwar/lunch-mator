@@ -1,14 +1,13 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {LunchDto} from 'app/lunch/dto/types';
-import {LunchService} from '../../service/lunch.service';
-import {LunchListComponent} from '../list/lunch-list.component';
+import {Component, Input} from "@angular/core";
+import {LunchDto} from "app/lunch/dto/types";
+import {LunchListComponent} from "../list/lunch-list.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'lunch-item',
   templateUrl: 'assets/javascripts/app/lunch/components/item/lunch-item.component.html'
 })
 export class LunchItemComponent {
-  static months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   static days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   @Input()
@@ -16,7 +15,7 @@ export class LunchItemComponent {
 
   startTime: string;
 
-  constructor(private lunchComponent: LunchListComponent) {
+  constructor(private lunchComponent: LunchListComponent, private router: Router) {
   }
 
   ngAfterContentInit() {
@@ -38,4 +37,7 @@ export class LunchItemComponent {
     return mmdd + " (" + LunchItemComponent.days[date.getDay()] + ") " + hhmm;
   }
 
+  onSelect(lunch: LunchDto) {
+    this.router.navigate(['/lunch', lunch.id]);
+  }
 }

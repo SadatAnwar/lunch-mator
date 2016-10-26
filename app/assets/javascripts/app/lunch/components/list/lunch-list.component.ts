@@ -39,9 +39,9 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
     this.lunchService.join(lunch.id)
       .subscribe((response: any) => {
         console.log(response);
-        this.displayAlert(AlertLevel.SUCCESS, "Joined lunch at" + lunch.restaurant.name);
+        this.displayAlert(AlertLevel.SUCCESS, "Joined lunch at " + lunch.restaurant.name, 3);
       }, (error: any) => {
-        this.displayAlert(AlertLevel.ERROR, "Error while joining lunch, make sure you are not already joined")
+        this.displayAlert(AlertLevel.ERROR, "Error while joining lunch, make sure you are not already joined", 3)
       });
   }
 }

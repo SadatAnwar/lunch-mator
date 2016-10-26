@@ -1,10 +1,9 @@
 package services
 
-import java.sql.Timestamp
 import java.util.Date
 import com.google.inject.Inject
 import exceptions.{ParticipantService, UserNotFoundException}
-import mappers.LunchTableMapper
+import mappers.LunchMapper
 import models.{CreateLunchDto, LunchRow, ParticipantRow, RestaurantRow}
 import org.joda.time.DateTime
 import persistence.repository.{LunchTableRows, Participants, Users}
@@ -15,20 +14,20 @@ import scala.concurrent.Future
 
 class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service {
 
-  def getAllLunchTables = usingDB {
-    LunchTableRows.getLunchWithRestaurant
-  }
-
   def getAllLunchNotPast: Future[Vector[(LunchRow, RestaurantRow, Int)]] = usingDB {
     LunchTableRows.getLunchWithOpenSpotsAfter(new DateTime())
   }
 
-  def getAllLunchNotPastNotByUser(email: String) : Future[Vector[(LunchRow, RestaurantRow, Int)]]= usingDB {
+  def getAllLunchNotPastNotByUser(email: String): Future[Vector[(LunchRow, RestaurantRow, Int)]] = usingDB {
     LunchTableRows.getLunchWithOpenSpotsAfter(email, new DateTime())
   }
 
+  def getLunchDetail(lunchId: Int): Future[(LunchRow, RestaurantRow)] = usingDB {
+    LunchTableRows.getLunchWithRestaurant(lunchId)
+  }
+
   def createLunch(email: String, lunchDto: CreateLunchDto) = usingDB {
-    val lunch = LunchTableMapper.map(lunchDto)
+    val lunch = LunchMapper.map(lunchDto)
     val lunchId = LunchTableRows.createLunch(lunch)
     lunchId.flatMap(singUpCreatorForLunch(email, _))
   }
@@ -37,7 +36,7 @@ class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPr
     Users.getByEmail(email).flatMap { user =>
       val joined = new Date()
       Logger.info(s"adding user [$user] as participant for lunchId [$lunchId]")
-      Participants.addParticipant(ParticipantRow(lunchId, user.id.getOrElse(throw new UserNotFoundException(user)), new Timestamp(joined.getTime)))
+      Participants.addParticipant(ParticipantRow(lunchId, user.id.getOrElse(throw new UserNotFoundException(user)), new DateTime(joined.getTime)))
     }
   }
 }

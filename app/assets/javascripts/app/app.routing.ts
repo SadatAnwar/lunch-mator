@@ -1,17 +1,17 @@
-import { ModuleWithProviders }  from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {ModuleWithProviders} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {WelcomeComponent} from 'app/common/components/welcome/welcome.component';
 
 const appRoutes: Routes = [
-    {
-        path: '',
-        redirectTo: '/welcome',
-        pathMatch: 'full'
-    },
-    {
-        path: 'welcome',
-        component: WelcomeComponent
-    }
+  {
+    path: '',
+    redirectTo: '/welcome',
+    pathMatch: 'full'
+  },
+  {
+    path: 'welcome',
+    component: WelcomeComponent
+  }
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

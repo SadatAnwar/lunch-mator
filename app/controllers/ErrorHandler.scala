@@ -16,9 +16,9 @@ import scala.concurrent._
 class ErrorHandler extends HttpErrorHandler {
 
   def onClientError(request: RequestHeader, statusCode: Int, message: String) = {
-    Logger.error(s"Client error: {$request}")
+    Logger.error(s"Client error: message:[$message], request:[$request], status:[$statusCode]")
     Future.successful(
-      Status(statusCode)("A client error occurred: " + message)
+      Status(statusCode)
     )
   }
 

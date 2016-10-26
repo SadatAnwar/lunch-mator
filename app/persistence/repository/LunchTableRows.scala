@@ -1,6 +1,6 @@
 package persistence.repository
 
-import com.github.tototoshi.slick.H2JodaSupport._
+import com.github.tototoshi.slick.PostgresJodaSupport._
 import models.{LunchRow, RestaurantRow}
 import org.joda.time.DateTime
 import slick.driver.PostgresDriver.api._
@@ -25,7 +25,7 @@ class LunchTableRows(tag: Tag) extends Table[LunchRow](tag, Some("lunch_world"),
 
 object LunchTableRows {
 
-  implicit val getUserResult = GetResult[(LunchRow, RestaurantRow, Int)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<), r.<<))
+  implicit val compoundLunch = GetResult[(LunchRow, RestaurantRow, Int)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<), r.<<))
 
   lazy val lunchTableRows = TableQuery[LunchTableRows]
 
@@ -37,14 +37,13 @@ object LunchTableRows {
     lunchTableRows.result
   }
 
-  def getLunchWithRestaurant = {
+  def getLunchWithRestaurant(lunchId: Int) = {
     val q = for {
-      (lunch, restaurant) <- lunchTableRows join Restaurants.restaurants on (_.restaurantId === _.id)
+      (lunch, restaurant) <- lunchTableRows.filter(_.id === lunchId) join Restaurants.restaurants on (_.restaurantId === _.id)
     } yield {
       (lunch, restaurant)
     }
-
-    q.result
+    q.result.head
   }
 
   def filter() = {

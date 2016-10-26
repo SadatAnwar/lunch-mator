@@ -8,7 +8,11 @@ object RestaurantMapper {
     Restaurant(restaurantRow.name, user)
   }
 
-  def map(restaurantDto: RestaurantDto, user: User) = {
+  def map(restaurantDto: CreateRestaurantDto, user: User) = {
     RestaurantRow(None, restaurantDto.name, restaurantDto.website.getOrElse(""), restaurantDto.description, user.id)
+  }
+
+  def map(restaurantRow: RestaurantRow): RestaurantDto = {
+    RestaurantDto(restaurantRow.id.getOrElse(-1), restaurantRow.name, Some(restaurantRow.website), restaurantRow.description)
   }
 }

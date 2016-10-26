@@ -1,16 +1,14 @@
 package controllers
 
 import java.util.UUID
-
 import com.google.inject.Inject
 import exceptions.ParticipantService
-import mappers.LunchTableMapper
+import mappers.LunchMapper
 import models.Formats._
-import models.{CreateLunchDto, Lunch2, LunchRow, RestaurantRow}
+import models._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import services.{Authenticated, LunchService}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class LunchController @Inject()(lunchService: LunchService, participantService: ParticipantService) extends Controller {
@@ -20,7 +18,7 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
   def createLunch() = Authenticated.async(parse.json) { request =>
     val lunchDto = request.body.as[CreateLunchDto]
     lunchService.createLunch(request.username, lunchDto).map(lunch =>
-      Created
+      Created(a)
     )
   }
 
@@ -30,12 +28,20 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
     )
   }
 
-  def getLunch() = Authenticated.async { request =>
+  def getLunch = Authenticated.async { request =>
     lunchService.getAllLunchNotPast.map { lunchRestSeq =>
-      val lunchSeq = lunchRestSeq.map( a => LunchTableMapper.map(a._1,a._2,a._3))
+      val lunchSeq = lunchRestSeq.map(a => LunchMapper.map(a._1, a._2, a._3))
       Ok(Json.toJson(lunchSeq))
     }
   }
 
-
+  def getLunchDetail(lunchId: Int) = Authenticated.async { request =>
+    participantService.getParticipants(lunchId).flatMap { participants =>
+      val detail = lunchService.getLunchDetail(lunchId)
+      detail.map { a =>
+        val lunchDetail: LunchDetailDto = LunchMapper.map(a._1, a._2, participants)
+        Ok(Json.toJson(lunchDetail))
+      }
+    }
+  }
 }
