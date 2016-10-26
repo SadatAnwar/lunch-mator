@@ -1,7 +1,6 @@
 package controllers
 
 import java.util.UUID
-
 import com.google.inject.Inject
 import exceptions.ParticipantService
 import mappers.LunchMapper
@@ -10,7 +9,6 @@ import models._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import services.{Authenticated, LunchService}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class LunchController @Inject()(lunchService: LunchService, participantService: ParticipantService) extends Controller {
@@ -20,7 +18,7 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
   def createLunch() = Authenticated.async(parse.json) { request =>
     val lunchDto = request.body.as[CreateLunchDto]
     lunchService.createLunch(request.username, lunchDto).map(lunch =>
-      Created
+      Created(a)
     )
   }
 
@@ -46,5 +44,4 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
       }
     }
   }
-
 }

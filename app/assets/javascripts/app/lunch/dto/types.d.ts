@@ -41,9 +41,15 @@ export interface DateTime {
 
 }
 
+export interface ParticipantDto {
+  name: string;
+  joined: Date;
+}
+
 export interface LunchDetailDto {
   lunchName: string;
-  restaurantName: string;
-  userName: string;
-  joined: Date;
+  restaurant: RestaurantDto;
+  participants: ParticipantDto[];
+  maxSize: number;
+  startTime: Date;
 }
