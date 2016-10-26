@@ -14,6 +14,11 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
       Ok(views.html.index())
   }
 
+  def securedWithParam(id: Any) = Authenticated {
+    request =>
+      Ok(views.html.index())
+  }
+
   def unSecure() =  Action {
     Ok(views.html.index())
   }

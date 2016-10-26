@@ -22,7 +22,7 @@ class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPr
     LunchTableRows.getLunchWithOpenSpotsAfter(email, new DateTime())
   }
 
-  def getLunchDetail(lunchId: Int) = usingDB {
+  def getLunchDetail(lunchId: Int): Future[(LunchRow, RestaurantRow)] = usingDB {
     LunchTableRows.getLunchWithRestaurant(lunchId)
   }
 

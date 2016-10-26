@@ -1,19 +1,22 @@
 <div *ngIf="lunch">
-  <h4> At {{lunch.restaurant.name}}</h4>
-  <div>
-    {{lunch.restaurant.description}}
-  </div>
-  <div>
-    Starts at: {{lunch.startTime | date}}
-  </div>
-  <div>
-    Max Size: {{lunch.maxSize}}
-  </div>
   <div class="list-group" *ngIf="lunch.participants.length > 0">
+    <h4> At {{lunch.restaurant.name}}</h4>
+    <div>
+      {{lunch.restaurant.description}}
+    </div>
+    <div>
+      Starts at: {{lunch.startTime | date}}
+    </div>
+    <div>
+      Max Size: {{lunch.maxSize}}
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        People going
+      </div>
+    </div>
     <div *ngFor="let participant of lunch.participants">
-      <div class="list-group-item">{{participant.userName}}</div>
-      <div class="list-group-item">{{participant.joined | date}}</div>
+      <div class="list-group-item">{{participant.userName}} Joined on {{participant.joined | date}}</div>
     </div>
   </div>
-
 </div>
