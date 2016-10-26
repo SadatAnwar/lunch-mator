@@ -4,7 +4,7 @@
     {{lunch.restaurant.description}}
   </div>
   <div>
-    Starts at: {{lunch.startTime}}
+    Starts at: {{lunch.startTime | date}}
   </div>
   <div>
     Max Size: {{lunch.maxSize}}
@@ -12,7 +12,7 @@
   <div class="list-group" *ngIf="lunch.participants.length > 0">
     <div *ngFor="let participant of lunch.participants">
       <div class="list-group-item">{{participant.userName}}</div>
-      <div class="list-group-item">{{participant.joined}}</div>
+      <div class="list-group-item">{{participant.joined | date}}</div>
     </div>
   </div>
 
