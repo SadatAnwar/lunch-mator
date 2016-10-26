@@ -4,6 +4,7 @@ import {LunchService} from '../../service/lunch.service';
 import {AlertLevel} from '../../../common/types/Alert';
 import {ErrorMapper} from '../../../mappers/ErrorMapper';
 import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {CalenderService} from '../../service/calander.service';
 
 @Component({
   selector: 'lunch-list',
@@ -15,7 +16,7 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
   lunchList: LunchDto[];
   time: string;
 
-  constructor(private lunchService: LunchService) {
+  constructor(private lunchService: LunchService, private calenderService: CalenderService) {
     super();
   }
 
@@ -40,6 +41,7 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
       .subscribe((response: any) => {
         console.log(response);
         this.displayAlert(AlertLevel.SUCCESS, "Joined lunch at " + lunch.restaurant.name, 3);
+        this.calenderService.createCalander(lunch.lunchName, lunch.restaurant.name, lunch.restaurant.website, new Date(lunch.startTime));
       }, (error: any) => {
         this.displayAlert(AlertLevel.ERROR, "Error while joining lunch, make sure you are not already joined", 3)
       });

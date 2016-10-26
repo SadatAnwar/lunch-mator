@@ -32,7 +32,6 @@ object Participants {
       lunch <- LunchTableRows.lunchTableRows.filter(_.id === lunchId)
       restaurant <- Restaurants.restaurants.filter(_.id === lunch.restaurantId)
       (participants, user) <- participants.filter(_.lunchId === lunchId) join Users.users on (_.userId === _.id)
-      if (lunch.anonymous != true)
     } yield {
       (participants, user, lunch, restaurant)
     }

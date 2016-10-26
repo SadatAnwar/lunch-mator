@@ -1,7 +1,8 @@
 export interface LunchDto {
   restaurant: RestaurantDto;
   id: number;
-  size: number;
+  lunchName: string;
+  maxSize: number;
   spotsLeft: number;
   startTime: number;
   anonymous: boolean;
@@ -46,10 +47,6 @@ export interface ParticipantDto {
   joined: Date;
 }
 
-export interface LunchDetailDto {
-  lunchName: string;
-  restaurant: RestaurantDto;
+export interface LunchDetailDto extends LunchDto {
   participants: ParticipantDto[];
-  maxSize: number;
-  startTime: Date;
 }

@@ -4,6 +4,7 @@ import {Router, ActivatedRoute, Params} from '@angular/router';
 import {LunchService} from '../../service/lunch.service';
 import {AlertLevel} from '../../../common/types/Alert';
 import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {CalenderService} from '../../service/calander.service';
 
 @Component({
   selector: 'lunch-detail',
@@ -16,6 +17,7 @@ export class LunchDetailComponent extends AlertDisplay {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private calenderService: CalenderService,
               private service: LunchService) {
     super();
     console.log("in constructor");
@@ -41,6 +43,7 @@ export class LunchDetailComponent extends AlertDisplay {
       .subscribe((response: any) => {
         console.log(response);
         this.displayAlert(AlertLevel.SUCCESS, "Joined lunch at " + lunch.restaurant.name, 3);
+        this.calenderService.createCalander(lunch.lunchName, lunch.restaurant.name, lunch.restaurant.website, new Date(lunch.startTime));
       }, (error: any) => {
         this.displayAlert(AlertLevel.ERROR, "Error while joining lunch, make sure you are not already joined", 3)
       });

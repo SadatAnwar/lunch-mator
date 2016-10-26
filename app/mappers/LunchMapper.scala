@@ -2,8 +2,6 @@ package mappers
 
 import models._
 import org.joda.time.DateTime
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 object LunchMapper {
 
@@ -20,10 +18,17 @@ object LunchMapper {
   }
 
   def map(l: LunchRow, r: RestaurantRow, participantCount: Int) = {
-    Lunch(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, l.anonymous)
+    LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, l.anonymous)
   }
 
   def map(lunchRow: LunchRow, restaurantRow: RestaurantRow, participantDtos: Seq[ParticipantDto]): LunchDetailDto = {
-    LunchDetailDto(lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.maxSize, lunchRow.startTime, participantDtos)
+    val participantCount = participantDtos.length
+    var participants = participantDtos
+
+    if (lunchRow.anonymous) {
+      participants = Seq.empty[ParticipantDto]
+    }
+
+    LunchDetailDto(lunchRow.id.getOrElse(-1), lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.maxSize, lunchRow.maxSize - participantCount, lunchRow.startTime, lunchRow.anonymous, participants)
   }
 }
