@@ -1,10 +1,11 @@
-import {Component} from "@angular/core";
-import {CompleterService, CompleterData, CompleterItem} from "ng2-completer";
-import {AlertDisplay} from "../../../common/services/AlertDisplay";
-import {AlertLevel} from "../../../common/types/Alert";
-import {RestaurantDto, CreateLunchDto, DateTime} from "../../dto/types";
-import {ErrorMapper} from "../../../mappers/ErrorMapper";
-import {LunchService} from "../../service/lunch.service";
+import {Component} from '@angular/core';
+import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
+import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {AlertLevel} from '../../../common/types/Alert';
+import {RestaurantDto, CreateLunchDto} from '../../dto/types';
+import {ErrorMapper} from '../../../mappers/ErrorMapper';
+import {LunchService} from '../../service/lunch.service';
+import {CalenderService} from '../../service/calander.service';
 
 @Component({
   selector: 'add-lunch',
@@ -28,21 +29,20 @@ export class AddLunchComponent extends AlertDisplay {
   startHH: number;
   startMin: number;
 
-
-  constructor(private completerService: CompleterService, private lunchService: LunchService) {
+  constructor(private completerService: CompleterService, private lunchService: LunchService, private calenderService: CalenderService) {
     super();
     this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
   }
 
   createTable() {
     if (!this.selectedRestaurant) {
-      this.displayAlert(AlertLevel.ERROR, "Make sure you select a valid restaurant. You can add one by going to add restaurant");
+      this.displayAlert(AlertLevel.ERROR, "Make sure you select a valid restaurant. You can add one by going to add restaurant. If this error persists, try reloading the page");
       return;
     }
     let createLunchDto = {
       restaurantId: this.selectedRestaurant.id,
       lunchName: this.lunchName,
-      startTime: new Date(2000 + this.startYY, this.startMM-1, this.startDD, this.startHH, this.startMin).getTime(),
+      startTime: new Date(2000 + this.startYY, this.startMM - 1, this.startDD, this.startHH, this.startMin).getTime(),
       anonymous: this.anonymous,
       maxSize: this.maxSize
     };
@@ -50,11 +50,11 @@ export class AddLunchComponent extends AlertDisplay {
     if (!this.validateForm(createLunchDto)) {
       return;
     }
-    console.log(createLunchDto);
     this.lunchService.createLunch(createLunchDto)
       .subscribe((response: any) => {
         this.waiting = false;
         this.displayAlert(AlertLevel.SUCCESS, "Lunch started", 3);
+        this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
         this.reset();
       }, (error: any) => {
         this.waiting = false;
@@ -75,12 +75,11 @@ export class AddLunchComponent extends AlertDisplay {
     this.startMin = null;
   }
 
-  select(selected: CompleterItem) {
+  selectRestaurant(selected: CompleterItem) {
     this.selectedRestaurant = selected.originalObject;
   }
 
   private validateForm(createLunchDto: CreateLunchDto): boolean {
-    console.log(createLunchDto);
     if (createLunchDto.anonymous == null) {
       createLunchDto.anonymous = false;
     }
@@ -96,6 +95,4 @@ export class AddLunchComponent extends AlertDisplay {
 
     return true;
   }
-
-
 }
