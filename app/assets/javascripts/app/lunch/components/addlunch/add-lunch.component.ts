@@ -16,7 +16,7 @@ export class AddLunchComponent extends AlertDisplay {
   waiting: boolean = false;
   lunchName: string = "";
   restaurantName: string = "";
-  maxSize: number = 0;
+  maxSize: number;
   dataService: CompleterData;
   randomWord: string = "an awesome";
   selectedRestaurant: RestaurantDto;
@@ -83,7 +83,7 @@ export class AddLunchComponent extends AlertDisplay {
     if (createLunchDto.anonymous == null) {
       createLunchDto.anonymous = false;
     }
-    if (createLunchDto.maxSize > 50) {
+    if (createLunchDto.maxSize > 50 || createLunchDto.maxSize < 2) {
       this.displayAlert(AlertLevel.ERROR, "You surely cant have a place that takes so many people? oO", 5);
       return false;
     }
@@ -94,5 +94,14 @@ export class AddLunchComponent extends AlertDisplay {
     }
 
     return true;
+  }
+
+  today() {
+    let date = new Date();
+    this.startYY = date.getFullYear() - 2000;
+    this.startDD = date.getDate();
+    this.startMM = date.getMonth() + 1;
+    this.startHH = 12;
+    this.startMin = 0;
   }
 }
