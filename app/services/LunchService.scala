@@ -1,6 +1,7 @@
 package services
 
 import java.util.Date
+
 import com.google.inject.Inject
 import exceptions.{ParticipantService, UserNotFoundException}
 import mappers.LunchMapper
@@ -9,17 +10,14 @@ import org.joda.time.DateTime
 import persistence.repository.{LunchTableRows, Participants, Users}
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service {
 
   def getAllLunchNotPast: Future[Vector[(LunchRow, RestaurantRow, Int)]] = usingDB {
-    LunchTableRows.getLunchWithOpenSpotsAfter(new DateTime())
-  }
-
-  def getAllLunchNotPastNotByUser(email: String): Future[Vector[(LunchRow, RestaurantRow, Int)]] = usingDB {
-    LunchTableRows.getLunchWithOpenSpotsAfter(email, new DateTime())
+    LunchTableRows.getLunchWithOpenSpotsAfter(new DateTime().withDurationAdded(30 * 60 * 1000, -1))
   }
 
   def getLunchDetail(lunchId: Int): Future[(LunchRow, RestaurantRow)] = usingDB {
