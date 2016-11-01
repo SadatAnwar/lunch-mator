@@ -31,7 +31,7 @@ object Authenticated {
         username =>
           block(new AuthenticatedRequest(username, request))
       } getOrElse {
-        Redirect("/registration")
+        Redirect("/login")
       }
   }
 }
