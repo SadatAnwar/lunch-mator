@@ -7,8 +7,10 @@
     </li>
   </ul>
 </div>
-<div *ngIf="!lunchList">
-  <h1>Schade...</h1>
+<div *ngIf="!lunchList || lunchList.length == 0">
+  <div class="container">
+    <h1>Oh! Looks like there are no active lunch. Go ahead, <a href="/add-lunch">start</a> one now </h1>
+  </div>
 </div>
 
 
