@@ -1,8 +1,8 @@
 <alert-detail [alert]="alert"></alert-detail>
 
-<div *ngIf="lunchList.length > 0">
+<div *ngIf="lunchs">
   <ul class="list-group">
-    <li class="list-group-item" *ngFor="let lunch of lunchList">
+    <li class="list-group-item" *ngFor="let lunch of lunchs">
       <lunch-item [lunch]="lunch"></lunch-item>
     </li>
   </ul>

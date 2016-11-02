@@ -22,6 +22,7 @@ object Formats {
   implicit val participantDto = Json.format[ParticipantDto]
 
   implicit val lunchFormat = Json.format[LunchDto]
+  implicit val myLunchFormat = Json.format[MyLunchDto]
   implicit val lunchDetailFormat = Json.format[LunchDetailDto]
 
   implicit val lunchDtoFormat = Json.format[CreateLunchDto]

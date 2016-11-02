@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers, Response} from '@angular/http';
-import {Observable} from 'rxjs';
-import 'rxjs/Rx';
-import {CreateLunchDto} from '../dto/types';
+import {Injectable} from "@angular/core";
+import {Http, Headers, Response} from "@angular/http";
+import {Observable} from "rxjs";
+import "rxjs/Rx";
+import {CreateLunchDto} from "../dto/types";
 
 @Injectable()
 export class LunchService {
@@ -40,21 +40,21 @@ export class LunchService {
       console.log(response);
       response.json();
     }).catch((error: any) => {
-      console.log(error);
+      console.error(error);
       return error;
     });
   }
 
   getMyLunchList() {
     return this.http.get(this.myLunchUrl).map(response => response.json()).catch((error: any) => {
-      console.log(error);
+      console.error(error);
       return error;
     });
   }
 
   getLunchDetails(lunchId: number) {
     return this.http.get(this.lunchDetailUrl + lunchId).map(response => response.json()).catch((error: any) => {
-      console.log(error);
+      console.error(error);
       return error;
     });
   }

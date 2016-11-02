@@ -13,6 +13,7 @@ import {CalenderService} from '../../service/calander.service';
 export class LunchDetailComponent extends AlertDisplay {
 
   lunch: LunchDetailDto;
+  startTime: string;
   lunchId: number;
 
   constructor(private route: ActivatedRoute,
@@ -20,17 +21,16 @@ export class LunchDetailComponent extends AlertDisplay {
               private calenderService: CalenderService,
               private service: LunchService) {
     super();
-    console.log("in constructor");
   }
 
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
       this.lunchId = +params['id']; // (+) converts string 'id' to a number
-      console.log("id is: " + this.lunchId);
       this.service.getLunchDetails(this.lunchId)
         .subscribe((response: LunchDetailDto) => {
           console.log(response);
           this.lunch = response;
+          this.startTime = this.calenderService.format(new Date(this.lunch.startTime));
         }, (error: any) => {
           this.displayAlert(AlertLevel.ERROR, error)
         });

@@ -1,6 +1,7 @@
 package controllers
 
 import java.util.UUID
+
 import com.google.inject.Inject
 import exceptions.ParticipantService
 import mappers.LunchMapper
@@ -9,6 +10,7 @@ import models._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import services.{Authenticated, LunchService}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class LunchController @Inject()(lunchService: LunchService, participantService: ParticipantService) extends Controller {
@@ -31,6 +33,13 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
   def getLunch = Authenticated.async { request =>
     lunchService.getAllLunchNotPast.map { lunchRestSeq =>
       val lunchSeq = lunchRestSeq.map(a => LunchMapper.map(a._1, a._2, a._3))
+      Ok(Json.toJson(lunchSeq))
+    }
+  }
+
+  def getMyLunch = Authenticated.async { request =>
+    lunchService.getLunchForUserNotPast(request.username).map { lunchRestSeq =>
+      val lunchSeq = lunchRestSeq.map(a => LunchMapper.map(a._1, a._2))
       Ok(Json.toJson(lunchSeq))
     }
   }

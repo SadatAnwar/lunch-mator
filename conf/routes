@@ -13,6 +13,7 @@ GET         /rest/lunch                           controllers.LunchController.ge
 POST        /rest/lunch                           controllers.LunchController.createLunch()
 PUT         /rest/lunch/:id                       controllers.LunchController.joinLunch(id: Int)
 GET         /rest/lunch-detail/:id                controllers.LunchController.getLunchDetail(id: Int)
+GET         /rest/my-lunch                        controllers.LunchController.getMyLunch()
 
 
 # REST User session
@@ -32,7 +33,7 @@ GET         /add-restaurant                       controllers.Application.secure
 GET         /add-lunch                            controllers.Application.secured()
 GET         /lunch                                controllers.Application.secured()
 GET         /lunch/list                           controllers.Application.secured()
-GET         /lunch/my-list                        controllers.Application.secured()
+GET         /lunch/my-lunch                       controllers.Application.secured()
 GET         /lunch/:id                            controllers.Application.securedWithParam(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
