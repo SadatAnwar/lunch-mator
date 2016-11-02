@@ -15,6 +15,7 @@ import {CalenderService} from "../../service/calander.service";
 export class LunchListComponent extends AlertDisplay implements OnInit {
   lunchList: LunchDto[];
   time: string;
+  waiting: boolean;
 
   constructor(private lunchService: LunchService, private calenderService: CalenderService) {
     super();
@@ -25,11 +26,14 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
   }
 
   private getLunchList() {
+    this.waiting = true;
     let lunch = this.lunchService.getLunchList()
       .subscribe((response: LunchDto[]) => {
         console.log(response);
         this.lunchList = response;
+        this.waiting = false;
       }, (error: any) => {
+        this.waiting = false;
         this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
       });
     console.log(lunch);

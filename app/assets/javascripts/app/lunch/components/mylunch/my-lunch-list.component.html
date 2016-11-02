@@ -1,9 +1,9 @@
 <alert-detail [alert]="alert"></alert-detail>
 
-<div *ngIf="lunchs">
+<div class="container" *ngIf="lunchs">
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let lunch of lunchs">
-      <lunch-item [lunch]="lunch"></lunch-item>
+      <lunch-item (requestLeave)="requestLeave($event)" [myLunch]="true" [lunch]="lunch"></lunch-item>
     </li>
   </ul>
 </div>

@@ -8,8 +8,11 @@
         <span *ngIf="lunch.spotsLeft < 1">
           <button type="button" class="btn btn-danger"> Full </button>
         </span>
+        <span *ngIf="myLunch">
+          <button (click)="leave(lunch)" type="button" class="btn btn-danger"> Leave </button>
+        </span>
         <span>
-          <button (click)="onSelect(lunch)" type="button" class="btn btn-primary"> Details </button>
+          <button (click)="details(lunch)" type="button" class="btn btn-primary"> Details </button>
         </span>
       </span>
   </h4>
@@ -19,7 +22,7 @@
   <div>
     Starts at: {{startTime}}
   </div>
-  <div>
-    Seats left: {{lunch?.spotsLeft}}
+  <div *ngIf="lunch.spotsLeft">
+    Seats left: {{lunch.spotsLeft}}
   </div>
 </a>

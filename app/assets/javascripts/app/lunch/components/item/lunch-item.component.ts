@@ -12,8 +12,14 @@ export class LunchItemComponent {
   @Input()
   lunch: LunchDto;
 
+  @Input()
+  myLunch: boolean;
+
   @Output()
   joined = new EventEmitter();
+
+  @Output()
+  requestLeave = new EventEmitter();
 
   startTime: string;
 
@@ -28,7 +34,11 @@ export class LunchItemComponent {
     this.joined.emit(lunch);
   }
 
-  onSelect(lunch: LunchDto) {
+  details(lunch: LunchDto) {
     this.router.navigate(['/lunch', lunch.id]);
+  }
+
+  leave(lunch: LunchDto) {
+    this.requestLeave.emit(lunch);
   }
 }

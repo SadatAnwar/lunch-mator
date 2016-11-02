@@ -69,6 +69,7 @@ object LunchTableRows {
             JOIN lunch_world.participants p ON lt.id = p.lunch_table_id
             JOIN lunch_world.users u on p.user_id = u.id
             WHERE lt.start_time > ${time}
+            AND p.active = 'true'
             AND u.email = ${email};
       """.as[(LunchRow, RestaurantRow)]
   }
@@ -105,6 +106,7 @@ object LunchTableRows {
                p.lunch_table_id,
                count(*) AS participants
              FROM lunch_world.participants p
+             WHERE p.active = 'true'
              GROUP BY p.lunch_table_id) pt ON lt.id = pt.lunch_table_id
             JOIN lunch_world.restaurants rt ON rt.id = lt.restaurant_id
           WHERE lt.start_time > ${time}

@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
-import {LunchDetailDto} from 'app/lunch/dto/types';
-import {Router, ActivatedRoute, Params} from '@angular/router';
-import {LunchService} from '../../service/lunch.service';
-import {AlertLevel} from '../../../common/types/Alert';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
-import {CalenderService} from '../../service/calander.service';
+import {Component} from "@angular/core";
+import {LunchDetailDto} from "app/lunch/dto/types";
+import {ActivatedRoute, Params} from "@angular/router";
+import {LunchService} from "../../service/lunch.service";
+import {AlertLevel} from "../../../common/types/Alert";
+import {AlertDisplay} from "../../../common/services/AlertDisplay";
+import {CalenderService} from "../../service/calander.service";
 
 @Component({
   selector: 'lunch-detail',
@@ -17,7 +17,6 @@ export class LunchDetailComponent extends AlertDisplay {
   lunchId: number;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private calenderService: CalenderService,
               private service: LunchService) {
     super();
@@ -28,7 +27,6 @@ export class LunchDetailComponent extends AlertDisplay {
       this.lunchId = +params['id']; // (+) converts string 'id' to a number
       this.service.getLunchDetails(this.lunchId)
         .subscribe((response: LunchDetailDto) => {
-          console.log(response);
           this.lunch = response;
           this.startTime = this.calenderService.format(new Date(this.lunch.startTime));
         }, (error: any) => {
@@ -42,6 +40,7 @@ export class LunchDetailComponent extends AlertDisplay {
     this.service.join(this.lunchId)
       .subscribe((response: any) => {
         console.log(response);
+        this.ngOnInit();
         this.displayAlert(AlertLevel.SUCCESS, "Joined lunch at " + lunch.restaurant.name, 3);
         this.calenderService.createCalander(lunch.lunchName, lunch.restaurant.name, lunch.restaurant.website, new Date(lunch.startTime));
       }, (error: any) => {
