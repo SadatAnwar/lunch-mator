@@ -8,7 +8,7 @@ import {Ng2CompleterModule} from "ng2-completer";
 import {AddLunchComponent} from "./components/addlunch/add-lunch.component";
 import {FormsModule} from "@angular/forms";
 import {LunchService} from "./service/lunch.service";
-import {MyLunchListComponent} from "./components/mylunch/lunch-list.component";
+import {MyLunchListComponent} from "./components/mylunch/my-lunch-list.component";
 import {LunchDetailComponent} from "./components/detail/lunch-detail.component";
 import {CalenderService} from './service/calander.service';
 

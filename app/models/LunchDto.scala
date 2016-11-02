@@ -4,7 +4,9 @@ import org.joda.time.DateTime
 
 case class LunchDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, spotsLeft: Int, startTime: DateTime, anonymous: Boolean)
 
-case class LunchDetailDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, spotsLeft: Int, startTime: DateTime,anonymous: Boolean, participants: Seq[ParticipantDto])
+case class MyLunchDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, startTime: DateTime, anonymous: Boolean)
+
+case class LunchDetailDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, spotsLeft: Int, startTime: DateTime, anonymous: Boolean, participants: Seq[ParticipantDto])
 
 case class CreateLunchDto(restaurantId: Int, lunchName: Option[String], startTime: Long, anonymous: Option[Boolean], maxSize: Int)
 

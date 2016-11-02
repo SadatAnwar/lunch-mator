@@ -6,7 +6,7 @@ import javax.inject.Inject
 import mappers.ParticipantMapper
 import models.{LunchRow, ParticipantRow, User}
 import org.joda.time.DateTime
-import persistence.repository.{LunchTableRows, Participants, Users}
+import persistence.repository.{Participants, Users}
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 import services.{LunchNotFoundException, UserService, usingDB}
@@ -30,10 +30,18 @@ class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfig
     usingDB(Participants.addParticipant(ParticipantRow(lunchId, user.id.getOrElse(-1), new DateTime(joined.getTime))))
   }
 
+  def removeUserFromLunch(email: String, lunchId: Int) = usingDB {
+    Users.getByEmail(email)
+  }.flatMap { user =>
+    Logger.info(s"adding user [$email] as participant for lunch [$lunchId]")
+    usingDB(Participants.deactivateParticipantForLunch(user.id.getOrElse(-1), lunchId))
+  }
+
   def getParticipants(lunchId: Int) = usingDB {
     Participants.getParticipantsForLunch(lunchId)
   }.map {
-    participants => participants.map{p =>
-      ParticipantMapper.map(p._1, p._2)}
+    participants => participants.map { p =>
+      ParticipantMapper.map(p._1, p._2)
+    }
   }
 }

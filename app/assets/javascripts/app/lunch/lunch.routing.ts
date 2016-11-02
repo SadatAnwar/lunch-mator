@@ -2,7 +2,7 @@ import {ModuleWithProviders} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
 import {LunchListComponent} from "app/lunch/components/list/lunch-list.component";
 import {AddLunchComponent} from "./components/addlunch/add-lunch.component";
-import {MyLunchListComponent} from "./components/mylunch/lunch-list.component";
+import {MyLunchListComponent} from "./components/mylunch/my-lunch-list.component";
 import {LunchDetailComponent} from "./components/detail/lunch-detail.component";
 
 const lunchRoutes: Routes = [
@@ -11,7 +11,7 @@ const lunchRoutes: Routes = [
     component: LunchListComponent
   },
   {
-    path: 'lunch/my-list',
+    path: 'lunch/my-lunch',
     component: MyLunchListComponent
   },
   {

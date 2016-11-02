@@ -24,8 +24,8 @@ class LunchTableRows(tag: Tag) extends Table[LunchRow](tag, Some("lunch_world"),
 }
 
 object LunchTableRows {
-
-  implicit val compoundLunch = GetResult[(LunchRow, RestaurantRow, Int)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<), r.<<))
+  implicit val compoundLunchRestaurantSize = GetResult[(LunchRow, RestaurantRow, Int)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<), r.<<))
+  implicit val compoundLunchRestaurant = GetResult[(LunchRow, RestaurantRow)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<)))
 
   lazy val lunchTableRows = TableQuery[LunchTableRows]
 
@@ -48,6 +48,30 @@ object LunchTableRows {
 
   def filter() = {
     lunchTableRows.filter(_.id === 1).result
+  }
+
+  def getLunchForUserAfter(email: String, time: DateTime) = {
+    sql"""SELECT
+            lt.id,
+            lt.name,
+            lt.restaurant_id,
+            lt.max_size,
+            lt.start_time,
+            lt.anonymous,
+
+            rt.id,
+            rt.name,
+            rt.website,
+            rt.description,
+            rt.added_by_user_id
+          FROM lunch_world.lunch_tables lt
+            JOIN lunch_world.restaurants rt ON rt.id = lt.restaurant_id
+            JOIN lunch_world.participants p ON lt.id = p.lunch_table_id
+            JOIN lunch_world.users u on p.user_id = u.id
+            WHERE lt.start_time > ${time}
+            AND p.active = 'true'
+            AND u.email = ${email};
+      """.as[(LunchRow, RestaurantRow)]
   }
 
   def getLunchAfter(time: DateTime) = {
@@ -82,40 +106,11 @@ object LunchTableRows {
                p.lunch_table_id,
                count(*) AS participants
              FROM lunch_world.participants p
+             WHERE p.active = 'true'
              GROUP BY p.lunch_table_id) pt ON lt.id = pt.lunch_table_id
             JOIN lunch_world.restaurants rt ON rt.id = lt.restaurant_id
           WHERE lt.start_time > ${time}
           AND lt.max_size > coalesce(pt.participants, 0)
-         ;
-      """.as[(LunchRow, RestaurantRow, Int)]
-  }
-
-  def getLunchWithOpenSpotsAfter(email: String, time: DateTime) = {
-    sql"""SELECT
-          lt.id,
-          lt.name,
-          lt.restaurant_id,
-          lt.max_size,
-          lt.start_time,
-          lt.anonymous,
-
-            rt.id,
-            rt.name,
-            rt.website,
-            rt.description,
-            rt.added_by_user_id,
-            pt.participants
-          FROM lunch_world.lunch_tables lt
-            JOIN
-            (SELECT
-               p.lunch_table_id,
-               count(*) AS participants
-             FROM lunch_world.participants p
-             GROUP BY p.lunch_table_id) pt ON lt.id = pt.lunch_table_id
-            JOIN lunch_world.restaurants rt ON rt.id = lt.restaurant_id
-            JOIN lunch_world.users on lt.
-          WHERE lt.start_time > ${time}
-          AND lt.max_size > pt.participants
          ;
       """.as[(LunchRow, RestaurantRow, Int)]
   }
