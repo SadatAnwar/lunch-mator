@@ -3,40 +3,45 @@
 # ~~~~
 
 # REST Restaurant
-GET         /rest/restaurants                     controllers.RestaurantController.listRestaurants()
-GET         /rest/restaurants/:name               controllers.RestaurantController.findRestaurant(name)
-GET         /rest/restaurants/search/:name        controllers.RestaurantController.searchRestaurant(name)
-POST        /rest/restaurants                     controllers.RestaurantController.addRestaurant()
+GET         /rest/restaurants                       controllers.RestaurantController.listRestaurants()
+GET         /rest/restaurants/:name                 controllers.RestaurantController.findRestaurant(name)
+GET         /rest/restaurants/search/:name          controllers.RestaurantController.searchRestaurant(name)
+POST        /rest/restaurants                       controllers.RestaurantController.addRestaurant()
 
 # REST Lunch
-GET         /rest/lunch                           controllers.LunchController.getLunch()
-POST        /rest/lunch                           controllers.LunchController.createLunch()
-POST        /rest/lunch/leave                     controllers.LunchController.leaveLunch()
-PUT         /rest/lunch/:id                       controllers.LunchController.joinLunch(id: Int)
-GET         /rest/lunch-detail/:id                controllers.LunchController.getLunchDetail(id: Int)
-GET         /rest/my-lunch                        controllers.LunchController.getMyLunch()
+GET         /rest/lunch                             controllers.LunchController.getLunch()
+POST        /rest/lunch                             controllers.LunchController.createLunch()
+POST        /rest/lunch/leave                       controllers.LunchController.leaveLunch()
+PUT         /rest/lunch/:id                         controllers.LunchController.joinLunch(id: Int)
+GET         /rest/lunch-detail/:id                  controllers.LunchController.getLunchDetail(id: Int)
+GET         /rest/my-lunch                          controllers.LunchController.getMyLunch()
 
 
 # REST User session
-POST        /rest/login                           controllers.AuthenticationController.authenticate()
-POST        /rest/signUp                          controllers.AuthenticationController.signUp()
-GET         /rest/logOut                          controllers.AuthenticationController.logOut()
+POST        /rest/login                             controllers.AuthenticationController.authenticate()
+POST        /rest/signUp                            controllers.AuthenticationController.signUp()
+GET         /rest/logOut                            controllers.AuthenticationController.logOut()
+
+# REST Google signin
+GET         /google-login                           controllers.GoogleAuthorizationController.redirectToGoogle() # redirect to google
+GET         /google-login/:authorizationCode        controllers.GoogleAuthorizationController.authorize(authorizationCode: Int)
+
 
 # Make HTML5 links work
 # Unsecured welcome pages
-GET         /registration                         controllers.Application.unSecure()
-GET         /login                                controllers.Application.unSecure()
+GET         /registration                           controllers.Application.unSecure()
+GET         /login                                  controllers.Application.unSecure()
 
 # Secured endpoints
-GET         /                                     controllers.Application.secured()
-GET         /welcome                              controllers.Application.secured()
-GET         /add-restaurant                       controllers.Application.secured()
-GET         /add-lunch                            controllers.Application.secured()
-GET         /lunch                                controllers.Application.secured()
-GET         /lunch/list                           controllers.Application.secured()
-GET         /lunch/my-lunch                       controllers.Application.secured()
-GET         /lunch/:id                            controllers.Application.securedWithParam(id: Int)
+GET         /                                       controllers.Application.secured()
+GET         /welcome                                controllers.Application.secured()
+GET         /add-restaurant                         controllers.Application.secured()
+GET         /add-lunch                              controllers.Application.secured()
+GET         /lunch                                  controllers.Application.secured()
+GET         /lunch/list                             controllers.Application.secured()
+GET         /lunch/my-lunch                         controllers.Application.secured()
+GET         /lunch/:id                              controllers.Application.securedWithParam(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
-GET         /webjars/*file                        controllers.WebJarAssets.at(file)
+GET         /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
+GET         /webjars/*file                          controllers.WebJarAssets.at(file)

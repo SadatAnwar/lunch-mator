@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1204-jdbc4",
   "com.typesafe.play" %% "play-slick" % "2.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
+  "com.typesafe.play" %% "play-ws" % "2.4.3",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "org.scalaz.stream" %% "scalaz-stream" % "0.8",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
