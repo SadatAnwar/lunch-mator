@@ -23,8 +23,8 @@ POST        /rest/signUp                            controllers.AuthenticationCo
 GET         /rest/logOut                            controllers.AuthenticationController.logOut()
 
 # REST Google signin
-GET         /google-login                           controllers.GoogleAuthorizationController.redirectToGoogle() # redirect to google
-GET         /google-login/:authorizationCode        controllers.GoogleAuthorizationController.authorize(authorizationCode: Int)
+GET         /google-login                           controllers.GoogleAuthenticationController.redirectToGoogle()
+GET         /google-token        controllers.GoogleAuthenticationController.authorize()
 
 
 # Make HTML5 links work
