@@ -1,14 +1,15 @@
 package controllers
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+import play.api.libs.json.Json
+import play.api.mvc.{Action, Controller}
+
 import com.google.inject.Inject
 import models.Formats._
 import models.{NewUserDto, UserIdentity}
-import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
 import services.{AuthenticationService, UserIdentityService}
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class AuthenticationController @Inject()(authenticationService: AuthenticationService) extends Controller {
 

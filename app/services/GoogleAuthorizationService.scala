@@ -3,7 +3,6 @@ package services
 import java.util.Base64
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 import play.Configuration
 import play.api.libs.json.{JsString, JsValue, Json}
@@ -13,7 +12,7 @@ import com.google.inject.Inject
 import models.Formats._
 import models.GoogleUserInformation
 
-class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: RESTClientWrapper) {
+class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: RESTClientWrapper, userService: UserService) {
 
   private val googleTokenUrl = "https://www.googleapis.com/oauth2/v4/token"
   private val authorizationUrl = "https://accounts.google.com/o/oauth2/v2/auth?"
@@ -33,7 +32,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
       "state=" + originPage
   }
 
-  def getGoogleUserData(authorizationCode: String): Future[Unit] = {
+  def getGoogleUserData(authorizationCode: String): Unit = {
     val formData = Map(
       "code" -> Seq(authorizationCode),
       "client_id" -> Seq(lunchMatorClientId),
@@ -41,11 +40,11 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
       "grant_type" -> Seq(grantType),
       "redirect_uri" -> Seq(tokenRedirect)
     )
-    googleAuthenticationClient.makePost(googleTokenUrl, formData).map(decodeUserData)
+    val googleUser = googleAuthenticationClient.makePost(googleTokenUrl, formData).map(decodeUserData)
   }
 
   private def decodeUserData(responseBody: JsValue) = {
     val tokens = (responseBody \ "id_token").get.asInstanceOf[JsString].value.split("\\.")
-    val userInformation = Json.parse(Base64.getDecoder.decode(tokens(1))).as[GoogleUserInformation]
+    Json.parse(Base64.getDecoder.decode(tokens(1))).as[GoogleUserInformation]
   }
 }
