@@ -14,10 +14,9 @@ class GoogleAuthenticationController @Inject()(googleAuthorizationService: Googl
     val params = request.queryString.map { case (k, v) => k -> v.mkString }
     val authorizationCode = params.getOrElse("code", throw new RuntimeException)
     val startPage = params.getOrElse("state", "/welcome")
-
     println(authorizationCode)
     println(startPage)
-
-    Ok
+    googleAuthorizationService.getGoogleUserData(authorizationCode)
+    Redirect(startPage)
   }
 }

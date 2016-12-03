@@ -23,6 +23,7 @@ libraryDependencies ++= Seq(
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
+  "com.pauldijou" %% "jwt-play" % "0.9.2",
 
   "org.webjars" %% "webjars-play" % "2.4.0-2",
   "org.webjars.npm" % "angular__common" % "2.0.1",
