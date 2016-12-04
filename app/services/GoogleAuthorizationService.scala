@@ -19,10 +19,10 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
 
   private val googleTokenUrl = "https://www.googleapis.com/oauth2/v4/token"
   private val authorizationUrl = "https://accounts.google.com/o/oauth2/v2/auth?"
-  private val lunchMatorClientId = "28348881946-hmdkk177nv7sks841ef4pb7sivacfn5r.apps.googleusercontent.com"
-  private val tokenRedirect = "http://localhost:9000/google-token"
+  private val lunchMatorClientId = configuration.underlying.getString("google.lunchmator.clientid")
+  private val tokenRedirect = configuration.underlying.getString("google.callback.token")
   private val grantType = "authorization_code"
-  private val clientSecret = "E4TXLJsP-jCkgI1a2xRR9lrm"
+  private val clientSecret = configuration.underlying.getString("google.lunchmator.clientsecret")
 
   def getGoogleSignInPage(originPage: String = "/welcome"): String = {
     authorizationUrl +
