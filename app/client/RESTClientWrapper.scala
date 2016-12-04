@@ -1,16 +1,22 @@
 package client
 
 import javax.inject.Inject
-import exceptions.GoogleAuthenticationException
-import play.api.libs.json.{JsValue, Json}
+
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import play.api.libs.json.Json
 import play.api.libs.ws._
 import play.mvc.Http
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+
+import exceptions.GoogleAuthenticationException
 
 class RESTClientWrapper @Inject()(ws: WSClient) {
 
-  def makePost(url: String, postData: Map[String, Seq[String]]): Future[JsValue] = {
+  import scala.concurrent.Future
+
+  import play.api.libs.json.Reads
+
+  def makePost[A](url: String, postData: Map[String, Seq[String]])(implicit fjs: Reads[A]): Future[A] = {
     ws
       .url(url)
       .withHeaders(
@@ -21,7 +27,7 @@ class RESTClientWrapper @Inject()(ws: WSClient) {
         if (!(200 to 299).contains(wsResponse.status)) {
           throw new GoogleAuthenticationException
         }
-        Json.parse(wsResponse.body)
+        Json.parse(wsResponse.body).as[A]
       }
   }
 }

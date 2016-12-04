@@ -1,11 +1,10 @@
 package mappers
 
 import exceptions.UserNotFoundException
+import models.GoogleModels.GoogleUserInformation
 import models.{NewUserDto, User, UserRow}
 
 object UserMapper {
-
-  import models.GoogleUserInformation
 
   def map(user: UserRow): User = {
     User(user.id.getOrElse(throw new UserNotFoundException(user)), user.firstName, user.lastName, user.email, user.active)
