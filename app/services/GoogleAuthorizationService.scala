@@ -35,9 +35,8 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
       s"state=$originPage"
   }
 
-  def googleAuthorize(params: Map[String, String]): Future[String] = {
+  def googleAuthorize(params: Map[String, String]): Future[GoogleUserInformation] = {
     val authorizationCode = params.getOrElse("code", throw new GoogleAuthenticationException)
-    val startPage = params.getOrElse("state", "/welcome")
     val googleUserData = getGoogleAuthorization(authorizationCode)
     googleUserData.flatMap {
       googleAuthorization =>
@@ -47,7 +46,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
             saveNewUser(googleUserInformation)
           }
         }.map(_ =>
-          startPage
+          googleUserInformation
         )
     }
   }

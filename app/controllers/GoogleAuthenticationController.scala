@@ -15,9 +15,10 @@ class GoogleAuthenticationController @Inject()(googleAuthorizationService: Googl
 
   def authorize(): Action[AnyContent] = Action.async { request =>
     val params = request.queryString.map { case (k, v) => k -> v.mkString }
-    val returnPage = googleAuthorizationService.googleAuthorize(params)
-    returnPage.map { address =>
-      Redirect(address)
+    val startPage = params.getOrElse("state", "/welcome")
+    val googleUser = googleAuthorizationService.googleAuthorize(params)
+    googleUser.map { user =>
+      Redirect(startPage).withSession("email" -> user.email)
     }
   }
 }
