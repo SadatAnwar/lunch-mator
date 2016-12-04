@@ -1,8 +1,8 @@
 package mappers
 
 import exceptions.UserNotFoundException
-import models.GoogleModels.GoogleUserInformation
-import models.{NewUserDto, User, UserRow}
+import models.GoogleModels.{GoogleAuthorization, GoogleUserInformation}
+import models.{NewUserDto, OAuthUserRow, User, UserRow}
 
 object UserMapper {
 
@@ -11,10 +11,14 @@ object UserMapper {
   }
 
   def map(newUserDto: NewUserDto): UserRow = {
-    UserRow(None, newUserDto.firstName, newUserDto.lastName, newUserDto.email, true)
+    UserRow(None, newUserDto.firstName, newUserDto.lastName, newUserDto.email, active = true)
   }
 
   def map(googleUserInformation: GoogleUserInformation): UserRow = {
     UserRow(None, googleUserInformation.given_name, googleUserInformation.family_name, googleUserInformation.email, active = true)
+  }
+
+  def map(googleUserInformation: GoogleUserInformation, googleAuthorization: GoogleAuthorization): OAuthUserRow = {
+    OAuthUserRow(googleUserInformation.email, googleAuthorization.access_token, googleAuthorization.id_token)
   }
 }

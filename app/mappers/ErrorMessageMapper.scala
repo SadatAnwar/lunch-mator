@@ -19,8 +19,4 @@ object ErrorMessageMapper {
       case _ => Error(exception.getMessage)
     }
   }
-
-  def map(exception: PasswordValidationException): Error = {
-    Error("Password doesnot match")
-  }
 }

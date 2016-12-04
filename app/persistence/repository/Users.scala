@@ -1,7 +1,9 @@
 package persistence.repository
 
 import models.UserRow
+import slick.dbio.Effect.Write
 import slick.driver.PostgresDriver.api._
+import slick.profile.FixedSqlAction
 
 class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") {
 
@@ -19,8 +21,8 @@ class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") 
 }
 
 object Users {
-  val users = TableQuery[Users]
 
+  val users = TableQuery[Users]
 
   def getByEmail(email: String) = {
     users.filter(_.email === email).result.head
@@ -34,7 +36,7 @@ object Users {
     users.filter(_.firstName === name).result
   }
 
-  def addNewUser(user: UserRow) = {
+  def addNewUser(user: UserRow): FixedSqlAction[Int, NoStream, Write] = {
     users += user
   }
 
