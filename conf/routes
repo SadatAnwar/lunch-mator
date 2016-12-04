@@ -18,8 +18,6 @@ GET         /rest/my-lunch                        controllers.LunchController.ge
 
 
 # REST User session
-POST        /rest/login                           controllers.AuthenticationController.authenticate()
-POST        /rest/signUp                          controllers.AuthenticationController.signUp()
 GET         /rest/logOut                          controllers.AuthenticationController.logOut()
 
 # REST Google signin
@@ -29,7 +27,6 @@ GET         /google-token                         controllers.GoogleAuthenticati
 
 # Make HTML5 links work
 # Unsecured welcome pages
-GET         /registration                         controllers.Application.unSecure()
 GET         /login                                controllers.Application.unSecure()
 
 # Secured endpoints
