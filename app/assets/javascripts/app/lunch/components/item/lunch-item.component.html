@@ -1,6 +1,6 @@
 <a class="list-group-item">
   <h4>
-    {{lunch?.restaurant?.name}}
+    {{lunch?.lunchName}} at {{lunch?.restaurant?.name}}
     <span class="pull-right">
         <span *ngIf="lunch.spotsLeft > 0">
           <button type="button" class="btn btn-success" (click)="join(lunch)"> Join </button>
