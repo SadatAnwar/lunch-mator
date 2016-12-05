@@ -17,11 +17,13 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1204-jdbc4",
   "com.typesafe.play" %% "play-slick" % "2.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
+  "com.typesafe.play" %% "play-ws" % "2.4.3",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "org.scalaz.stream" %% "scalaz-stream" % "0.8",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
+  "com.pauldijou" %% "jwt-play" % "0.9.2",
 
   "org.webjars" %% "webjars-play" % "2.4.0-2",
   "org.webjars.npm" % "angular__common" % "2.0.1",

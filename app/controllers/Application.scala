@@ -19,7 +19,8 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
       Ok(views.html.index())
   }
 
-  def unSecure() =  Action {
+  def unSecure() =  Action { request=>
+
     Ok(views.html.index())
   }
 }

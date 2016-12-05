@@ -6,28 +6,27 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 object Formats {
-  implicit val rds: Reads[Timestamp] = (__ \ "startTime").read[Long].map { long => new Timestamp(long) }
-  implicit val wrs: Writes[Timestamp] = (__ \ "startTime").write[Long].contramap { (a: Timestamp) => a.getTime }
-  implicit val fmt: Format[Timestamp] = Format(rds, wrs)
 
-  implicit val userFormat = Json.format[UserRow]
-  implicit val userIdentityFormat = Json.format[UserIdentity]
-  implicit val newUserDtoFormat = Json.format[NewUserDto]
+  implicit val timeStampReads: Reads[Timestamp] = (__ \ "startTime").read[Long].map { long => new Timestamp(long) }
+  implicit val timeStampWrites: Writes[Timestamp] = (__ \ "startTime").write[Long].contramap { (a: Timestamp) => a.getTime }
+  implicit val timeStampFormat: Format[Timestamp] = Format(timeStampReads, timeStampWrites)
 
-  implicit val restaurantFormat = Json.format[Restaurant]
-  implicit val restaurantDtoFormat = Json.format[RestaurantDto]
-  implicit val createRestaurantDtoFormat = Json.format[CreateRestaurantDto]
-  implicit val restaurantRowFormat = Json.format[RestaurantRow]
+  implicit val userFormat: OFormat[UserRow] = Json.format[UserRow]
+  implicit val userIdentityFormat: OFormat[UserIdentity] = Json.format[UserIdentity]
+  implicit val newUserDtoFormat: OFormat[NewUserDto] = Json.format[NewUserDto]
+  implicit val userRest: OFormat[(UserRow, RestaurantRow)] = Json.format[(UserRow, RestaurantRow)]
 
-  implicit val participantDto = Json.format[ParticipantDto]
+  implicit val restaurantFormat: OFormat[Restaurant] = Json.format[Restaurant]
+  implicit val restaurantDtoFormat: OFormat[RestaurantDto] = Json.format[RestaurantDto]
+  implicit val createRestaurantDtoFormat: OFormat[CreateRestaurantDto] = Json.format[CreateRestaurantDto]
 
-  implicit val lunchFormat = Json.format[LunchDto]
-  implicit val myLunchFormat = Json.format[MyLunchDto]
-  implicit val lunchDetailFormat = Json.format[LunchDetailDto]
+  implicit val restaurantRowFormat: OFormat[RestaurantRow] = Json.format[RestaurantRow]
 
-  implicit val lunchDtoFormat = Json.format[CreateLunchDto]
+  implicit val participantDto: OFormat[ParticipantDto] = Json.format[ParticipantDto]
+  implicit val lunchFormat: OFormat[LunchDto] = Json.format[LunchDto]
+  implicit val myLunchFormat: OFormat[MyLunchDto] = Json.format[MyLunchDto]
+  implicit val lunchDetailFormat: OFormat[LunchDetailDto] = Json.format[LunchDetailDto]
 
-  implicit val errorFormat = Json.format[Error]
-
-  implicit val userRest = Json.format[(UserRow, RestaurantRow)]
+  implicit val lunchDtoFormat: OFormat[CreateLunchDto] = Json.format[CreateLunchDto]
+  implicit val errorFormat: OFormat[Error] = Json.format[Error]
 }

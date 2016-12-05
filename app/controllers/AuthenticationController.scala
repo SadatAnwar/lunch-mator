@@ -1,24 +1,16 @@
 package controllers
 
-import com.google.inject.Inject
-import models.Formats._
-import models.{NewUserDto, UserIdentity}
-import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
-import services.{AuthenticationService, UserIdentityService}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AuthenticationController @Inject()(authenticationService: AuthenticationService) extends Controller {
+import play.api.mvc.{Action, Controller}
 
-  def signUp() = Action.async(parse.json) { request =>
-    authenticationService.signUp(request.body.as[NewUserDto]).map {
-      userIdentityStore =>
-        val user: UserIdentity = UserIdentityService.map(userIdentityStore)
-        Created(Json.toJson(user)).withSession("email" -> user.email)
-    }
-  }
+import com.google.inject.Inject
+import models.Formats._
+import models.UserIdentity
+import services.{AuthenticationService, UserIdentityService}
+
+class AuthenticationController @Inject()(authenticationService: AuthenticationService) extends Controller {
 
   def authenticate() = Action.async(parse.json) { request =>
     val identity: UserIdentity = request.body.as[UserIdentity]
