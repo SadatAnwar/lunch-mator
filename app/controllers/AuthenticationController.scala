@@ -3,6 +3,7 @@ package controllers
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+import play.api.Logger
 import play.api.mvc.{Action, Controller}
 
 import com.google.inject.Inject
@@ -24,6 +25,7 @@ class AuthenticationController @Inject()(authenticationService: AuthenticationSe
   }
 
   def logOut() = Action.async { request =>
+    Logger.info(s"Logging out User:{${request.session.get("email").getOrElse("NO USER")}}")
     Future.successful(Redirect("/login").withNewSession)
   }
 }

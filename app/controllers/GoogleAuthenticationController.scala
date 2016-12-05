@@ -2,6 +2,7 @@ package controllers
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import play.api.Logger
 import play.api.mvc.{Action, AnyContent, Controller}
 
 import com.google.inject.Inject
@@ -18,6 +19,7 @@ class GoogleAuthenticationController @Inject()(googleAuthorizationService: Googl
     val startPage = params.getOrElse("state", "/welcome")
     val googleUser = googleAuthorizationService.googleAuthorize(params)
     googleUser.map { user =>
+      Logger.info(s"Successfully logged in ${user.name}")
       Redirect(startPage).withSession("email" -> user.email)
     }
   }
