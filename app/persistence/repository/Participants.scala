@@ -29,7 +29,7 @@ object Participants {
   def addParticipant(participantRow: ParticipantRow) = {
     Logger.info(s"Inserting $participantRow into table")
     sqlu"""INSERT INTO lunch_world.participants (lunch_table_id, user_id, joined_at)
-            VALUEs (${participantRow.lunchId},${participantRow.userId},${participantRow.joined})
+            VALUES (${participantRow.lunchId},${participantRow.userId},${participantRow.joined})
            ON CONFLICT(user_id, lunch_table_id) DO UPDATE SET active = TRUE ;
       """
   }
