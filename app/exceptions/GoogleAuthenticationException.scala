@@ -1,4 +1,4 @@
 package exceptions
 
-class GoogleAuthenticationException extends AuthenticationException{
+class GoogleAuthenticationException(message: String = "") extends AuthenticationException(message) {
 }

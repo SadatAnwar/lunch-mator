@@ -10,6 +10,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc._
 
+import exceptions.AuthenticationException
 import mappers.ErrorMessageMapper
 import models.Formats._
 import org.postgresql.util.PSQLException
@@ -27,6 +28,7 @@ class ErrorHandler extends HttpErrorHandler {
   def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
     Logger.error(s"Server side error for request [$request] exception thrown: [$exception] ${exception.printStackTrace()}")
     val errorMessage = exception match {
+      case _: AuthenticationException => return Future.successful(Redirect("/login"))
       case e: PSQLException => ErrorMessageMapper.map(e, request.path)
       case e: Exception => ErrorMessageMapper.map(e)
     }

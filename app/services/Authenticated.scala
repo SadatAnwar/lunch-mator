@@ -1,37 +1,43 @@
 package services
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import play.api.mvc.BodyParsers.parse
-import play.api.mvc.Results._
 import play.api.mvc._
+
+import exceptions.AuthenticationException
+import persistence.repository.Users
 
 class AuthenticatedRequest[A](val username: String, request: Request[A]) extends WrappedRequest[A](request) {
 }
 
 object Authenticated {
 
+  def async[A](block: (AuthenticatedRequest[AnyContent]) => Future[Result]): EssentialAction = async(parse.anyContent)(block)
+
   def async[A](bp: BodyParser[A])(block: (AuthenticatedRequest[A]) => Future[Result]): Action[A] = Action.async(bp) {
     request =>
-      request.session.get("email").map {
-        username =>
-          block(new AuthenticatedRequest(username, request))
-      } getOrElse {
-        Future.successful(Redirect("/login"))
+      validateSession(request).flatMap { valid =>
+        if (valid) {
+          block(new AuthenticatedRequest(request.session.get("email").get, request))
+        }
+        else {
+          throw new AuthenticationException
+        }
       }
   }
 
-  def async[A](block: (AuthenticatedRequest[AnyContent]) => Future[Result]): EssentialAction = async(parse.anyContent)(block)
+  def validateSession(request: Request[Any]): Future[Boolean] = {
+    val email = request.session.get("email").getOrElse("")
+    if (email.equals("")) {
+      return Future.successful(false)
+    }
 
-  def apply[A](block: (AuthenticatedRequest[AnyContent]) => Result): EssentialAction = apply(parse.anyContent)(block)
+    validateUser(email)
+  }
 
-  def apply[A](bp: BodyParser[A])(block: (AuthenticatedRequest[A]) => Result): Action[A] = Action(bp) {
-    request =>
-      request.session.get("email").map {
-        username =>
-          block(new AuthenticatedRequest(username, request))
-      } getOrElse {
-        Redirect("/login")
-      }
+  def validateUser(email: String): Future[Boolean] = usingDB {
+    Users.isPresent(email)
   }
 }
