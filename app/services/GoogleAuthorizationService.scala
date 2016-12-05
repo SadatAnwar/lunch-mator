@@ -1,11 +1,13 @@
 package services
 
+import java.nio.charset.Charset
 import java.util.Base64
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import play.Configuration
+import play.api.Logger
 import play.api.libs.json.Json
 
 import client.RESTClientWrapper
@@ -63,7 +65,9 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
 
   private def decodeUserData(googleAuthorization: GoogleAuthorization) = {
     val tokens = googleAuthorization.id_token.split("\\.")
-    Json.parse(Base64.getDecoder.decode(tokens(1))).as[GoogleUserInformation]
+    Logger.info(s"Received response from google ${googleAuthorization.toString}")
+    Logger.info(s"Decoding ${tokens(1)}")
+    Json.parse(Base64.getDecoder.decode(tokens(1).getBytes("UTF-8"))).as[GoogleUserInformation]
   }
 
   private def saveOAuth(googleUserInformation: GoogleUserInformation, googleAuthorization: GoogleAuthorization) = usingDB {

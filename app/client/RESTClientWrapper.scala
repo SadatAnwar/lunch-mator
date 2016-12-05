@@ -3,12 +3,11 @@ package client
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.parsing.json.JSONObject
 
 import play.api.libs.json.Json
 import play.api.libs.ws._
 import play.mvc.Http
-
-import exceptions.GoogleAuthenticationException
 
 class RESTClientWrapper @Inject()(ws: WSClient) {
 
@@ -25,7 +24,7 @@ class RESTClientWrapper @Inject()(ws: WSClient) {
       .post(postData)
       .map { wsResponse =>
         if (!(200 to 299).contains(wsResponse.status)) {
-          throw new GoogleAuthenticationException
+          throw HttpClientException(url, JSONObject(postData).toString(), wsResponse.body, wsResponse.status)
         }
         Json.parse(wsResponse.body).as[A]
       }
