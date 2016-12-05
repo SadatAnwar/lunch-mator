@@ -1,4 +1,4 @@
 package exceptions
 
-class AuthenticationException extends RuntimeException {
+class AuthenticationException(message: String = "") extends RuntimeException(message) {
 }

@@ -13,7 +13,7 @@ import com.google.inject.Inject
 import exceptions.GoogleAuthenticationException
 import mappers.UserMapper
 import models.GoogleModels._
-import persistence.repository.{OAuthUser, Users}
+import persistence.repository.OAuthUser
 
 class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: RESTClientWrapper, userService: UserService) {
 
@@ -38,16 +38,15 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
   def googleAuthorize(params: Map[String, String]): Future[GoogleUserInformation] = {
     val authorizationCode = params.getOrElse("code", throw new GoogleAuthenticationException)
     val googleUserData = getGoogleAuthorization(authorizationCode)
-    googleUserData.flatMap {
+    googleUserData.map {
       googleAuthorization =>
         val googleUserInformation = decodeUserData(googleAuthorization)
-        saveOAuth(googleUserInformation, googleAuthorization).map { insertCount =>
+        saveNewUser(googleUserInformation).map { insertCount =>
           if (insertCount != 0) {
-            saveNewUser(googleUserInformation)
+            saveOAuth(googleUserInformation, googleAuthorization)
           }
-        }.map(_ =>
-          googleUserInformation
-        )
+        }
+        googleUserInformation
     }
   }
 
@@ -71,7 +70,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
     OAuthUser.addNewUser(UserMapper.map(googleUserInformation, googleAuthorization))
   }
 
-  private def saveNewUser(googleUserInformation: GoogleUserInformation) = usingDB {
-    Users.addNewUser(UserMapper.map(googleUserInformation))
+  private def saveNewUser(googleUserInformation: GoogleUserInformation) = {
+    userService.addUser(UserMapper.map(googleUserInformation))
   }
 }

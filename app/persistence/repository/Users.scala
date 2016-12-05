@@ -1,9 +1,12 @@
 package persistence.repository
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import models.UserRow
-import slick.dbio.Effect.Write
+import slick.dbio.DBIOAction
+import slick.dbio.Effect.{Read, Write}
 import slick.driver.PostgresDriver.api._
-import slick.profile.FixedSqlAction
+import slick.profile.{FixedSqlAction, FixedSqlStreamingAction, SqlAction}
 
 class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") {
 
@@ -24,23 +27,33 @@ object Users {
 
   val users = TableQuery[Users]
 
-  def getByEmail(email: String) = {
+  def getByEmail(email: String): SqlAction[UserRow, NoStream, Read] = {
     users.filter(_.email === email).result.head
   }
 
-  def findById(userId: Int) = {
+  def isPresent(email: String): FixedSqlAction[Boolean, _root_.slick.driver.PostgresDriver.api.NoStream, Read] = {
+    users.filter(_.email === email).exists.result
+  }
+
+  def findById(userId: Int): SqlAction[UserRow, NoStream, Read] = {
     users.filter(_.id === userId).result.head
   }
 
-  def findByName(name: String) = {
+  def findByName(name: String): FixedSqlStreamingAction[Seq[UserRow], UserRow, Read] = {
     users.filter(_.firstName === name).result
   }
 
-  def addNewUser(user: UserRow): FixedSqlAction[Int, NoStream, Write] = {
-    users += user
+  def addNewUser(user: UserRow): DBIOAction[Int, NoStream, Read with Write] = {
+    users.filter(_.email === user.email).exists.result.flatMap { exists =>
+      if (!exists) {
+        users += user
+      } else {
+        DBIO.successful(0)
+      }
+    }
   }
 
-  def getAll = {
+  def getAll: FixedSqlStreamingAction[Seq[UserRow], UserRow, Read] = {
     users.result
   }
 }

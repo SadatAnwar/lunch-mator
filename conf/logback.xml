@@ -14,8 +14,8 @@
   -->
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
-  <!--<logger name="scala.slick" level="DEBUG" />-->
-  <!--<logger name="slick.jdbc" level="DEBUG"/>-->
+  <logger name="scala.slick" level="DEBUG" />
+  <logger name="slick.jdbc" level="DEBUG"/>
 
   <root level="ERROR">
     <appender-ref ref="STDOUT" />
