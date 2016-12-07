@@ -28,7 +28,7 @@ class ErrorHandler extends HttpErrorHandler {
   def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
     Logger.error(s"Server side error for request [$request] exception thrown: [$exception] ${exception.printStackTrace()}")
     val errorMessage = exception match {
-      case _: AuthenticationException => return Future.successful(Redirect("/login"))
+      case _: AuthenticationException => return Future.successful(Redirect("/login").withNewSession)
       case e: PSQLException => ErrorMessageMapper.map(e, request.path)
       case e: Exception => ErrorMessageMapper.map(e)
     }
