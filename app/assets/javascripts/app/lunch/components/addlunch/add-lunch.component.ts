@@ -96,6 +96,11 @@ export class AddLunchComponent extends AlertDisplay {
     return true;
   }
 
+  tomorrow() {
+    this.today();
+    this.startDD = this.startDD + 1;
+  }
+
   today() {
     let date = new Date();
     this.startYY = date.getFullYear() - 2000;
