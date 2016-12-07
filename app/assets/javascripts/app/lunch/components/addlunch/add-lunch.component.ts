@@ -93,15 +93,28 @@ export class AddLunchComponent extends AlertDisplay {
       return false;
     }
 
+    if (this.startYY > this.yearYY(new Date()) + 1) {
+      this.startYY = this.yearYY(new Date());
+    }
+
     return true;
   }
 
-  today() {
+  public tomorrow() {
+    this.today();
+    this.startDD = this.startDD + 1;
+  }
+
+  public today() {
     let date = new Date();
-    this.startYY = date.getFullYear() - 2000;
+    this.startYY = this.yearYY(date);
     this.startDD = date.getDate();
     this.startMM = date.getMonth() + 1;
     this.startHH = 12;
     this.startMin = 0;
+  }
+
+  private yearYY(date: Date) {
+    return date.getFullYear() - 2000;
   }
 }
