@@ -29,11 +29,11 @@ object Authenticated {
   }
 
   def validateSession(request: Request[Any]): Future[Boolean] = {
-    val email = request.session.get("email").getOrElse("")
-    if (email.equals("")) {
+    if (request.session.get("email").isEmpty) {
       return Future.successful(false)
     }
 
+    val email = request.session.get("email").get
     validateUser(email)
   }
 

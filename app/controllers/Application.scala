@@ -22,7 +22,10 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
   }
 
   def unSecure() = Action { request =>
-
-    Ok(views.html.index())
+    if (request.session.get("email").isDefined) {
+      Redirect("/welcome")
+    } else {
+      Ok(views.html.index())
+    }
   }
 }
