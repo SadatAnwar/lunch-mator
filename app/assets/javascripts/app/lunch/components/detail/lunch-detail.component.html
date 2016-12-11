@@ -20,7 +20,7 @@
           </div>
           <div *ngFor="let participant of lunch.participants">
             <div class="list-group-item">
-              {{participant.userName}} joined on {{participant.joined | date:"dd.MM.yy HH:mm"}}
+              {{participant.userName}} joined on {{participant.joined | date:"dd.MM.yy"}} at {{participant.joined | date:"hh:mm a"}}
             </div>
           </div>
         </div>

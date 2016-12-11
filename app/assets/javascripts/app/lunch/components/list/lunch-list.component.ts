@@ -1,10 +1,10 @@
-import {Component, OnInit, Injectable} from "@angular/core";
-import {LunchDto} from "app/lunch/dto/types";
-import {LunchService} from "../../service/lunch.service";
-import {AlertLevel} from "../../../common/types/Alert";
-import {ErrorMapper} from "../../../mappers/ErrorMapper";
-import {AlertDisplay} from "../../../common/services/AlertDisplay";
-import {CalenderService} from "../../service/calander.service";
+import {Component, OnInit, Injectable} from '@angular/core';
+import {LunchDto} from 'app/lunch/dto/types';
+import {LunchService} from '../../service/lunch.service';
+import {AlertLevel} from '../../../common/types/Alert';
+import {ErrorMapper} from '../../../mappers/ErrorMapper';
+import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {CalenderService} from '../../service/calander.service';
 
 @Component({
   selector: 'lunch-list',
@@ -27,20 +27,17 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
 
   private getLunchList() {
     this.waiting = true;
-    let lunch = this.lunchService.getLunchList()
+    this.lunchService.getLunchList()
       .subscribe((response: LunchDto[]) => {
-        console.log(response);
         this.lunchList = response;
         this.waiting = false;
       }, (error: any) => {
         this.waiting = false;
         this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
       });
-    console.log(lunch);
   }
 
   join(lunch: LunchDto) {
-    console.log(lunch);
     this.lunchService.join(lunch.id)
       .subscribe((response: any) => {
         console.log(response);
