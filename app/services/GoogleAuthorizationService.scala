@@ -1,6 +1,5 @@
 package services
 
-import java.nio.charset.Charset
 import java.util.Base64
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,7 +25,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
   private val grantType = "authorization_code"
   private val clientSecret = configuration.underlying.getString("google.lunchmator.clientsecret")
 
-  def getGoogleSignInPage(originPage: String = "/welcome"): String = {
+  def getGoogleSignInPage(originPage: String = "/lunch/list"): String = {
     authorizationUrl +
       "response_type=code&" +
       s"client_id=$lunchMatorClientId&" +
