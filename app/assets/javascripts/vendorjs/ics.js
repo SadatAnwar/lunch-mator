@@ -85,7 +85,7 @@ var ics = function() {
             }
 
             if (rrule.byday.length > 7) {
-              throw "Recurrence rule 'byday' array must not be longer than the 7 DAYS in a week";
+              throw "Recurrence rule 'byday' array must not be longer than the 7 days in a week";
             }
 
             // Filter any possible repeats

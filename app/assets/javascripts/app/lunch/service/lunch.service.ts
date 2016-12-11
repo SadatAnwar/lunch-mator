@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers, Response} from '@angular/http';
-import {Observable} from 'rxjs';
-import 'rxjs/Rx';
-import {CreateLunchDto, LunchDto} from '../dto/types';
+import {Injectable} from "@angular/core";
+import {Http, Headers, Response} from "@angular/http";
+import {Observable} from "rxjs";
+import "rxjs/Rx";
+import {CreateLunchDto, LunchDto} from "../dto/types";
 
 @Injectable()
 export class LunchService {
@@ -19,24 +19,27 @@ export class LunchService {
   }
 
   createLunch(lunch: CreateLunchDto): Observable<any> {
+    console.log(lunch);
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post(this.lunchUrl, lunch, {headers}).map((response: Response) => {
       return response.json;
     }).catch((error: any) => {
-      console.error(error);
+      console.log(error);
       return error;
     });
   }
 
   getLunchList(): Observable<any> {
     return this.http.get(this.lunchUrl).map(response => response.json()).catch((error: any) => {
+      console.log(error);
       return error;
     });
   }
 
   join(id: number): Observable<any> {
     return this.http.put(this.lunchUrl + "/" + id, "").map(response => {
+      console.log(response);
       response.json();
     }).catch((error: any) => {
       console.error(error);
@@ -46,6 +49,7 @@ export class LunchService {
 
   leave(lunch: LunchDto): Observable<any> {
     return this.http.post(this.leaveLunchUrl, lunch).map(response => {
+      console.log(response);
       return response;
     }).catch((error: any) => {
       console.error(error);

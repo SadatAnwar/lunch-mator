@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from "@angular/core";
 declare var ics: any;
 
 @Injectable()
 export class CalenderService {
-  static DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  static days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   createCalander(lunchName: string, restaurantName: string, website: string = "", start: Date) {
     var cal = ics();
@@ -21,7 +21,7 @@ export class CalenderService {
     let MM = this.format2Digit(date.getMinutes());
     let mmdd = [dd, mm].join('.');
     let hhmm = [HH, MM].join(':');
-    return mmdd + " (" + CalenderService.DAYS[date.getDay()] + ") " + hhmm;
+    return mmdd + " (" + CalenderService.days[date.getDay()] + ") " + hhmm;
   }
 
   private getEndDateTime(start: Date): Date {
