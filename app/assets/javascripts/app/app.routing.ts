@@ -1,6 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {WelcomeComponent} from 'app/common/components/welcome/welcome.component';
+import {LunchListComponent} from './lunch/components/list/lunch-list.component';
 
 const appRoutes: Routes = [
   {
@@ -10,7 +10,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'welcome',
-    component: WelcomeComponent
+    component: LunchListComponent
   }
 ];
 

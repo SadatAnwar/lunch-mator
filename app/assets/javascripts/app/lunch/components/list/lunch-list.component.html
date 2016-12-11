@@ -1,6 +1,9 @@
 <alert-detail [alert]="alert"></alert-detail>
 
-<div  class="container" *ngIf="lunchList">
+<welcome></welcome>
+
+
+<div class="container" *ngIf="lunchList">
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let lunch of lunchList">
       <lunch-item (joined)="join($event)" [lunch]="lunch"></lunch-item>
