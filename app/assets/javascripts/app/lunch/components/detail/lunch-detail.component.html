@@ -2,7 +2,7 @@
 
 <div class="container" *ngIf="lunch">
   <div class="list-group" style="padding: 20px;">
-    <h4>{{lunch.lunchName}} At {{lunch.restaurant.name}}
+    <h4>{{lunch.lunchName}} at {{lunch.restaurant.name}}
       <button class="btn-lg btn-success pull-right" (click)="join(lunch)">Join</button>
     </h4>
     <div>
@@ -19,7 +19,9 @@
             People going
           </div>
           <div *ngFor="let participant of lunch.participants">
-            <div class="list-group-item">{{participant.userName}} Joined on {{participant.joined | date}}</div>
+            <div class="list-group-item">
+              {{participant.userName}} joined on {{participant.joined | date:"dd.MM.yy HH:mm"}}
+            </div>
           </div>
         </div>
       </div>
