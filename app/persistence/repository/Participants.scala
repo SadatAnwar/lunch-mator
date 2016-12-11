@@ -1,9 +1,10 @@
 package persistence.repository
 
+import play.api.Logger
+
 import com.github.tototoshi.slick.PostgresJodaSupport._
 import models.ParticipantRow
 import org.joda.time.DateTime
-import play.api.Logger
 import slick.driver.PostgresDriver.api._
 import slick.lifted.Tag
 
@@ -42,11 +43,13 @@ object Participants {
     } yield {
       (participants, user, lunch, restaurant)
     }
-    q.result
+    q.sortBy(_._1.joinedAt.asc).result
   }
 
   def deactivateParticipantForLunch(userId: Int, lunchId: Int) = {
-    val q = for {p <- participants if p.userId === userId && p.lunchId === lunchId} yield p.active
+    val q = for {p <- participants if p.userId === userId && p.lunchId === lunchId} yield {
+      p.active
+    }
     q.update(false)
   }
 }
