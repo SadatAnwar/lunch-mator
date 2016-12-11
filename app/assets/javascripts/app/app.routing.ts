@@ -5,12 +5,8 @@ import {LunchListComponent} from './lunch/components/list/lunch-list.component';
 const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: '/lunch/list',
+    redirectTo: '/welcome',
     pathMatch: 'full'
-  },
-  {
-    path: 'lunch/list',
-    component: LunchListComponent
   },
   {
     path: 'welcome',
