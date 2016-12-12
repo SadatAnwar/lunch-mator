@@ -29,6 +29,7 @@ class ErrorHandler extends HttpErrorHandler {
     Logger.error(s"Server side error for request [$request] exception thrown: [$exception] ${exception.printStackTrace()}")
     val errorMessage = exception match {
       case _: AuthenticationException => return Future.successful(Redirect("/login").withNewSession)
+      case _: java.util.NoSuchElementException => return Future.successful(NotFound("Requested content not found"))
       case e: PSQLException => ErrorMessageMapper.map(e, request.path)
       case e: Exception => ErrorMessageMapper.map(e)
     }

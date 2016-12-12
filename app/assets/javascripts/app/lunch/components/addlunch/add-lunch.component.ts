@@ -3,9 +3,9 @@ import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
 import {AlertDisplay} from '../../../common/services/AlertDisplay';
 import {AlertLevel} from '../../../common/types/Alert';
 import {RestaurantDto, CreateLunchDto} from '../../dto/types';
-import {ErrorMapper} from '../../../mappers/ErrorMapper';
 import {LunchService} from '../../service/lunch.service';
 import {CalenderService} from '../../service/calander.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'add-lunch',
@@ -29,7 +29,10 @@ export class AddLunchComponent extends AlertDisplay {
   startHH: number;
   startMin: number;
 
-  constructor(private completerService: CompleterService, private lunchService: LunchService, private calenderService: CalenderService) {
+  constructor(private completerService: CompleterService,
+              private router: Router,
+              private lunchService: LunchService,
+              private calenderService: CalenderService) {
     super();
     this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
   }
@@ -51,15 +54,13 @@ export class AddLunchComponent extends AlertDisplay {
       return;
     }
     this.lunchService.createLunch(createLunchDto)
-      .subscribe((response: any) => {
+      .subscribe((lunchId: number) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.SUCCESS, "New lunch started", 3);
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
-        this.reset();
-        //TODO: Route to lunch details
+        this.router.navigateByUrl(`/lunch/${lunchId}`)
       }, (error: any) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
+        this.displayAlert(AlertLevel.ERROR, `Error: [${error}]`)
       });
     this.waiting = true;
   }

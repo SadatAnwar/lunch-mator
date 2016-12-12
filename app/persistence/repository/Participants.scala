@@ -5,8 +5,10 @@ import play.api.Logger
 import com.github.tototoshi.slick.PostgresJodaSupport._
 import models.ParticipantRow
 import org.joda.time.DateTime
+import slick.dbio.Effect.Write
 import slick.driver.PostgresDriver.api._
 import slick.lifted.Tag
+import slick.profile.{FixedSqlAction, SqlAction}
 
 class Participants(tag: Tag) extends Table[ParticipantRow](tag, Some("lunch_world"), "participants") {
 
@@ -27,11 +29,11 @@ object Participants {
 
   lazy val participants = TableQuery[Participants]
 
-  def addParticipant(participantRow: ParticipantRow) = {
+  def addParticipant(participantRow: ParticipantRow): SqlAction[Int, NoStream, Effect] = {
     Logger.info(s"Inserting $participantRow into table")
     sqlu"""INSERT INTO lunch_world.participants (lunch_table_id, user_id, joined_at)
             VALUES (${participantRow.lunchId},${participantRow.userId},${participantRow.joined})
-           ON CONFLICT(user_id, lunch_table_id) DO UPDATE SET active = TRUE ;
+           ON CONFLICT(user_id, lunch_table_id) DO UPDATE SET active = TRUE;
       """
   }
 
@@ -46,7 +48,7 @@ object Participants {
     q.sortBy(_._1.joinedAt.asc).result
   }
 
-  def deactivateParticipantForLunch(userId: Int, lunchId: Int) = {
+  def deactivateParticipantForLunch(userId: Int, lunchId: Int): FixedSqlAction[Int, NoStream, Write] = {
     val q = for {p <- participants if p.userId === userId && p.lunchId === lunchId} yield {
       p.active
     }
