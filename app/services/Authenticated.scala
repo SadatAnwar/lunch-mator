@@ -6,10 +6,14 @@ import scala.concurrent.Future
 import play.api.mvc.BodyParsers.parse
 import play.api.mvc._
 
+import com.google.inject.{Inject, Provider}
 import exceptions.AuthenticationException
 import persistence.repository.Users
 
-class AuthenticatedRequest[A](val username: String, request: Request[A]) extends WrappedRequest[A](request) {
+class AuthenticatedRequest[A](val username: String, val request: Request[A]) extends WrappedRequest[A](request) {
+}
+
+class Foo @Inject()(userService: Provider[UserService]) {
 }
 
 object Authenticated {
@@ -23,7 +27,7 @@ object Authenticated {
           block(new AuthenticatedRequest(request.session.get("email").get, request))
         }
         else {
-          throw new AuthenticationException
+          throw new AuthenticationException(origin = request.path)
         }
       }
   }
@@ -33,11 +37,10 @@ object Authenticated {
       return Future.successful(false)
     }
 
-    val email = request.session.get("email").get
-    validateUser(email)
+    validateUser(request.session.get("email").get)
   }
 
-  def validateUser(email: String): Future[Boolean] = usingDB {
+  private def validateUser(email: String): Future[Boolean] = usingDB {
     Users.isPresent(email)
   }
 }

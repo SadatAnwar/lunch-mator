@@ -1,4 +1,4 @@
 package exceptions
 
-class AuthenticationException(message: String = "") extends RuntimeException(message) {
+class AuthenticationException(val origin: String = "", val message: String = "") extends RuntimeException(message) {
 }
