@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
-import {CreateLunchDto, LunchDto} from '../dto/types';
+import {CreateLunchDto, LunchDto, LunchDetailDto} from '../dto/types';
 
 @Injectable()
 export class LunchService {
@@ -18,52 +18,35 @@ export class LunchService {
     this.lunchDetailUrl = '/rest/lunch-detail/'
   }
 
-  createLunch(lunch: CreateLunchDto): Observable<any> {
+  createLunch(lunch: CreateLunchDto): Observable<number> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post(this.lunchUrl, lunch, {headers}).map((response: Response) => {
-      return response.json;
-    }).catch((error: any) => {
-      console.error(error);
-      return error;
-    });
+    return this.http.post(this.lunchUrl, lunch, {headers})
+      .map((response: Response) => {
+        return response.json();
+      });
   }
 
-  getLunchList(): Observable<any> {
-    return this.http.get(this.lunchUrl).map(response => response.json()).catch((error: any) => {
-      return error;
-    });
+  getLunchList(): Observable<LunchDto[]> {
+    return this.http.get(this.lunchUrl)
+      .map(response => response.json());
   }
 
   join(id: number): Observable<any> {
-    return this.http.put(this.lunchUrl + "/" + id, "").map(response => {
-      response.json();
-    }).catch((error: any) => {
-      console.error(error);
-      return error;
-    });
+    return this.http.put(this.lunchUrl + "/" + id, "")
+      .map(response => response.json());
   }
 
   leave(lunch: LunchDto): Observable<any> {
-    return this.http.post(this.leaveLunchUrl, lunch).map(response => {
-      return response;
-    }).catch((error: any) => {
-      console.error(error);
-      return error;
-    });
+    return this.http.post(this.leaveLunchUrl, lunch);
   }
 
-  getMyLunchList() {
-    return this.http.get(this.myLunchUrl).map(response => response.json()).catch((error: any) => {
-      console.error(error);
-      return error;
-    });
+  getMyLunchList(): Observable<LunchDto[]> {
+    return this.http.get(this.myLunchUrl).map(response => response.json());
   }
 
-  getLunchDetails(lunchId: number) {
-    return this.http.get(this.lunchDetailUrl + lunchId).map(response => response.json()).catch((error: any) => {
-      console.error(error);
-      return error;
-    });
+  getLunchDetails(lunchId: number): Observable<LunchDetailDto> {
+    return this.http.get(this.lunchDetailUrl + lunchId)
+      .map(response => response.json());
   }
 }
