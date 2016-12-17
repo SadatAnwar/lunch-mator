@@ -18,9 +18,13 @@ class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") 
 
   def email = column[String]("email")
 
+  def lastLogin = column[String]("last_login")
+
+  def picture = column[String]("picture_link")
+
   def active = column[Boolean]("active")
 
-  override def * = (id.?, firstName, lastName, email, active) <> (UserRow.tupled, UserRow.unapply _)
+  override def * = (id.?, firstName, lastName, email, active) <> (UserRow.tupled, UserRow.unapply)
 }
 
 object Users {
@@ -48,6 +52,7 @@ object Users {
       if (!exists) {
         users += user
       } else {
+        //TODO: Update data here
         DBIO.successful(0)
       }
     }
