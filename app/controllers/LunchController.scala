@@ -1,22 +1,23 @@
 package controllers
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import play.api.libs.json.Json
+import play.api.mvc.Controller
+
 import com.google.inject.Inject
 import exceptions.ParticipantService
 import mappers.LunchMapper
 import models.Formats._
 import models._
-import play.api.libs.json.Json
-import play.api.mvc.Controller
 import services.{Authenticated, LunchService}
-
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class LunchController @Inject()(lunchService: LunchService, participantService: ParticipantService) extends Controller {
 
   def createLunch() = Authenticated.async(parse.json) { request =>
     val lunchDto = request.body.as[CreateLunchDto]
-    lunchService.createLunch(request.username, lunchDto).map(lunch =>
-      Created
+    lunchService.createLunch(request.username, lunchDto).map(lunchId =>
+      Created(Json.toJson(lunchId))
     )
   }
 
@@ -28,8 +29,8 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
 
   def leaveLunch = Authenticated.async(parse.json) { request =>
     val lunchDto = request.body.as[MyLunchDto]
-    participantService.removeUserFromLunch(request.username, lunchDto.id).map(participant =>
-      Ok
+    participantService.removeUserFromLunch(request.username, lunchDto.id).map(rowsUpdated =>
+      Ok(Json.toJson("Success"))
     )
   }
 

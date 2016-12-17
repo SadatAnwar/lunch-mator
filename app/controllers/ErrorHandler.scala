@@ -27,7 +27,9 @@ class ErrorHandler extends HttpErrorHandler {
 
   def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
     val errorMessage = exception match {
+
       case e: AuthenticationException => return Future.successful(makeLoginRedirect(e.origin))
+      case _: java.util.NoSuchElementException => return Future.successful(NotFound("Requested content not found"))
       case e: PSQLException => ErrorMessageMapper.map(e, request.path)
       case e: Exception => ErrorMessageMapper.map(e)
     }
