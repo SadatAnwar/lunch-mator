@@ -87,6 +87,9 @@ export class AddLunchComponent extends AlertDisplay {
     if (createLunchDto.anonymous == null) {
       createLunchDto.anonymous = false;
     }
+    if (!createLunchDto.maxSize){
+      createLunchDto.maxSize = 5;
+    }
     if (createLunchDto.maxSize > 50 || createLunchDto.maxSize < 2) {
       this.displayAlert(AlertLevel.ERROR, "You surely cant have a place that takes so many people? oO", 5);
       return false;
