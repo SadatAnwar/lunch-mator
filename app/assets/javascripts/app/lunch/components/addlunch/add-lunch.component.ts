@@ -56,8 +56,10 @@ export class AddLunchComponent extends AlertDisplay {
     this.lunchService.createLunch(createLunchDto)
       .subscribe((lunchId: number) => {
         this.waiting = false;
+        this.displayAlert(AlertLevel.SUCCESS, "New lunch started", 3);
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
-        this.router.navigateByUrl(`/lunch/${lunchId}`)
+        this.reset();
+        //TODO: Route to lunch details
       }, (error: any) => {
         this.waiting = false;
         this.displayAlert(AlertLevel.ERROR, `Error: [${error}]`)
@@ -84,6 +86,9 @@ export class AddLunchComponent extends AlertDisplay {
   private validateForm(createLunchDto: CreateLunchDto): boolean {
     if (createLunchDto.anonymous == null) {
       createLunchDto.anonymous = false;
+    }
+    if (!createLunchDto.maxSize){
+      createLunchDto.maxSize = 5;
     }
     if (createLunchDto.maxSize > 50 || createLunchDto.maxSize < 2) {
       this.displayAlert(AlertLevel.ERROR, "You surely cant have a place that takes so many people? oO", 5);

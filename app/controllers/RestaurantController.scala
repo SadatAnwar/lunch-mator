@@ -1,12 +1,14 @@
 package controllers
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import play.api.libs.json._
+import play.api.mvc.Controller
+
 import com.google.inject.Inject
 import models.CreateRestaurantDto
 import models.Formats._
-import play.api.libs.json._
-import play.api.mvc.Controller
 import services.{Authenticated, RestaurantService}
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class RestaurantController @Inject()(restaurantsService: RestaurantService) extends Controller {
 

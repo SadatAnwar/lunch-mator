@@ -2,14 +2,15 @@ package controllers
 
 import javax.inject.Inject
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import play.api.db.slick.DatabaseConfigProvider
-import play.api.mvc.{Action, Controller, EssentialAction}
+import play.api.mvc.{Action, AnyContent, Controller, EssentialAction}
 
-import services.Authenticated
+import services.{Authenticated, UserService}
 
-class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controller {
+class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userService: UserService) extends Controller {
 
   def secured(): EssentialAction = Authenticated.async {
     request =>
@@ -21,11 +22,19 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Co
       Future.successful(Ok(views.html.index()))
   }
 
-  def unSecure() = Action { request =>
+  def unSecure(): Action[AnyContent] = Action.async { request =>
+    val params = request.queryString.map { case (k, v) => k -> v.mkString }
+    val origin = params.getOrElse("origin", "/welcome")
     if (request.session.get("email").isDefined) {
-      Redirect("/welcome")
+      userService.validateUser(request.session.get("email").get).map { valid =>
+        if (valid) {
+          Redirect("/welcome")
+        } else {
+          Ok(views.html.index())
+        }
+      }
     } else {
-      Ok(views.html.index())
+      Future.successful(Ok(views.html.index()))
     }
   }
 }

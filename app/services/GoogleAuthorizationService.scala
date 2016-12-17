@@ -25,7 +25,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
   private val grantType = "authorization_code"
   private val clientSecret = configuration.underlying.getString("google.lunchmator.clientsecret")
 
-  def getGoogleSignInPage(originPage: String = "/lunch/list"): String = {
+  def getGoogleSignInPage(origin: String = "/welcome"): String = {
     authorizationUrl +
       "response_type=code&" +
       s"client_id=$lunchMatorClientId&" +
@@ -33,7 +33,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
       "scope=profile&" +
       "access_type=online&" +
       "include_granted_scopes=true&" +
-      s"state=$originPage"
+      s"state=$origin"
   }
 
   def googleAuthorize(params: Map[String, String]): Future[GoogleUserInformation] = {
