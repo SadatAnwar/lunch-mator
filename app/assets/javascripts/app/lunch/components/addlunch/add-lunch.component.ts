@@ -56,8 +56,10 @@ export class AddLunchComponent extends AlertDisplay {
     this.lunchService.createLunch(createLunchDto)
       .subscribe((lunchId: number) => {
         this.waiting = false;
+        this.displayAlert(AlertLevel.SUCCESS, "New lunch started", 3);
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
-        this.router.navigateByUrl(`/lunch/${lunchId}`)
+        this.reset();
+        //TODO: Route to lunch details
       }, (error: any) => {
         this.waiting = false;
         this.displayAlert(AlertLevel.ERROR, `Error: [${error}]`)
