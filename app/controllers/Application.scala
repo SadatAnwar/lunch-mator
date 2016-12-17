@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import play.api.db.slick.DatabaseConfigProvider
@@ -22,6 +23,8 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userServic
   }
 
   def unSecure(): Action[AnyContent] = Action.async { request =>
+    val params = request.queryString.map { case (k, v) => k -> v.mkString }
+    val origin = params.getOrElse("origin", "/welcome")
     if (request.session.get("email").isDefined) {
       userService.validateUser(request.session.get("email").get).map { valid =>
         if (valid) {
