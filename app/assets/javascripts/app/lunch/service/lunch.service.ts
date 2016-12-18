@@ -8,14 +8,15 @@ import {CreateLunchDto, LunchDto, LunchDetailDto} from '../dto/types';
 export class LunchService {
   lunchUrl: string;
   myLunchUrl: string;
-  lunchDetailUrl: string;
   leaveLunchUrl: string;
+  private participantUrl: string;
 
   constructor(private http: Http) {
     this.lunchUrl = '/rest/lunch';
     this.leaveLunchUrl = '/rest/lunch/leave';
     this.myLunchUrl = '/rest/my-lunch';
-    this.lunchDetailUrl = '/rest/lunch-detail/'
+    this.participantUrl = '/rest/participants';
+
   }
 
   createLunch(lunch: CreateLunchDto): Observable<number> {
@@ -32,12 +33,22 @@ export class LunchService {
       .map(response => response.json());
   }
 
-  join(id: number): Observable<any> {
+  public requestJoin(lunch: LunchDto, onSuccess: (response: any) => void, onFail: (error: any) => void) {
+    this.join(lunch.id).subscribe(onSuccess, onFail);
+  }
+
+  private join(id: number): Observable<any> {
     return this.http.put(this.lunchUrl + "/" + id, "")
       .map(response => response.json());
   }
 
-  leave(lunch: LunchDto): Observable<any> {
+  public requestLeave(lunchDto: LunchDto, onSuccess: (response: any) => void, onFail: (error: any) => void) {
+    if (confirm("are you sure you want to leave?")) {
+      this.leave(lunchDto).subscribe(onSuccess, onFail);
+    }
+  }
+
+  private leave(lunch: LunchDto): Observable<any> {
     return this.http.post(this.leaveLunchUrl, lunch);
   }
 
@@ -46,7 +57,12 @@ export class LunchService {
   }
 
   getLunchDetails(lunchId: number): Observable<LunchDetailDto> {
-    return this.http.get(this.lunchDetailUrl + lunchId)
+    return this.http.get(`${this.lunchUrl}/${lunchId}`)
+      .map(response => response.json());
+  }
+
+  getParticipants(lunchId: number) {
+    return this.http.get(`${this.participantUrl}/${lunchId}`)
       .map(response => response.json());
   }
 }

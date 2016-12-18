@@ -6,12 +6,13 @@ export class CalenderService {
   static DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   createCalander(lunchName: string, restaurantName: string, website: string = "", start: Date) {
-    var cal = ics();
-    let end = this.getEndDateTime(start);
-    cal.addEvent('Lunch at ' + restaurantName, "Lunch-mator lunch", website, start, end);
-    if (confirm("want to download an appointment for your calender?")) {
-      cal.download("lunch-mator");
-    }
+    return;
+    // var cal = ics();
+    // let end = this.getEndDateTime(start);
+    // cal.addEvent('Lunch at ' + restaurantName, "Lunch-mator lunch", website, start, end);
+    // if (confirm("want to download an appointment for your calender?")) {
+    //   cal.download("lunch-mator");
+    // }
   }
 
   format(date: Date) {

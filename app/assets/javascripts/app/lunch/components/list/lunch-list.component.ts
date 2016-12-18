@@ -2,7 +2,6 @@ import {Component, OnInit, Injectable} from '@angular/core';
 import {LunchDto} from 'app/lunch/dto/types';
 import {LunchService} from '../../service/lunch.service';
 import {AlertLevel} from '../../../common/types/Alert';
-import {ErrorMapper} from '../../../mappers/ErrorMapper';
 import {AlertDisplay} from '../../../common/services/AlertDisplay';
 import {CalenderService} from '../../service/calander.service';
 
@@ -33,18 +32,27 @@ export class LunchListComponent extends AlertDisplay implements OnInit {
         this.waiting = false;
       }, (error: any) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.ERROR, ErrorMapper.map(error).message)
+        this.displayAlert(AlertLevel.ERROR, `Error retrieving available lunch: [${error}]`, 5)
       });
   }
 
   join(lunch: LunchDto) {
-    this.lunchService.join(lunch.id)
-      .subscribe((response: any) => {
-        console.log(response);
+    this.lunchService.requestJoin(lunch,
+      (response: any) => {
         this.displayAlert(AlertLevel.SUCCESS, `Joined lunch at ${lunch.restaurant.name}`, 3);
         this.calenderService.createCalander(lunch.lunchName, lunch.restaurant.name, lunch.restaurant.website, new Date(lunch.startTime));
+        this.ngOnInit();
       }, (error: any) => {
         this.displayAlert(AlertLevel.ERROR, `Error: [${error}], make sure you are not already joined`, 3)
       });
+  }
+
+  leave(lunch: LunchDto) {
+    this.lunchService.requestLeave(lunch, (response: any) => {
+      this.displayAlert(AlertLevel.SUCCESS, "Left lunch at " + lunch.restaurant.name, 3);
+      this.ngOnInit();
+    }, (error: any) => {
+      this.displayAlert(AlertLevel.ERROR, `Error:  ${error}`, 3);
+    });
   }
 }

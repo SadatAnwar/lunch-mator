@@ -31,15 +31,11 @@ export class MyLunchListComponent extends AlertDisplay implements OnInit {
   }
 
   requestLeave(lunch: LunchDto) {
-    if (confirm("are you sure you want to leave?")) {
-      console.log("request leave for ", lunch);
-      this.lunchService.leave(lunch)
-        .subscribe((response: any) => {
-          this.ngOnInit();
-          this.displayAlert(AlertLevel.SUCCESS, "Left lunch at " + lunch.restaurant.name, 3);
-        }, (error: any) => {
-          this.displayAlert(AlertLevel.ERROR, `Error:  ${error}`, 3);
-        });
-    }
+    this.lunchService.requestLeave(lunch, (response: any) => {
+      this.displayAlert(AlertLevel.SUCCESS, "Left lunch at " + lunch.restaurant.name, 3);
+      this.ngOnInit();
+    }, (error: any) => {
+      this.displayAlert(AlertLevel.ERROR, `Error:  ${error}`, 3);
+    });
   }
 }
