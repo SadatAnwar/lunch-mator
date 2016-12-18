@@ -2,7 +2,7 @@ package models
 
 import org.joda.time.DateTime
 
-case class LunchDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, spotsLeft: Int, startTime: DateTime, anonymous: Boolean)
+case class LunchDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, spotsLeft: Int, startTime: DateTime, canJoin: Boolean, anonymous: Boolean)
 
 case class MyLunchDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, startTime: DateTime, anonymous: Boolean)
 

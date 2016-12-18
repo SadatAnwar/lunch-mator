@@ -1,7 +1,7 @@
-import {Component, Input, EventEmitter, Output} from "@angular/core";
-import {LunchDto} from "app/lunch/dto/types";
-import {Router} from "@angular/router";
-import {CalenderService} from "../../service/calander.service";
+import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {LunchDto} from 'app/lunch/dto/types';
+import {Router} from '@angular/router';
+import {CalenderService} from '../../service/calander.service';
 
 @Component({
   selector: 'lunch-item',
@@ -16,7 +16,7 @@ export class LunchItemComponent {
   myLunch: boolean;
 
   @Output()
-  joined = new EventEmitter();
+  requestJoined = new EventEmitter();
 
   @Output()
   requestLeave = new EventEmitter();
@@ -31,7 +31,7 @@ export class LunchItemComponent {
   }
 
   join(lunch: LunchDto) {
-    this.joined.emit(lunch);
+    this.requestJoined.emit(lunch);
   }
 
   details(lunch: LunchDto) {

@@ -10,7 +10,7 @@ import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 
 import mappers.ParticipantMapper
-import models.{LunchRow, ParticipantDto, ParticipantRow, User}
+import models._
 import org.joda.time.DateTime
 import persistence.repository.{Participants, Users}
 import services.{LunchNotFoundException, UserService, usingDB}

@@ -3,12 +3,12 @@ package persistence.repository
 import play.api.Logger
 
 import com.github.tototoshi.slick.PostgresJodaSupport._
-import models.ParticipantRow
+import models.{LunchRow, ParticipantRow, RestaurantRow, UserRow}
 import org.joda.time.DateTime
-import slick.dbio.Effect.Write
+import slick.dbio.Effect.{Read, Write}
 import slick.driver.PostgresDriver.api._
 import slick.lifted.Tag
-import slick.profile.{FixedSqlAction, SqlAction}
+import slick.profile.{FixedSqlAction, FixedSqlStreamingAction, SqlAction}
 
 class Participants(tag: Tag) extends Table[ParticipantRow](tag, Some("lunch_world"), "participants") {
 
@@ -37,7 +37,7 @@ object Participants {
       """
   }
 
-  def getParticipantsForLunch(lunchId: Int) = {
+  def getParticipantsForLunch(lunchId: Int): FixedSqlStreamingAction[Seq[(ParticipantRow, UserRow, LunchRow, RestaurantRow)], (ParticipantRow, UserRow, LunchRow, RestaurantRow), Read] = {
     val q = for {
       lunch <- LunchTableRows.lunchTableRows.filter(_.id === lunchId)
       restaurant <- Restaurants.restaurants.filter(_.id === lunch.restaurantId)

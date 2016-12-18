@@ -6,7 +6,7 @@
 <div class="container" *ngIf="lunchList">
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let lunch of lunchList">
-      <lunch-item (joined)="join($event)" [lunch]="lunch"></lunch-item>
+      <lunch-item (requestLeave)="leave($event)" (requestJoined)="join($event)" [lunch]="lunch"></lunch-item>
     </li>
   </ul>
 </div>
