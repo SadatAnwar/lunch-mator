@@ -2,7 +2,8 @@ package mappers
 
 import exceptions.UserNotFoundException
 import models.GoogleModels.{GoogleAuthorization, GoogleUserInformation}
-import models.{NewUserDto, OAuthUserRow, User, UserRow}
+import models.{OAuthUserRow, User, UserRow}
+import org.joda.time.DateTime
 
 object UserMapper {
 
@@ -10,15 +11,11 @@ object UserMapper {
     User(user.id.getOrElse(throw new UserNotFoundException(user)), user.firstName, user.lastName, user.email, user.active)
   }
 
-  def map(newUserDto: NewUserDto): UserRow = {
-    UserRow(None, newUserDto.firstName, newUserDto.lastName, newUserDto.email, active = true)
+  def map(user: GoogleUserInformation): UserRow = {
+    UserRow(None, user.given_name, user.family_name, user.email, user.picture.getOrElse(""), DateTime.now(), active = true)
   }
 
-  def map(googleUserInformation: GoogleUserInformation): UserRow = {
-    UserRow(None, googleUserInformation.given_name, googleUserInformation.family_name, googleUserInformation.email, active = true)
-  }
-
-  def map(googleUserInformation: GoogleUserInformation, googleAuthorization: GoogleAuthorization): OAuthUserRow = {
-    OAuthUserRow(googleUserInformation.email, googleAuthorization.access_token, googleAuthorization.id_token)
+  def map(userInfo: GoogleUserInformation, auth: GoogleAuthorization): OAuthUserRow = {
+    OAuthUserRow(userInfo.email, auth.access_token, auth.id_token)
   }
 }

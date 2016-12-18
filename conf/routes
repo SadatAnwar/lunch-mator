@@ -4,17 +4,21 @@
 
 # REST Restaurant
 GET         /rest/restaurants                     controllers.RestaurantController.listRestaurants()
+GET         /rest/restaurants/random              controllers.RestaurantController.getRandomRestaurant()
 GET         /rest/restaurants/:name               controllers.RestaurantController.findRestaurant(name)
 GET         /rest/restaurants/search/:name        controllers.RestaurantController.searchRestaurant(name)
 POST        /rest/restaurants                     controllers.RestaurantController.addRestaurant()
 
 # REST Lunch
-GET         /rest/lunch                           controllers.LunchController.getLunch()
+GET         /rest/lunch                           controllers.LunchController.getAllAvailableLunch()
+GET         /rest/lunch/:id                       controllers.LunchController.getLunch(id: Int)
 POST        /rest/lunch                           controllers.LunchController.createLunch()
 POST        /rest/lunch/leave                     controllers.LunchController.leaveLunch()
 PUT         /rest/lunch/:id                       controllers.LunchController.joinLunch(id: Int)
-GET         /rest/lunch-detail/:id                controllers.LunchController.getLunchDetail(id: Int)
 GET         /rest/my-lunch                        controllers.LunchController.getMyLunch()
+
+# REST Participants
+GET         /rest/participants/:lunchId           controllers.ParticipantController.getParticipants(lunchId: Int)
 
 
 # REST User session

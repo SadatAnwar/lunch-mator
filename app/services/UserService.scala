@@ -24,6 +24,10 @@ class UserService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPro
     Users.getAll
   }
 
+  def validateUser(email: String): Future[Boolean] = usingDB {
+    Users.isPresent(email)
+  }
+
   def getUserByEmail(email: String): Future[User] = usingDB {
     Users.getByEmail(email)
   }.map(user => UserMapper.map(user))
