@@ -6,14 +6,10 @@ import scala.concurrent.Future
 import play.api.mvc.BodyParsers.parse
 import play.api.mvc._
 
-import com.google.inject.{Inject, Provider}
 import exceptions.AuthenticationException
 import persistence.repository.Users
 
 class AuthenticatedRequest[A](val username: String, val request: Request[A]) extends WrappedRequest[A](request) {
-}
-
-class Foo @Inject()(userService: Provider[UserService]) {
 }
 
 object Authenticated {

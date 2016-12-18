@@ -5,7 +5,6 @@ import {AlertLevel} from '../../../common/types/Alert';
 import {RestaurantDto, CreateLunchDto} from '../../dto/types';
 import {LunchService} from '../../service/lunch.service';
 import {CalenderService} from '../../service/calander.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'add-lunch',
@@ -18,7 +17,6 @@ export class AddLunchComponent extends AlertDisplay {
   restaurantName: string = "";
   maxSize: number;
   dataService: CompleterData;
-  randomWord: string = "an awesome";
   selectedRestaurant: RestaurantDto;
   anonymous: boolean = false;
 
@@ -30,7 +28,6 @@ export class AddLunchComponent extends AlertDisplay {
   startMin: number;
 
   constructor(private completerService: CompleterService,
-              private router: Router,
               private lunchService: LunchService,
               private calenderService: CalenderService) {
     super();
@@ -87,7 +84,7 @@ export class AddLunchComponent extends AlertDisplay {
     if (createLunchDto.anonymous == null) {
       createLunchDto.anonymous = false;
     }
-    if (!createLunchDto.maxSize){
+    if (!createLunchDto.maxSize) {
       createLunchDto.maxSize = 5;
     }
     if (createLunchDto.maxSize > 50 || createLunchDto.maxSize < 2) {
@@ -105,6 +102,18 @@ export class AddLunchComponent extends AlertDisplay {
     }
 
     return true;
+  }
+
+  public randomRestaurant() {
+    this.lunchService.getRandomRestaurant()
+      .subscribe((restaurant: RestaurantDto) => {
+        this.displayAlert(AlertLevel.INFO, `${restaurant.name} selected`, 3);
+        this.restaurantName = restaurant.name;
+        this.selectedRestaurant = restaurant;
+      }, (error: any) => {
+        this.displayAlert(AlertLevel.ERROR, `Error occured: [${error}]`);
+      });
+
   }
 
   public tomorrow() {

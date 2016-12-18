@@ -14,11 +14,18 @@
                      placeholder="Give your lunch {{randomWord}} name">
             </div>
             <div class="form-group">
-              <ng2-completer [(ngModel)]="restaurantName" [dataService]="dataService" [minSearchLength]="1"
-                             inputName="Restaurant name" placeholder="Restaurant name"
-                             (selected)="selectRestaurant($event)"
-                             [matchClass]="'match'">
-              </ng2-completer>
+              <div class="input-group" style="margin: 0px;">
+                <div style="margin-right: 10px">
+                <ng2-completer [(ngModel)]="restaurantName" [dataService]="dataService" [minSearchLength]="1"
+                               inputName="Restaurant name" placeholder="Restaurant name"
+                               (selected)="selectRestaurant($event)"
+                               [matchClass]="'match'">
+                </ng2-completer>
+                </div>
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" (click)="randomRestaurant()">I am feeling lucky!</button>
+                </span>
+              </div>
             </div>
             <div class="row form-group">
               <div class='col-xs-2'><label class="form-label">Date</label>
@@ -45,7 +52,8 @@
                   <button class="btn-default" style="width: 100%; margin-top: 10px" (click)="today()">Today</button>
                 </div>
                 <div class='col-xs-6'>
-                  <button class="btn-default" style="width: 100%; margin-top: 10px" (click)="tomorrow()">Tomorrow</button>
+                  <button class="btn-default" style="width: 100%; margin-top: 10px" (click)="tomorrow()">Tomorrow
+                  </button>
                 </div>
               </div>
             </div>

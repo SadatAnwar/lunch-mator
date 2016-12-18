@@ -27,16 +27,22 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
   }
 
   def findRestaurant(name: String) = Authenticated.async {
-    implicit request =>
+    request =>
       restaurantsService.getRestaurantByName(name).map(restaurant =>
         Ok(Json.toJson(restaurant))
       )
   }
 
   def searchRestaurant(name: String) = Authenticated.async {
-    implicit request =>
+    request =>
       restaurantsService.searchRestaurant(name).map(restaurant =>
         Ok(Json.toJson(restaurant))
       )
+  }
+
+  def getRandomRestaurant() = Authenticated.async { request =>
+    restaurantsService.getRandomRestaurant().map { restaurant =>
+      Ok(Json.toJson(restaurant))
+    }
   }
 }

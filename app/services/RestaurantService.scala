@@ -2,30 +2,35 @@ package services
 
 import javax.inject.Inject
 
-import mappers.RestaurantMapper
-import models.{CreateRestaurantDto, RestaurantDto, RestaurantRow}
-import persistence.repository.Restaurants
-import play.api.db.slick.DatabaseConfigProvider
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+import play.api.db.slick.DatabaseConfigProvider
+
+import mappers.RestaurantMapper
+import models.{CreateRestaurantDto, RestaurantRow}
+import persistence.repository.Restaurants
+
 class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvider, val userService: UserService) {
 
-  def searchRestaurant(name: String) = usingDB {
+  def searchRestaurant(name: String): Future[Seq[RestaurantRow]] = usingDB {
     Restaurants.searchRestaurant(name)
   }
 
-  def createNewRestaurant(restaurant: RestaurantRow) = usingDB {
+  def createNewRestaurant(restaurant: RestaurantRow): Future[Int] = usingDB {
     Restaurants.addRestraurant(restaurant)
   }
 
-  def createNewRestaurant(restaurantDto: CreateRestaurantDto, userName: String) = usingDB.async {
+  def createNewRestaurant(restaurantDto: CreateRestaurantDto, userName: String): Future[Int] = usingDB.async {
     userService.getUserByEmail(userName).map {
       user => RestaurantMapper.map(restaurantDto, user)
     }.map {
       restaurant => Restaurants.addRestraurant(restaurant)
     }
+  }
+
+  def getRandomRestaurant(): Future[RestaurantRow] = usingDB {
+    Restaurants.selectRandomRestaurant()
   }
 
   def getAllRestaurants: Future[Seq[RestaurantRow]] = usingDB {
