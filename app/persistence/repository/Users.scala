@@ -2,7 +2,9 @@ package persistence.repository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import com.github.tototoshi.slick.PostgresJodaSupport._
 import models.UserRow
+import org.joda.time.DateTime
 import slick.dbio.DBIOAction
 import slick.dbio.Effect.{Read, Write}
 import slick.driver.PostgresDriver.api._
@@ -18,13 +20,13 @@ class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") 
 
   def email = column[String]("email")
 
-  def lastLogin = column[String]("last_login")
-
   def picture = column[String]("picture_link")
+
+  def lastLogin = column[DateTime]("last_login")
 
   def active = column[Boolean]("active")
 
-  override def * = (id.?, firstName, lastName, email, active) <> (UserRow.tupled, UserRow.unapply)
+  override def * = (id.?, firstName, lastName, email, picture, lastLogin, active) <> (UserRow.tupled, UserRow.unapply)
 }
 
 object Users {
@@ -52,8 +54,12 @@ object Users {
       if (!exists) {
         users += user
       } else {
-        //TODO: Update data here
-        DBIO.successful(0)
+        val q = for {
+          u <- users if u.email === user.email
+        } yield {
+          (u.lastLogin, u.picture)
+        }
+        q.update(user.lastLogin, user.picture)
       }
     }
   }
