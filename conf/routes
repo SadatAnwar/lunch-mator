@@ -4,6 +4,7 @@
 
 # REST Restaurant
 GET         /rest/restaurants                     controllers.RestaurantController.listRestaurants()
+GET         /rest/restaurants/random              controllers.RestaurantController.getRandomRestaurant()
 GET         /rest/restaurants/:name               controllers.RestaurantController.findRestaurant(name)
 GET         /rest/restaurants/search/:name        controllers.RestaurantController.searchRestaurant(name)
 POST        /rest/restaurants                     controllers.RestaurantController.addRestaurant()

@@ -1,4 +1,4 @@
-import {Alert, AlertLevel} from "../types/Alert";
+import {Alert, AlertLevel} from '../types/Alert';
 
 export abstract class AlertDisplay {
   private alert = new Alert();
@@ -40,9 +40,6 @@ export abstract class AlertDisplay {
   }
 
   displayAlert(level: AlertLevel, message: string, timeout: number = -1) {
-    if (level == AlertLevel.INFO) {
-      this.displayInfo(message, timeout);
-    }
     switch (level) {
       case AlertLevel.INFO:
         this.displayInfo(message, timeout);

@@ -1,7 +1,9 @@
 package persistence.repository
 
 import models.RestaurantRow
+import slick.dbio.Effect.{Read, Write}
 import slick.driver.PostgresDriver.api._
+import slick.profile.{FixedSqlAction, FixedSqlStreamingAction, SqlAction}
 
 class Restaurants(tag: Tag) extends Table[RestaurantRow](tag, Some("lunch_world"), "restaurants") {
 
@@ -20,22 +22,26 @@ class Restaurants(tag: Tag) extends Table[RestaurantRow](tag, Some("lunch_world"
 
 object Restaurants {
 
-  def searchRestaurant(name: String) = {
-    restaurants.filter(_.name.toLowerCase like "%" + name.toLowerCase + "%").result
-  }
-
-
   lazy val restaurants = TableQuery[Restaurants]
 
   def getAll = {
     restaurants.result
   }
 
-  def addRestraurant(restaurant: RestaurantRow) = {
+  def searchRestaurant(name: String): FixedSqlStreamingAction[Seq[RestaurantRow], RestaurantRow, Read] = {
+    restaurants.filter(_.name.toLowerCase like "%" + name.toLowerCase + "%").result
+  }
+
+  def selectRandomRestaurant(): SqlAction[RestaurantRow, NoStream, Read] = {
+    val rand = SimpleFunction.nullary[Double]("random")
+    restaurants.sortBy(x => rand).take(1).result.head
+  }
+
+  def addRestraurant(restaurant: RestaurantRow): FixedSqlAction[Int, NoStream, Write] = {
     restaurants += restaurant
   }
 
-  def getRestaurantsById(restaurant_id: Int) = {
+  def getRestaurantsById(restaurant_id: Int): SqlAction[RestaurantRow, NoStream, Read] = {
     restaurants.filter(_.id === restaurant_id).result.head
   }
 

@@ -6,16 +6,18 @@ import {CreateLunchDto, LunchDto, LunchDetailDto} from '../dto/types';
 
 @Injectable()
 export class LunchService {
-  lunchUrl: string;
-  myLunchUrl: string;
-  leaveLunchUrl: string;
+  private lunchUrl: string;
+  private myLunchUrl: string;
+  private leaveLunchUrl: string;
   private participantUrl: string;
+  private randomRestaurantUrl: string;
 
   constructor(private http: Http) {
     this.lunchUrl = '/rest/lunch';
     this.leaveLunchUrl = '/rest/lunch/leave';
     this.myLunchUrl = '/rest/my-lunch';
     this.participantUrl = '/rest/participants';
+    this.randomRestaurantUrl = '/rest/restaurants/random';
 
   }
 
@@ -63,6 +65,11 @@ export class LunchService {
 
   getParticipants(lunchId: number) {
     return this.http.get(`${this.participantUrl}/${lunchId}`)
+      .map(response => response.json());
+  }
+
+  getRandomRestaurant() {
+    return this.http.get(`${this.randomRestaurantUrl}`)
       .map(response => response.json());
   }
 }
