@@ -1,8 +1,10 @@
 package models
 
+import org.joda.time.DateTime
+
 case class User(id: Int, firstName: String, lastName: String, email: String, active: Boolean)
 
-case class UserRow(id: Option[Int], firstName: String, lastName: String, email: String, active: Boolean)
+case class UserRow(id: Option[Int], firstName: String, lastName: String, email: String, picture: String, lastLogin: DateTime, active: Boolean)
 
 case class OAuthUserRow(email: String, accessToken: String, idToken: String)
 
