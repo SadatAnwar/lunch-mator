@@ -1,11 +1,9 @@
 package mappers
 
-import exceptions.PasswordValidationException
 import models.Error
 import org.postgresql.util.PSQLException
 
 object ErrorMessageMapper {
-
 
   def map(exception: Exception): Error = {
     Error(exception.getMessage)

@@ -1,18 +1,20 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
 import {AlertDisplay} from '../../../common/services/AlertDisplay';
 import {AlertLevel} from '../../../common/types/Alert';
 import {RestaurantDto, CreateLunchDto} from '../../dto/types';
 import {LunchService} from '../../service/lunch.service';
 import {CalenderService} from '../../service/calander.service';
-import {Router} from '@angular/router';
+import {Router, Params, ActivatedRoute} from '@angular/router';
+import {RestaurantService} from '../../../restaurant/services/restaurant.services';
+import {Response} from '@angular/http';
 
 @Component({
   selector: 'add-lunch',
   templateUrl: 'assets/javascripts/app/lunch/components/addlunch/add-lunch.component.html'
 })
 
-export class AddLunchComponent extends AlertDisplay {
+export class AddLunchComponent extends AlertDisplay implements OnInit {
   waiting: boolean = false;
   lunchName: string = "";
   restaurantName: string = "";
@@ -20,9 +22,9 @@ export class AddLunchComponent extends AlertDisplay {
   dataService: CompleterData;
   selectedRestaurant: RestaurantDto;
   anonymous: boolean = false;
-
   //Time
   startYY: number;
+
   startDD: number;
   startMM: number;
   startHH: number;
@@ -30,16 +32,36 @@ export class AddLunchComponent extends AlertDisplay {
 
   constructor(private completerService: CompleterService,
               private lunchService: LunchService,
+              private restaurantService: RestaurantService,
               private calenderService: CalenderService,
+              private activatedRoute: ActivatedRoute,
               private router: Router) {
     super();
 
     this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
   }
 
+  ngOnInit(): void {
+    console.log("init");
+    this.activatedRoute.queryParams.map((params: Params) => {
+      return +params['restaurantId'];
+    }).subscribe((restaurantId: number) => {
+      if (!restaurantId) {
+        return;
+      }
+      this.restaurantService.getRestaurant(restaurantId)
+        .subscribe((restaurant: RestaurantDto) => {
+          this.restaurantName = restaurant.name;
+          this.selectedRestaurant = restaurant;
+        }, (error: Response) => {
+          this.displayAlert(AlertLevel.ERROR, `Error:  ${error.text()}`, 5);
+        });
+    });
+  }
+
   createTable() {
     if (!this.selectedRestaurant) {
-      this.displayAlert(AlertLevel.ERROR, "Make sure you select a valid restaurant. You can add one by going to add restaurant. If this error persists, try reloading the page");
+      this.displayAlert(AlertLevel.ERROR, "Make sure you select a valid restaurant. You can add one by going to add restaurant. If this error persists, try reloading the page", 5);
       return;
     }
     let createLunchDto = {
@@ -108,7 +130,7 @@ export class AddLunchComponent extends AlertDisplay {
   }
 
   public randomRestaurant() {
-    this.lunchService.getRandomRestaurant()
+    this.restaurantService.getRandomRestaurant()
       .subscribe((restaurant: RestaurantDto) => {
         this.restaurantName = restaurant.name;
         this.selectedRestaurant = restaurant;
