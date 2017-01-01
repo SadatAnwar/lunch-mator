@@ -34,6 +34,7 @@ class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPr
       LunchTableRows.createLunch(lunch)
     }.flatMap { lunchId =>
       participantService.addUserToLunch(email, lunchId)
+      Future.successful(lunchId)
     }
   }
 }
