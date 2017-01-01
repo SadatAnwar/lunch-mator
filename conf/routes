@@ -32,6 +32,7 @@ GET         /google-token                         controllers.GoogleAuthenticati
 # Make HTML5 links work
 # Unsecured welcome pages
 GET         /login                                controllers.Application.unSecure()
+GET         /about                                controllers.Application.unSecure()
 
 # Secured endpoints
 GET         /                                     controllers.Application.secured()
