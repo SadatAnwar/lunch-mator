@@ -5,6 +5,7 @@ import {AlertLevel} from '../../../common/types/Alert';
 import {RestaurantDto, CreateLunchDto} from '../../dto/types';
 import {LunchService} from '../../service/lunch.service';
 import {CalenderService} from '../../service/calander.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'add-lunch',
@@ -29,8 +30,10 @@ export class AddLunchComponent extends AlertDisplay {
 
   constructor(private completerService: CompleterService,
               private lunchService: LunchService,
-              private calenderService: CalenderService) {
+              private calenderService: CalenderService,
+              private router: Router) {
     super();
+
     this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
   }
 
@@ -55,8 +58,8 @@ export class AddLunchComponent extends AlertDisplay {
         this.waiting = false;
         this.displayAlert(AlertLevel.SUCCESS, "New lunch started", 3);
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
-        this.reset();
-        //TODO: Route to lunch details
+        this.router.navigateByUrl(`/lunch/${lunchId}`);
+        console.info(`Lunch ID: ${lunchId}`);
       }, (error: any) => {
         this.waiting = false;
         this.displayAlert(AlertLevel.ERROR, `Error: [${error}]`)
@@ -107,7 +110,6 @@ export class AddLunchComponent extends AlertDisplay {
   public randomRestaurant() {
     this.lunchService.getRandomRestaurant()
       .subscribe((restaurant: RestaurantDto) => {
-        this.displayAlert(AlertLevel.INFO, `${restaurant.name} selected`, 3);
         this.restaurantName = restaurant.name;
         this.selectedRestaurant = restaurant;
       }, (error: any) => {
