@@ -51,3 +51,6 @@ libraryDependencies ++= Seq(
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
 
+
+sources in(Compile, doc) := Seq.empty
+publishArtifact in(Compile, packageDoc) := false
