@@ -45,9 +45,7 @@ export class LunchService {
   }
 
   public requestLeave(lunchDto: LunchDto, onSuccess: (response: any) => void, onFail: (error: any) => void) {
-    if (confirm("are you sure you want to leave?")) {
-      this.leave(lunchDto).subscribe(onSuccess, onFail);
-    }
+    this.leave(lunchDto).subscribe(onSuccess, onFail);
   }
 
   private leave(lunch: LunchDto): Observable<any> {
