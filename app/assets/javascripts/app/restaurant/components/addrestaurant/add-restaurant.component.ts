@@ -1,10 +1,10 @@
-import {Component} from "@angular/core";
-import {CompleterService, CompleterData} from "ng2-completer";
-import {ErrorMapper} from "../../../mappers/ErrorMapper";
-import {RestaurantService} from "../../services/restaurant.services";
-import {AlertDisplay} from "../../../common/services/AlertDisplay";
-import {ErrorDetail} from "../../../common/types/ErrorDetail";
-import {AlertLevel} from "../../../common/types/Alert";
+import {Component} from '@angular/core';
+import {CompleterService, CompleterData} from 'ng2-completer';
+import {ErrorMapper} from '../../../mappers/ErrorMapper';
+import {RestaurantService} from '../../services/restaurant.services';
+import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {ErrorDetail} from '../../../common/types/ErrorDetail';
+import {AlertLevel} from '../../../common/types/Alert';
 
 @Component({
   selector: 'add-restaurant',
@@ -20,15 +20,14 @@ export class AddRestaurantComponent extends AlertDisplay {
 
   constructor(private completerService: CompleterService, private restaurantService: RestaurantService) {
     super();
-    this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
+    this.dataService = completerService.remote(this.restaurantService.getSerachUrl(), "name", 'name');
   }
 
   add() {
     if (this.restaurantName == null || this.restaurantName.length == 0) {
       this.displayAlert(AlertLevel.ERROR, "Restaurant must have a name")
     }
-    var restaurantDto = {name: this.restaurantName, website: this.website, description: this.description};
-    console.log(restaurantDto);
+    let restaurantDto = {name: this.restaurantName, website: this.website, description: this.description};
     this.restaurantService.add(restaurantDto)
       .subscribe((response: any) => {
         this.waiting = false;

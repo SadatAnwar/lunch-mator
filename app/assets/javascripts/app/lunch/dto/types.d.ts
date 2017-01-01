@@ -44,7 +44,8 @@ export interface DateTime {
 }
 
 export interface ParticipantDto {
-  name: string;
+  firstName: string;
+  lastName: string;
   joined: Date;
 }
 

@@ -8,6 +8,7 @@ GET         /rest/restaurants/random              controllers.RestaurantControll
 GET         /rest/restaurants/:name               controllers.RestaurantController.findRestaurant(name)
 GET         /rest/restaurants/search/:name        controllers.RestaurantController.searchRestaurant(name)
 POST        /rest/restaurants                     controllers.RestaurantController.addRestaurant()
+GET         /rest/restaurant/:id                  controllers.RestaurantController.loadRestaurant(id: Int)
 
 # REST Lunch
 GET         /rest/lunch                           controllers.LunchController.getAllAvailableLunch()
@@ -38,6 +39,7 @@ GET         /about                                controllers.Application.unSecu
 GET         /                                     controllers.Application.secured()
 GET         /welcome                              controllers.Application.secured()
 GET         /add-restaurant                       controllers.Application.secured()
+GET         /restaurants                          controllers.Application.secured()
 GET         /add-lunch                            controllers.Application.secured()
 GET         /lunch                                controllers.Application.secured()
 GET         /lunch/list                           controllers.Application.secured()

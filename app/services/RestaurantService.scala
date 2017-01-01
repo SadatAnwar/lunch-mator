@@ -17,6 +17,10 @@ class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvid
     Restaurants.searchRestaurant(name)
   }
 
+  def loadRestaurant(id: Int): Future[Option[RestaurantRow]] = usingDB {
+    Restaurants.getRestaurantsById(id)
+  }
+
   def createNewRestaurant(restaurant: RestaurantRow): Future[Int] = usingDB {
     Restaurants.addRestraurant(restaurant)
   }

@@ -40,7 +40,7 @@ object usingDB {
 
   import dbConfig.driver.api._
 
-  def apply[T](f: => DBIOAction[T, NoStream, Nothing]) = {
+  def apply[T](f: => DBIOAction[T, NoStream, Nothing]): Future[T] = {
     db.run(f)
   }
 

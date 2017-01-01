@@ -18,10 +18,10 @@ object LunchMapper {
   }
 
   def map(l: LunchRow, r: RestaurantRow, joined: Int, participantCount: Int): LunchDto = {
-    LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, joined==0, l.anonymous)
+    LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, joined == 0, l.anonymous)
   }
 
-  def map(l: LunchRow, r: RestaurantRow) = {
+  def map(l: LunchRow, r: RestaurantRow): MyLunchDto = {
     MyLunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.startTime, l.anonymous)
   }
 
@@ -29,7 +29,7 @@ object LunchMapper {
     val participantCount = participantDtos.length
 
     if (lunchRow.anonymous) {
-      LunchDetailDto(lunchRow.id.getOrElse(-1), lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.maxSize, lunchRow.maxSize - participantCount, lunchRow.startTime, lunchRow.anonymous, participantDtos.map(p => ParticipantDto("Anonymous User", p.joined)))
+      LunchDetailDto(lunchRow.id.getOrElse(-1), lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.maxSize, lunchRow.maxSize - participantCount, lunchRow.startTime, lunchRow.anonymous, participantDtos.map(p => ParticipantDto("Anonymous", "User", p.joined)))
     } else {
       LunchDetailDto(lunchRow.id.getOrElse(-1), lunchRow.lunchName.getOrElse(""), RestaurantMapper.map(restaurantRow), lunchRow.maxSize, lunchRow.maxSize - participantCount, lunchRow.startTime, lunchRow.anonymous, participantDtos)
     }
