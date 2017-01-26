@@ -64,8 +64,8 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
 
   private def decodeUserData(googleAuthorization: GoogleAuthorization) = {
     val tokens = googleAuthorization.id_token.split("\\.")
-    Logger.info(s"Received response from google ${googleAuthorization.toString}")
-    Logger.info(s"Decoding ${tokens(1)}")
+    Logger.debug(s"Google response: [${googleAuthorization.toString}]")
+    Logger.debug(s"Decoding: [${tokens(1)}]")
     Json.parse(Base64.getDecoder.decode(tokens(1).getBytes("UTF-8"))).as[GoogleUserInformation]
   }
 
