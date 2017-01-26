@@ -29,7 +29,7 @@ export class AddRestaurantComponent extends AlertDisplay {
     }
     let restaurantDto = {name: this.restaurantName, website: this.website, description: this.description};
     this.restaurantService.add(restaurantDto)
-      .subscribe((response: any) => {
+      .subscribe(() => {
         this.waiting = false;
         this.displaySuccessWithTimeOut("Restaurant added", 3);
         this.reset();
