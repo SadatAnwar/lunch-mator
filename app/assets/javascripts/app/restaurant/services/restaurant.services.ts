@@ -31,15 +31,15 @@ export class RestaurantService {
       .map(response => response.json());
   }
 
-  public add(restaurantDto: CreateRestaurantDto): Observable<any> {
+  public add(restaurantDto: CreateRestaurantDto): Observable<void> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post(this.restaurants, restaurantDto, {headers}).map((response: Response) => {
-      return response.json();
-    });
+
+    return this.http.post(this.restaurants, restaurantDto, {headers}).map(response => response.json());
   }
 
-  public getSerachUrl(): string {
+  public
+  getSerachUrl(): string {
     return `${this.restaurants}/search/`
   }
 }
