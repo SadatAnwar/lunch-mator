@@ -10,7 +10,7 @@ import com.google.inject.Inject
 class AuthenticationController @Inject() extends Controller {
 
   def logOut(): Action[AnyContent] = Action.async { request =>
-    Logger.info(s"Logging out User:{${request.session.get("email").getOrElse("NO USER")}}")
+    Logger.info(s"Log Out:[${request.session.get("email").getOrElse("NO USER")}]")
     Future.successful(Redirect("/login").withNewSession)
   }
 }

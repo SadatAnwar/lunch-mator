@@ -30,7 +30,7 @@ object Participants {
   lazy val participants = TableQuery[Participants]
 
   def addParticipant(participantRow: ParticipantRow): SqlAction[Int, NoStream, Effect] = {
-    Logger.info(s"Inserting $participantRow into table")
+    Logger.debug(s"Inserting $participantRow into table")
     sqlu"""INSERT INTO lunch_world.participants (lunch_table_id, user_id, joined_at)
             VALUES (${participantRow.lunchId},${participantRow.userId},${participantRow.joined})
            ON CONFLICT(user_id, lunch_table_id) DO UPDATE SET active = TRUE;

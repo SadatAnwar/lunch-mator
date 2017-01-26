@@ -16,7 +16,7 @@ class GoogleAuthenticationController @Inject()(googleAuthorizationService: Googl
     val startPage = params.getOrElse("state", "/welcome")
     val googleUser = googleAuthorizationService.googleAuthorize(params)
     googleUser.map { user =>
-      Logger.info(s"Successfully logged in ${user.name}")
+      Logger.info(s"Login Success: [${user.name}]")
       Redirect(startPage).withSession("email" -> user.email)
     }
   }
