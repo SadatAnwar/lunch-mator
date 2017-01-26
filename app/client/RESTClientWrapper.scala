@@ -9,6 +9,8 @@ import play.api.libs.json.Json
 import play.api.libs.ws._
 import play.mvc.Http
 
+import exceptions.HttpClientException
+
 class RESTClientWrapper @Inject()(ws: WSClient) {
 
   import scala.concurrent.Future
