@@ -106,6 +106,11 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
   }
 
   private validateForm(createLunchDto: CreateLunchDto): boolean {
+    if (createLunchDto.lunchName.length > 20) {
+      this.displayAlert(AlertLevel.ERROR, "Lunch name cannot be more than 20 characters", 5);
+      return false;
+    }
+
     if (createLunchDto.anonymous == null) {
       createLunchDto.anonymous = false;
     }
