@@ -29,6 +29,10 @@ GET         /rest/logOut                          controllers.AuthenticationCont
 GET         /google-login                         controllers.GoogleAuthenticationController.redirectToGoogle()
 GET         /google-token                         controllers.GoogleAuthenticationController.authorize()
 
+# REST HipChat
+GET         /hipchat-users/:name                  controllers.HipChatController.searchUsers(name: String)
+POST        /hipchat-message                      controllers.HipChatController.sendMessage()
+POST        /hipchat-invite                       controllers.HipChatController.invite()
 
 # Make HTML5 links work
 # Unsecured welcome pages
