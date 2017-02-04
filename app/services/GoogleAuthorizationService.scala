@@ -40,15 +40,14 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
   def googleAuthorize(params: Map[String, String]): Future[GoogleUserInformation] = {
     val authorizationCode = params.getOrElse("code", throw new GoogleAuthenticationException)
     val googleUserData = getGoogleAuthorization(authorizationCode)
-    googleUserData.map {
-      googleAuthorization =>
-        val googleUserInformation = decodeUserData(googleAuthorization)
-        saveNewUser(googleUserInformation).map { insertCount =>
-          if (insertCount != 0) {
-            saveOAuth(googleUserInformation, googleAuthorization)
-          }
+    googleUserData.map { googleAuthorization =>
+      val googleUserInformation = decodeUserData(googleAuthorization)
+      saveNewUser(googleUserInformation).map { insertCount =>
+        if (insertCount != 0) {
+          saveOAuth(googleUserInformation, googleAuthorization)
         }
-        googleUserInformation
+      }
+      googleUserInformation
     }
   }
 
@@ -65,7 +64,10 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
       "grant_type" -> Seq(grantType),
       "redirect_uri" -> Seq(tokenRedirect)
     )
-    googleAuthenticationClient.post[Map[String, Seq[String]], GoogleAuthorization](googleTokenUrl, headers, formData)
+    googleAuthenticationClient.post[Map[String, Seq[String]], GoogleAuthorization](googleTokenUrl, headers, formData).map {
+      case Some(result) => result
+      case None => throw new GoogleAuthenticationException
+    }
   }
 
   private def decodeUserData(googleAuthorization: GoogleAuthorization) = {

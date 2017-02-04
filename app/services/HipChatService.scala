@@ -12,7 +12,7 @@ import client.RESTClientWrapper
 import com.google.inject.Inject
 import mappers.{HipChatMapper, PageMapper}
 import models.Formats._
-import models.{HipChatMessage, HipChatUser, Page}
+import models._
 
 class HipChatService @Inject()(configuration: Configuration, restClient: RESTClientWrapper, userService: UserService) {
 
@@ -26,8 +26,20 @@ class HipChatService @Inject()(configuration: Configuration, restClient: RESTCli
     findUser(name)
   }
 
-  def sendMessage(users: List[HipChatUser], hipChatMessage: HipChatMessage) = {
-    val message = HipChatMapper.mapNotificationMessage(users, hipChatMessage)
+  def sendInvitation(invitation: InvitationDto): Future[String] = {
+    val invitationMessage = s"Hello! You have been invited for lunch at ${invitation.lunch.restaurant.name}. " +
+      s"To join, click http://lunch-mator.rebuy.de/lunch/${invitation.lunch.id}"
+
+    sendMessage(invitation.users, HipChatMessage(invitationMessage))
+  }
+
+  def sendMessage(hipChatMessageDto: HipChatMessageDto): Future[String] = {
+
+    sendMessage(hipChatMessageDto.users, hipChatMessageDto.message)
+  }
+
+  private def sendMessage(users: Seq[HipChatUser], hipchatMessage: HipChatMessage): Future[String] = {
+    val message = HipChatMapper.mapNotificationMessage(users, hipchatMessage)
     val url = s"${apiBaseUrl}room/$lunchMatorRoomId/notification"
     Logger.info(url)
     val headers = List(
@@ -35,17 +47,21 @@ class HipChatService @Inject()(configuration: Configuration, restClient: RESTCli
       Http.HeaderNames.AUTHORIZATION -> s"Bearer $writeToken"
     )
 
-    restClient.post[JsValue, String](url, headers, Json.toJson(message))
+    restClient.post[JsValue, String](url, headers, Json.toJson(message)).map {
+      case Some(result) => result
+      case None => ""
+    }
   }
 
   private def findUser(name: String, resultSetSize: Int = 200): Future[Seq[HipChatUser]] = {
     val url = s"${apiBaseUrl}user?max-results=$resultSetSize"
     val headers = List(Http.HeaderNames.AUTHORIZATION -> s"Bearer $readToken")
 
-    restClient.get[Page[HipChatUser]](url, headers).map { result =>
-      PageMapper.map(result)
+    restClient.get[Page[HipChatUser]](url, headers).map {
+      case Some(result) => PageMapper.map(result)
         .filter(u => userNameLike(u, name))
         .toList
+      case None => List()
     }
   }
 

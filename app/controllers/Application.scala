@@ -17,10 +17,6 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userServic
       Future.successful(Ok(views.html.index()))
   }
 
-  def descriptor(): Action[AnyContent] = Action.async {
-    Future.successful(Ok("{\n  \"description\": \"description of your add-on\", \n  \"key\": \"your-addon-key\", \n  \"name\": \"Your addon name\", \n  \"vendor\": {\n    \"name\": \"Your company name\", \n    \"url\": \"https://www.your-company.com\"\n  }\n  \"links\": {\n    \"self\": \"https://your-addon-url/descriptor-url\"\n  }, \n  \"capabilities\": {\n    \"hipchatApiConsumer\": {\n      \"scopes\": [\n        \"send_notification\"\n      ]\n    }, \n    \"installable\": {\n      \"allowGlobal\": false, \n      \"allowRoom\": true, \n      \"installedUrl\": \"https://your-addon-url/installed\",\n      \"updatedUrl\": \"https://your-addon-url/updated\"\n    }\n}"))
-  }
-
   def securedWithParam(id: Any): EssentialAction = Authenticated.async {
     request =>
       Future.successful(Ok(views.html.index()))

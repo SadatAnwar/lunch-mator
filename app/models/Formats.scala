@@ -36,4 +36,6 @@ object Formats {
   implicit val hipChatMessageFormat: OFormat[HipChatMessage] = Json.format[HipChatMessage]
 
   implicit val hipChatMessageDtoFormat: OFormat[HipChatMessageDto] = Json.format[HipChatMessageDto]
+
+  implicit val hipChatInvitationFormat: OFormat[InvitationDto] = Json.format[InvitationDto]
 }

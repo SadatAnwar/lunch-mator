@@ -17,7 +17,7 @@ class RESTClientWrapper @Inject()(ws: WSClient) {
 
   import play.api.libs.json.Reads
 
-  def post[T, R](url: String, headers: List[(String, String)], postData: T)(implicit fjs: Reads[R], wrt: Writeable[T]): Future[R] = {
+  def post[T, R](url: String, headers: List[(String, String)], postData: T)(implicit fjs: Reads[R], wrt: Writeable[T]): Future[Option[R]] = {
     Logger.debug(s"POST | url:[$url] | headers:[$headers]")
     ws
       .url(url)
@@ -26,7 +26,7 @@ class RESTClientWrapper @Inject()(ws: WSClient) {
       .map(response => mapResponse[R](response))
   }
 
-  def get[A](url: String, headers: List[(String, String)] = List(), queryParams: List[(String, String)] = List())(implicit fjs: Reads[A]): Future[A] = {
+  def get[A](url: String, headers: List[(String, String)] = List(), queryParams: List[(String, String)] = List())(implicit fjs: Reads[A]): Future[Option[A]] = {
     ws
       .url(url)
       .withHeaders(headers: _*)
@@ -35,11 +35,15 @@ class RESTClientWrapper @Inject()(ws: WSClient) {
       .map(response => mapResponse(response))
   }
 
-  private def mapResponse[A](response: WSResponse)(implicit fjs: Reads[A]): A = {
+  private def mapResponse[A](response: WSResponse)(implicit fjs: Reads[A]): Option[A] = {
+    if (204.equals(response.status)) {
+      return Option.empty[A]
+    }
+
     if (!(200 to 299).contains(response.status)) {
       Logger.error(s"ERROR: ResponseCode:[${response.status}] | ResponseBody:[${response.body}]")
       throw HttpClientInternalException(response.body, response.status)
     }
-    Json.parse(response.body).as[A]
+    Option.apply(Json.parse(response.body).as[A])
   }
 }

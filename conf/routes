@@ -32,6 +32,7 @@ GET         /google-token                         controllers.GoogleAuthenticati
 # REST HipChat
 GET         /hipchat-users/:name                  controllers.HipChatController.searchUsers(name: String)
 POST        /hipchat-message                      controllers.HipChatController.sendMessage()
+POST        /hipchat-invite                       controllers.HipChatController.invite()
 
 # Make HTML5 links work
 # Unsecured welcome pages
