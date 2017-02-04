@@ -45,7 +45,7 @@ class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfig
   }.map {
     participants =>
       participants.map { p =>
-        ParticipantMapper.map(p._1, p._2)
+        ParticipantMapper.map(p._1, p._2, p._3)
       }
   }
 }

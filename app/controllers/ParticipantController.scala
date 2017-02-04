@@ -13,8 +13,8 @@ import services.Authenticated
 class ParticipantController @Inject()(participantService: ParticipantService) extends Controller {
 
   def getParticipants(lunchId: Int): EssentialAction = Authenticated.async { request =>
-    participantService.getParticipants(lunchId).map { a =>
-      Ok(Json.toJson(a))
+    participantService.getParticipants(lunchId).map { participant =>
+      Ok(Json.toJson(participant))
     }
   }
 }
