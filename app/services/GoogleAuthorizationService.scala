@@ -15,6 +15,7 @@ import com.google.inject.Inject
 import exceptions.GoogleAuthenticationException
 import mappers.UserMapper
 import models.GoogleModels._
+import org.apache.commons.compress.utils.CharsetNames
 import persistence.repository.OAuthUser
 
 class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: RESTClientWrapper, userService: UserService) {
@@ -53,8 +54,8 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
 
   def getGoogleAuthorization(authorizationCode: String): Future[GoogleAuthorization] = {
     val headers = List(
-      Http.HeaderNames.CONTENT_TYPE -> "application/x-www-form-urlencoded",
-      "charset" -> "utf-8"
+      Http.HeaderNames.CONTENT_TYPE -> Http.MimeTypes.FORM,
+      Http.HeaderNames.ACCEPT_CHARSET -> CharsetNames.UTF_8
     )
 
     val formData = Map(
