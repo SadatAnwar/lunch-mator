@@ -29,4 +29,11 @@ object Formats {
 
   implicit val lunchDtoFormat: OFormat[CreateLunchDto] = Json.format[CreateLunchDto]
   implicit val errorFormat: OFormat[Error] = Json.format[Error]
+
+  implicit val links: OFormat[Links] = Json.format[Links]
+  implicit val hipChatUser: OFormat[HipChatUser] = Json.format[HipChatUser]
+
+  implicit val hipChatMessageFormat: OFormat[HipChatMessage] = Json.format[HipChatMessage]
+
+  implicit val hipChatMessageDtoFormat: OFormat[HipChatMessageDto] = Json.format[HipChatMessageDto]
 }

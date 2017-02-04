@@ -8,6 +8,7 @@ import scala.concurrent.Future
 import play.Configuration
 import play.api.Logger
 import play.api.libs.json.Json
+import play.mvc.Http
 
 import client.RESTClientWrapper
 import com.google.inject.Inject
@@ -18,12 +19,12 @@ import persistence.repository.OAuthUser
 
 class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: RESTClientWrapper, userService: UserService) {
 
-  private val googleTokenUrl = "https://www.googleapis.com/oauth2/v4/token"
-  private val authorizationUrl = "https://accounts.google.com/o/oauth2/v2/auth?"
-  private val lunchMatorClientId = configuration.underlying.getString("google.lunchmator.clientid")
-  private val tokenRedirect = configuration.underlying.getString("google.callback.token")
+  private val googleTokenUrl = configuration.getString("google.token.url")
+  private val authorizationUrl = configuration.getString("google.auth.url")
+  private val lunchMatorClientId = configuration.getString("google.lunchmator.clientid")
+  private val tokenRedirect = configuration.getString("google.callback.token")
   private val grantType = "authorization_code"
-  private val clientSecret = configuration.underlying.getString("google.lunchmator.clientsecret")
+  private val clientSecret = configuration.getString("google.lunchmator.clientsecret")
 
   def getGoogleSignInPage(origin: String = "/welcome"): String = {
     authorizationUrl +
@@ -52,6 +53,11 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
   }
 
   def getGoogleAuthorization(authorizationCode: String): Future[GoogleAuthorization] = {
+    val headers = List(
+      Http.HeaderNames.CONTENT_TYPE -> "application/x-www-form-urlencoded",
+      "charset" -> "utf-8"
+    )
+
     val formData = Map(
       "code" -> Seq(authorizationCode),
       "client_id" -> Seq(lunchMatorClientId),
@@ -59,7 +65,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
       "grant_type" -> Seq(grantType),
       "redirect_uri" -> Seq(tokenRedirect)
     )
-    googleAuthenticationClient.makePost[GoogleAuthorization](googleTokenUrl, formData)
+    googleAuthenticationClient.post[Map[String, Seq[String]], GoogleAuthorization](googleTokenUrl, headers, formData)
   }
 
   private def decodeUserData(googleAuthorization: GoogleAuthorization) = {
