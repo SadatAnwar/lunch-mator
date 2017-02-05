@@ -11,9 +11,11 @@ import {LunchService} from "./service/lunch.service";
 import {MyLunchListComponent} from "./components/mylunch/my-lunch-list.component";
 import {LunchDetailComponent} from "./components/detail/lunch-detail.component";
 import {CalenderService} from './service/calander.service';
+import {SelectModule} from 'ng2-select';
+
 
 @NgModule({
-  imports: [CommonModule, CommonModules, Ng2CompleterModule, FormsModule, routing],
+  imports: [CommonModule, CommonModules, Ng2CompleterModule,SelectModule, FormsModule, routing],
   declarations: [LunchItemComponent, LunchListComponent, LunchDetailComponent, MyLunchListComponent, AddLunchComponent],
   providers: [LunchService, CalenderService]
 })

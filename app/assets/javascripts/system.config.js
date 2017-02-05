@@ -27,7 +27,7 @@
     'angular2-in-memory-web-api': p('lib/angular2-in-memory-web-api'),
     'rxjs': p('lib/rxjs'),
     'ng2-completer': p('lib/ng2-completer/bundles'),
-    'ng2-select': p('lib/ng2-select/bundles')
+    'ng2-select': p('lib/ng2-select')
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {

@@ -6,12 +6,10 @@ import {CreateRestaurantDto, RestaurantDto} from '../../lunch/dto/types';
 
 @Injectable()
 export class RestaurantService {
-  restaurants: string;
-  restaurant: string;
+  private restaurants = '/rest/restaurants';
+  private restaurant = '/rest/restaurant';
 
   constructor(private http: Http) {
-    this.restaurants = '/rest/restaurants';
-    this.restaurant = '/rest/restaurant';
   }
 
   public getAllRestaurants(): Observable<RestaurantDto[]> {
