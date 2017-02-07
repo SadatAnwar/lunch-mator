@@ -1,10 +1,12 @@
 package mappers
 
-import models.{HipChatMessage, HipChatUser}
+import models.{HipChatMessage, HipChatPing}
 
-object HipChatMapper {
+object HipChatMapper
+{
 
-  def mapNotificationMessage(users: Seq[HipChatUser], hipChatMessage: HipChatMessage): HipChatMessage = {
+  def mapNotificationMessage(users: Seq[HipChatPing], hipChatMessage: HipChatMessage): HipChatMessage =
+  {
     var finalMessage = hipChatMessage.message
     if (users.nonEmpty) {
       finalMessage = hipChatMessage.message.concat("\n/cc: ")

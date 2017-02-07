@@ -10,6 +10,7 @@ scalaVersion := "2.11.6"
 
 TypescriptKeys.configFile := "tsconfig.json"
 
+
 libraryDependencies ++= Seq(
   cache,
   ws,

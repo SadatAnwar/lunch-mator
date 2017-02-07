@@ -1,5 +1,5 @@
 import {Component, Input, EventEmitter, Output} from '@angular/core';
-import {LunchDto} from 'app/lunch/dto/types';
+import {LunchDto} from '../../../dto/types';
 import {Router} from '@angular/router';
 import {CalenderService} from '../../service/calander.service';
 

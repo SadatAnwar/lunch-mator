@@ -30,9 +30,9 @@ GET         /google-login                         controllers.GoogleAuthenticati
 GET         /google-token                         controllers.GoogleAuthenticationController.authorize()
 
 # REST HipChat
-GET         /hipchat-users/:name                  controllers.HipChatController.searchUsers(name: String)
-POST        /hipchat-message                      controllers.HipChatController.sendMessage()
-POST        /hipchat-invite                       controllers.HipChatController.invite()
+GET         /rest/hipchat-users/:name             controllers.HipChatController.searchUsers(name: String)
+POST        /rest/hipchat-message                 controllers.HipChatController.sendMessage()
+POST        /rest/hipchat-invite                  controllers.HipChatController.invite()
 
 # Make HTML5 links work
 # Unsecured welcome pages
@@ -52,4 +52,5 @@ GET         /lunch/:id                            controllers.Application.secure
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
+GET         /webjars/search/*file                 controllers.Application.findWebJar(file)
 GET         /webjars/*file                        controllers.WebJarAssets.at(file)

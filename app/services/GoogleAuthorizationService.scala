@@ -10,7 +10,7 @@ import play.api.Logger
 import play.api.libs.json.Json
 import play.mvc.Http
 
-import client.RESTClientWrapper
+import client.RestClientWrapper
 import com.google.inject.Inject
 import exceptions.GoogleAuthenticationException
 import mappers.UserMapper
@@ -18,7 +18,7 @@ import models.GoogleModels._
 import org.apache.commons.compress.utils.CharsetNames
 import persistence.repository.OAuthUser
 
-class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: RESTClientWrapper, userService: UserService) {
+class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: RestClientWrapper, userService: UserService) {
 
   private val googleTokenUrl = configuration.getString("google.token.url")
   private val authorizationUrl = configuration.getString("google.auth.url")

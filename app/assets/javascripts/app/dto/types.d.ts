@@ -52,3 +52,18 @@ export interface ParticipantDto {
 export interface LunchDetailDto extends LunchDto {
   participants: ParticipantDto[];
 }
+
+export interface HipChatUser {
+  mention_name: string;
+  name: string;
+  text: string;
+}
+
+export interface HipChatPing {
+  mention_name: string;
+}
+
+export interface InvitationDto {
+  users: HipChatPing[];
+  lunchId: number;
+}

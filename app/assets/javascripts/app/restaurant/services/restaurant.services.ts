@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
-import {CreateRestaurantDto, RestaurantDto} from '../../lunch/dto/types';
+import {CreateRestaurantDto, RestaurantDto} from '../../dto/types';
 
 @Injectable()
 export class RestaurantService {

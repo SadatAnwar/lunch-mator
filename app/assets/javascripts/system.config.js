@@ -7,6 +7,10 @@
     return 'assets/' + partialPath;
   }
 
+  function webjar(partialPath) {
+    return 'webjars/invite/' + partialPath;
+  }
+
   function npm(partialPath) {
     return 'node_modules/' + partialPath;
   }
