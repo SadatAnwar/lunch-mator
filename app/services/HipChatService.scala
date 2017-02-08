@@ -50,7 +50,7 @@ class HipChatService @Inject()(configuration: Configuration,
         s"at ${timeFormat.format(new Date(lunch.startTime.getMillis))}"
 
       if (daysInBetween == 0) {
-        when = s"today at ${timeFormat.format(lunch.startTime)}"
+        when = s"today at ${timeFormat.format(new Date(lunch.startTime.getMillis))}"
       }
       if (daysInBetween == 1) {
         when = s"tomorrow at ${timeFormat.format(new Date(lunch.startTime.getMillis))}"
