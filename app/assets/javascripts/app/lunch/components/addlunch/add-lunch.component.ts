@@ -1,13 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter} from '@angular/core';
 import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
 import {AlertDisplay} from '../../../common/services/AlertDisplay';
 import {AlertLevel} from '../../../common/types/Alert';
-import {RestaurantDto, CreateLunchDto} from '../../dto/types';
+import {RestaurantDto, CreateLunchDto, HipChatUser, HipChatPing, InvitationDto} from '../../../dto/types';
 import {LunchService} from '../../service/lunch.service';
 import {CalenderService} from '../../service/calander.service';
 import {Router, Params, ActivatedRoute} from '@angular/router';
 import {RestaurantService} from '../../../restaurant/services/restaurant.services';
 import {Response} from '@angular/http';
+import {UserLookupService} from '../../service/user-lookup.service';
+import {InvitationService} from '../../service/invitation.service';
 
 @Component({
   selector: 'add-lunch',
@@ -15,16 +17,17 @@ import {Response} from '@angular/http';
 })
 
 export class AddLunchComponent extends AlertDisplay implements OnInit {
-  waiting: boolean = false;
-  lunchName: string = "";
-  restaurantName: string = "";
-  maxSize: number;
-  dataService: CompleterData;
-  selectedRestaurant: RestaurantDto;
-  anonymous: boolean = false;
+  private waiting: boolean = false;
+  private lunchName: string = "";
+  private restaurantName: string = "";
+  private maxSize: number;
+  private dataService: CompleterData;
+  private selectedRestaurant: RestaurantDto;
+  private anonymous: boolean = false;
+  private inviteUsers: HipChatPing[] = [];
+
   //Time
   startYY: number;
-
   startDD: number;
   startMM: number;
   startHH: number;
@@ -34,34 +37,41 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
               private lunchService: LunchService,
               private restaurantService: RestaurantService,
               private calenderService: CalenderService,
+              private userLookupService: UserLookupService,
               private activatedRoute: ActivatedRoute,
+              private invitationService: InvitationService,
               private router: Router) {
     super();
 
-    this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
+    this.dataService = completerService.remote("/rest/restaurants/invite/", "name", 'name');
   }
 
   ngOnInit(): void {
-    console.log("init");
-    this.activatedRoute.queryParams.map((params: Params) => {
-      return +params['restaurantId'];
-    }).subscribe((restaurantId: number) => {
-      if (!restaurantId) {
-        return;
-      }
-      this.restaurantService.getRestaurant(restaurantId)
-        .subscribe((restaurant: RestaurantDto) => {
-          this.restaurantName = restaurant.name;
-          this.selectedRestaurant = restaurant;
-        }, (error: Response) => {
-          this.displayAlert(AlertLevel.ERROR, `Error:  ${error.text()}`, 5);
-        });
-    });
+    this.activatedRoute.queryParams
+      .map((params: Params) => {
+
+        return +params['restaurantId'];
+      })
+      .subscribe((restaurantId: number) => {
+        if (!restaurantId) {
+
+          return;
+        }
+        this.restaurantService.getRestaurant(restaurantId)
+          .subscribe((restaurant: RestaurantDto) => {
+              this.restaurantName = restaurant.name;
+              this.selectedRestaurant = restaurant;
+            },
+            (error: Response) => {
+              this.displayAlert(AlertLevel.ERROR, `Error:  ${error.text()}`, 5);
+            });
+      });
   }
 
   createTable() {
     if (!this.selectedRestaurant) {
       this.displayAlert(AlertLevel.ERROR, "Make sure you select a valid restaurant. You can add one by going to add restaurant. If this error persists, try reloading the page", 5);
+
       return;
     }
     let createLunchDto = {
@@ -79,7 +89,14 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
       .subscribe((lunchId: number) => {
         this.waiting = false;
         this.displayAlert(AlertLevel.SUCCESS, "New lunch started", 3);
+
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
+
+        if (this.inviteUsers.length > 0) {
+          let invitation: InvitationDto = {users: this.inviteUsers, lunchId: lunchId};
+          this.invitationService.invite(invitation).subscribe(() => console.log("invitation success for ", invitation));
+        }
+
         this.router.navigateByUrl(`/lunch/${lunchId}`);
         console.info(`Lunch ID: ${lunchId}`);
       }, (error: any) => {
@@ -162,4 +179,42 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
   private yearYY(date: Date) {
     return date.getFullYear() - 2000;
   }
+
+  public items$: EventEmitter<any> = new EventEmitter<any>();
+
+  private value: HipChatUser[];
+
+  public selected(item: any): void {
+    this.items$.next([]);
+  }
+
+  public removeUser(item: any): void {
+    this.items$.next([]);
+  }
+
+  public searchUsers(value: any): void {
+    if (value.trim().length > 0) {
+      this.userLookupService.search(value.trim()).subscribe((users: HipChatUser[]) => {
+        const items = [];
+        users.forEach((user: HipChatUser) => {
+          let entry: any = {};
+          entry.text = user.name;
+          entry.id = user.mention_name;
+
+          items.push(entry);
+        });
+        this.items$.emit(items);
+      })
+    }
+  }
+
+  public refreshValue(value: any[]): void {
+    this.inviteUsers = [];
+    value.forEach(item => {
+      let hipchatPing: HipChatPing = {mention_name: item.id};
+      this.inviteUsers.push(hipchatPing);
+    });
+
+  }
 }
+

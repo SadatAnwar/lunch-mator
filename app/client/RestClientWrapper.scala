@@ -11,7 +11,7 @@ import play.api.libs.ws._
 
 import exceptions.HttpClientInternalException
 
-class RESTClientWrapper @Inject()(ws: WSClient) {
+class RestClientWrapper @Inject()(ws: WSClient) {
 
   import scala.concurrent.Future
 
@@ -26,13 +26,15 @@ class RESTClientWrapper @Inject()(ws: WSClient) {
       .map(response => mapResponse[R](response))
   }
 
-  def get[A](url: String, headers: List[(String, String)] = List(), queryParams: List[(String, String)] = List())(implicit fjs: Reads[A]): Future[Option[A]] = {
+  def get[A](url: String, headers: List[(String, String)] = List(), queryParams: List[(String, String)] = List())(implicit fjs: Reads[A]): Future[A] = {
+    Logger.debug(s"GET | url:[$url] | headers:[$headers]")
     ws
       .url(url)
       .withHeaders(headers: _*)
       .withQueryString(queryParams: _*)
       .get()
       .map(response => mapResponse(response))
+      .map(option => option.get)
   }
 
   private def mapResponse[A](response: WSResponse)(implicit fjs: Reads[A]): Option[A] = {

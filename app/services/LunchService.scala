@@ -13,7 +13,11 @@ import models.{CreateLunchDto, LunchRow, RestaurantRow}
 import org.joda.time.DateTime
 import persistence.repository.LunchTableRows
 
-class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service {
+class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service
+{
+  def getLunchWithId(id: Int): Future[(LunchRow, RestaurantRow)] = usingDB {
+    LunchTableRows.getLunchWithId(id)
+  }
 
   def getAllLunchNotPast(email: String): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
     LunchTableRows.getLunchWithOpenSpotsAfter(email, new DateTime().withDurationAdded(30 * 60 * 1000, -1))
@@ -27,7 +31,8 @@ class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPr
     LunchTableRows.getLunchWithRestaurant(email, lunchId)
   }
 
-  def createLunch(email: String, lunchDto: CreateLunchDto): Future[Int] = {
+  def createLunch(email: String, lunchDto: CreateLunchDto): Future[Int] =
+  {
     Logger.info(s"User:[$email created lunch with Name: [${lunchDto.lunchName.getOrElse("")}]]")
     usingDB {
       val lunch = LunchMapper.map(lunchDto)

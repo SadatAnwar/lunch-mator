@@ -1,5 +1,5 @@
 import {Component, Input, EventEmitter, Output, OnInit} from '@angular/core';
-import {RestaurantDto} from 'app/lunch/dto/types';
+import {RestaurantDto} from '../../../dto/types';
 import {Router} from '@angular/router';
 
 @Component({

@@ -10,10 +10,10 @@ import models.Formats._
 import models.{HipChatMessageDto, InvitationDto}
 import services.{Authenticated, HipChatService}
 
-class HipChatController @Inject()(hipChatService: HipChatService) extends Controller {
+class HipChatController @Inject()(hipChatService: HipChatService) extends Controller
+{
 
-  def searchUsers(name: String): EssentialAction = Authenticated.async { request =>
-
+  def searchUsers(name: String): EssentialAction = Authenticated.async(parse.tolerantText) { request =>
     hipChatService.getUsersWithNameIn(name).map { result =>
 
       Ok(Json.toJson(result))

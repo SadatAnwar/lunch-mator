@@ -9,6 +9,7 @@
     <base href="/">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/ico" href="@routes.Assets.versioned("images/favicon.ico")">
+    <link href="@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))" rel="stylesheet">
     <link href="@routes.Assets.versioned("stylesheets/main.css")" rel="stylesheet">
     <script src="@routes.Assets.versioned("javascripts/vendorjs/ics.js")"></script>
     <script src="@routes.Assets.versioned("javascripts/vendorjs/ics-deps.min.js")"></script>
@@ -31,4 +32,5 @@
   <body>
   @content
   </body>
+  <link href="@routes.Assets.versioned("stylesheets/ng2-select.css")" rel="stylesheet">
 </html>

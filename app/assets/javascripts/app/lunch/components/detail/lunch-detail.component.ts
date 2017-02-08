@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {LunchDetailDto, ParticipantDto} from 'app/lunch/dto/types';
+import {LunchDetailDto, ParticipantDto} from '../../../dto/types';
 import {ActivatedRoute, Params} from '@angular/router';
 import {LunchService} from '../../service/lunch.service';
 import {AlertLevel} from '../../../common/types/Alert';
