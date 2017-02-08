@@ -43,7 +43,7 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
               private router: Router) {
     super();
 
-    this.dataService = completerService.remote("/rest/restaurants/", "name", 'name');
+    this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
   }
 
   ngOnInit(): void {
