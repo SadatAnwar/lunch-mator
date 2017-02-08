@@ -43,7 +43,7 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
               private router: Router) {
     super();
 
-    this.dataService = completerService.remote("/rest/restaurants/invite/", "name", 'name');
+    this.dataService = completerService.remote("/rest/restaurants/", "name", 'name');
   }
 
   ngOnInit(): void {
@@ -123,7 +123,7 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
   }
 
   private validateForm(createLunchDto: CreateLunchDto): boolean {
-    if (createLunchDto.lunchName.length > 20) {
+    if (createLunchDto.lunchName.length > 40) {
       this.displayAlert(AlertLevel.ERROR, "Lunch name cannot be more than 20 characters", 5);
       return false;
     }
