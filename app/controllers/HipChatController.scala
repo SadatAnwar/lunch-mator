@@ -14,7 +14,7 @@ class HipChatController @Inject()(hipChatService: HipChatService) extends Contro
 {
 
   def searchUsers(name: String): EssentialAction = Authenticated.async(parse.tolerantText) { request =>
-    hipChatService.getUsersWithNameIn(name).map { result =>
+    hipChatService.getUsersWithNameIn(request.username, name).map { result =>
 
       Ok(Json.toJson(result))
     }

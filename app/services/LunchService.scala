@@ -15,9 +15,6 @@ import persistence.repository.LunchTableRows
 
 class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service
 {
-  def getLunchWithId(id: Int): Future[(LunchRow, RestaurantRow)] = usingDB {
-    LunchTableRows.getLunchWithId(id)
-  }
 
   def getAllLunchNotPast(email: String): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
     LunchTableRows.getLunchWithOpenSpotsAfter(email, new DateTime().withDurationAdded(30 * 60 * 1000, -1))
@@ -29,6 +26,10 @@ class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPr
 
   def getLunchDetail(email: String, lunchId: Int): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
     LunchTableRows.getLunchWithRestaurant(email, lunchId)
+  }
+
+  def getLunchAndRestaurant(id: Int): Future[(LunchRow, RestaurantRow)] = usingDB {
+    LunchTableRows.getLunchWithId(id)
   }
 
   def createLunch(email: String, lunchDto: CreateLunchDto): Future[Int] =

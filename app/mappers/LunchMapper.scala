@@ -3,25 +3,31 @@ package mappers
 import models._
 import org.joda.time.DateTime
 
-object LunchMapper {
+object LunchMapper
+{
 
-  def map(lunchDto: CreateLunchDto): LunchRow = {
+  def map(lunchDto: CreateLunchDto): LunchRow =
+  {
     LunchRow(None, lunchDto.lunchName, lunchDto.restaurantId, lunchDto.maxSize, new DateTime(lunchDto.startTime), lunchDto.anonymous.getOrElse(false))
   }
 
-  def map(lunchRows: Seq[LunchRow]): Seq[CreateLunchDto] = {
+  def map(lunchRows: Seq[LunchRow]): Seq[CreateLunchDto] =
+  {
     lunchRows.map(map)
   }
 
-  def map(lunchRow: LunchRow): CreateLunchDto = {
+  def map(lunchRow: LunchRow): CreateLunchDto =
+  {
     CreateLunchDto(lunchRow.restaurantId, lunchRow.lunchName, lunchRow.startTime.getMillis, Some(lunchRow.anonymous), lunchRow.maxSize)
   }
 
-  def map(l: LunchRow, r: RestaurantRow, joined: Int, participantCount: Int): LunchDto = {
+  def map(l: LunchRow, r: RestaurantRow, joined: Int, participantCount: Int): LunchDto =
+  {
     LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, joined == 0, l.anonymous)
   }
 
-  def map(l: LunchRow, r: RestaurantRow): MyLunchDto = {
+  def map(l: LunchRow, r: RestaurantRow): MyLunchDto =
+  {
     MyLunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.startTime, l.anonymous)
   }
 }
