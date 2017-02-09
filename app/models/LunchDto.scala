@@ -6,6 +6,8 @@ case class LunchDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSi
 
 case class MyLunchDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, startTime: DateTime, anonymous: Boolean)
 
+case class LunchAtRestaurant(lunch: LunchRow, restaurant: RestaurantRow)
+
 case class LunchDetailDto(id: Int, lunchName: String, restaurant: RestaurantDto, maxSize: Int, spotsLeft: Int, startTime: DateTime, anonymous: Boolean, participants: Seq[ParticipantDto])
 
 case class CreateLunchDto(restaurantId: Int, lunchName: Option[String], startTime: Long, anonymous: Option[Boolean], maxSize: Int)

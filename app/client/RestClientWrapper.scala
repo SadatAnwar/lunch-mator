@@ -11,14 +11,16 @@ import play.api.libs.ws._
 
 import exceptions.HttpClientInternalException
 
-class RestClientWrapper @Inject()(ws: WSClient) {
+class RestClientWrapper @Inject()(ws: WSClient)
+{
 
   import scala.concurrent.Future
 
   import play.api.libs.json.Reads
 
-  def post[T, R](url: String, headers: List[(String, String)], postData: T)(implicit fjs: Reads[R], wrt: Writeable[T]): Future[Option[R]] = {
-    Logger.debug(s"POST | url:[$url] | headers:[$headers]")
+  def post[T, R](url: String, headers: List[(String, String)], postData: T)(implicit fjs: Reads[R], wrt: Writeable[T]): Future[Option[R]] =
+  {
+    Logger.info(s"POST | url:[$url] | headers:[$headers]")
     ws
       .url(url)
       .withHeaders(headers: _*)
@@ -26,8 +28,9 @@ class RestClientWrapper @Inject()(ws: WSClient) {
       .map(response => mapResponse[R](response))
   }
 
-  def get[A](url: String, headers: List[(String, String)] = List(), queryParams: List[(String, String)] = List())(implicit fjs: Reads[A]): Future[A] = {
-    Logger.debug(s"GET | url:[$url] | headers:[$headers]")
+  def get[A](url: String, headers: List[(String, String)] = List(), queryParams: List[(String, String)] = List())(implicit fjs: Reads[A]): Future[A] =
+  {
+    Logger.info(s"GET | url:[$url] | headers:[$headers]")
     ws
       .url(url)
       .withHeaders(headers: _*)
@@ -37,7 +40,8 @@ class RestClientWrapper @Inject()(ws: WSClient) {
       .map(option => option.get)
   }
 
-  private def mapResponse[A](response: WSResponse)(implicit fjs: Reads[A]): Option[A] = {
+  private def mapResponse[A](response: WSResponse)(implicit fjs: Reads[A]): Option[A] =
+  {
     if (204.equals(response.status)) {
       return Option.empty[A]
     }
