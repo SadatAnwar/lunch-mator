@@ -3,10 +3,11 @@ package client
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 import play.api.Logger
 import play.api.http.Writeable
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws._
 
 import exceptions.HttpClientInternalException
@@ -14,13 +15,9 @@ import exceptions.HttpClientInternalException
 class RestClientWrapper @Inject()(ws: WSClient)
 {
 
-  import scala.concurrent.Future
-
-  import play.api.libs.json.Reads
-
   def post[T, R](url: String, headers: List[(String, String)], postData: T)(implicit fjs: Reads[R], wrt: Writeable[T]): Future[Option[R]] =
   {
-    Logger.info(s"POST | url:[$url] | headers:[$headers]")
+    Logger.debug(s"POST | url:[$url] | headers:[$headers] | body:[$postData]")
     ws
       .url(url)
       .withHeaders(headers: _*)
@@ -30,7 +27,7 @@ class RestClientWrapper @Inject()(ws: WSClient)
 
   def get[A](url: String, headers: List[(String, String)] = List(), queryParams: List[(String, String)] = List())(implicit fjs: Reads[A]): Future[A] =
   {
-    Logger.info(s"GET | url:[$url] | headers:[$headers]")
+    Logger.debug(s"GET | url:[$url] | headers:[$headers]")
     ws
       .url(url)
       .withHeaders(headers: _*)

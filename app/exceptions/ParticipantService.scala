@@ -9,13 +9,13 @@ import scala.concurrent.Future
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 
-import mappers.ParticipantMapper
 import models._
 import org.joda.time.DateTime
 import persistence.repository.{Participants, Users}
 import services.{LunchNotFoundException, UserService, usingDB}
 
-class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfigProvider, userService: UserService) {
+class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfigProvider, userService: UserService)
+{
 
   def addUserToLunch(user: User, lunch: LunchRow): Future[Int] = usingDB {
     val joined = new Date()
@@ -40,12 +40,7 @@ class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfig
     }
   }
 
-  def getParticipants(lunchId: Int): Future[Seq[ParticipantDto]] = usingDB {
+  def getParticipationDetails(lunchId: Int): Future[Seq[(ParticipantRow, UserRow, LunchRow, RestaurantRow)]] = usingDB {
     Participants.getParticipantsForLunch(lunchId)
-  }.map {
-    participants =>
-      participants.map { p =>
-        ParticipantMapper.map(p._1, p._2, p._3)
-      }
   }
 }

@@ -1,19 +1,19 @@
 package services
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.Logger
-import play.api.db.slick.DatabaseConfigProvider
 
+import actors.LunchReminderActor.LunchReminderMessage
 import com.google.inject.Inject
 import exceptions.ParticipantService
 import mappers.LunchMapper
 import models.{CreateLunchDto, LunchRow, RestaurantRow}
 import org.joda.time.DateTime
 import persistence.repository.LunchTableRows
+import scheduler.Scheduler
 
-class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider, participantService: ParticipantService) extends Service
+class LunchService @Inject()(participantService: ParticipantService, scheduler: Scheduler)(implicit ec: ExecutionContext)
 {
 
   def getAllLunchNotPast(email: String): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
@@ -34,12 +34,17 @@ class LunchService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigPr
 
   def createLunch(email: String, lunchDto: CreateLunchDto): Future[Int] =
   {
-    Logger.info(s"User:[$email created lunch with Name: [${lunchDto.lunchName.getOrElse("")}]]")
+    Logger.info(s"New lunch created | User:[$email] | RestaurantId:[${lunchDto.restaurantId}]")
+
     usingDB {
       val lunch = LunchMapper.map(lunchDto)
       LunchTableRows.createLunch(lunch)
     }.flatMap { lunchId =>
       participantService.addUserToLunch(email, lunchId)
+
+      val remindAt = new DateTime(lunchDto.startTime).minusMinutes(10)
+      scheduler.scheduleMessage(LunchReminderMessage(lunchId), remindAt)
+
       Future.successful(lunchId)
     }
   }
