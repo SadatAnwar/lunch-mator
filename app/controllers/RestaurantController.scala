@@ -11,7 +11,8 @@ import models.CreateRestaurantDto
 import models.Formats._
 import services.{Authenticated, RestaurantService}
 
-class RestaurantController @Inject()(restaurantsService: RestaurantService) extends Controller {
+class RestaurantController @Inject()(restaurantsService: RestaurantService) extends Controller
+{
 
   def listRestaurants(): EssentialAction = Authenticated.async { request =>
     restaurantsService.getAllRestaurants.map(restaurants =>

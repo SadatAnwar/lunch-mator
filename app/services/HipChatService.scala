@@ -1,8 +1,7 @@
 package services
 
-import java.text.{Normalizer, SimpleDateFormat}
+import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.regex.Pattern
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -13,36 +12,60 @@ import play.api.Logger
 import client.{HipChatMessagingClient, HipChatUserCacheClient}
 import com.google.inject.Inject
 import models._
-import org.joda.time.{DateTime, Days}
+import org.joda.time.{DateTime, Days, Minutes}
 
 class HipChatService @Inject()(configuration: Configuration,
                                hipChatUserClient: HipChatUserCacheClient,
                                hipChatMessagingClient: HipChatMessagingClient,
                                lunchService: LunchService,
+                               userMatcherService: UserMatcherService,
                                userService: UserService)
 {
   private val lunchMatorHost = configuration.getString("lunchmator.host")
 
-  def getUsersWithNameIn(username: String, name: String): Future[Seq[HipChatUser]] =
+  def getUsersWithNameIn(name: String): Future[Seq[HipChatUser]] =
   {
-    Logger.info(s"HipChat user search: search by:[$username] | search for:[$name]")
     hipChatUserClient.getAllUsers.map { users =>
-      users.filter(user => userNameLike(user, name))
+      users.filter(user => userMatcherService.userNameLike(user, name))
     }
   }
 
-  def sendInvitation(invitation: InvitationDto): Future[String] =
+  def sendInvitation(communication: HipChatCommunication)(implicit userName: String): Future[String] =
   {
-    lunchService.getLunchAndRestaurant(invitation.lunchId).flatMap { result =>
+    Logger.info(s"Sending HipChat invitation | From:[$userName] | To:[${communication.users.map(_.mention_name).mkString(",")}]")
 
+    lunchService.getLunchAndRestaurant(communication.lunchId).flatMap { result =>
       val message = makeInvitation(result._1, result._2)
-      hipChatMessagingClient.sendMessage(invitation.users, message)
+
+      hipChatMessagingClient.sendMessage(communication.users, message)
+    }
+  }
+
+  def sendReminder(communication: HipChatCommunication): Future[String] =
+  {
+    lunchService.getLunchAndRestaurant(communication.lunchId).flatMap { result =>
+      val message = makeReminder(result._1, result._2)
+
+      Logger.info(s"Sending LunchReminder | For LunchId:[${communication.lunchId}] | To:[${communication.users.map(_.mention_name).mkString(",")}]")
+
+      hipChatMessagingClient.sendMessage(communication.users, message)
     }
   }
 
   def sendMessage(hipChatMessageDto: HipChatMessageDto): Future[String] =
   {
     hipChatMessagingClient.sendMessage(hipChatMessageDto.users, hipChatMessageDto.message)
+  }
+
+  private def makeReminder(lunch: LunchRow, restaurant: RestaurantRow): HipChatMessage =
+  {
+    val timeLeft = Minutes.minutesBetween(DateTime.now(), lunch.startTime).getMinutes
+    val timeFormat = new SimpleDateFormat("hh:mm a")
+
+    val reminderMessage = s"Hey! Just wanted to remind you about your lunch ($lunchMatorHost/lunch/${lunch.id.get}) " +
+      s"in $timeLeft min (${timeFormat.format(new Date(lunch.startTime.getMillis))}) at ${restaurant.name} ${restaurant.website}."
+
+    HipChatMessage(reminderMessage, color = HipChatMessageColor.YELLOW)
   }
 
   private def makeInvitation(lunch: LunchRow, restaurant: RestaurantRow): HipChatMessage =
@@ -66,15 +89,5 @@ class HipChatService @Inject()(configuration: Configuration,
       s"to join, click $lunchMatorHost/lunch/${lunch.id.get}"
 
     HipChatMessage(invitationMessage)
-  }
-
-  private def userNameLike(user: HipChatUser, searchString: String) =
-  {
-    val pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
-    val userName = pattern.matcher(Normalizer.normalize(user.name, Normalizer.Form.NFD).toLowerCase).replaceAll("")
-    val search = pattern.matcher(Normalizer.normalize(searchString, Normalizer.Form.NFD).toLowerCase).replaceAll("")
-    val mentionName = pattern.matcher(Normalizer.normalize(user.mention_name, Normalizer.Form.NFD).toLowerCase).replaceAll("")
-
-    userName.contains(search.toLowerCase) || mentionName.contains(search.toLowerCase)
   }
 }

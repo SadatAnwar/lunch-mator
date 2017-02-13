@@ -1,6 +1,6 @@
 package mappers
 
-import models.{HipChatMessage, HipChatPing}
+import models.{HipChatMessage, HipChatPing, HipChatUser}
 
 object HipChatMapper
 {
@@ -17,5 +17,10 @@ object HipChatMapper
     }
 
     HipChatMessage(finalMessage, hipChatMessage.color, hipChatMessage.message_format)
+  }
+
+  def mapUsers(user: HipChatUser): HipChatPing =
+  {
+    HipChatPing(user.mention_name)
   }
 }

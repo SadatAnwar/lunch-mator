@@ -28,7 +28,7 @@ class HipChatMessagingClient @Inject()(configuration: Configuration, lunchServic
       Http.HeaderNames.AUTHORIZATION -> s"Bearer $writeToken"
     )
 
-    Logger.info(s"Sending message to hipChat URL[$url]")
+    Logger.info(s"Sending message to hipChat URL:[$url] | Message:[$message]")
     restClient.post[JsValue, String](url, headers, Json.toJson(message)).map {
       case Some(result) => result
       case None => ""

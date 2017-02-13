@@ -4,6 +4,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.Configuration
+import play.api.Logger
 import play.api.cache.CacheApi
 import play.cache.NamedCache
 import play.mvc.Http
@@ -36,6 +37,7 @@ class HipChatUserCacheClient @Inject()(configuration: Configuration,
       Http.HeaderNames.AUTHORIZATION -> s"Bearer $readToken",
       Http.HeaderNames.ACCEPT_CHARSET -> CharsetNames.UTF_8
     )
+    Logger.info(s"Requesting HipChat for userList | URL:[$link]")
     restClientWrapper.get[Page[HipChatUser]](link, headers).flatMap { page =>
       if (page.links.next.isEmpty) {
         Future.successful(page.items)

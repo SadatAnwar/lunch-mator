@@ -9,14 +9,18 @@ import play.api.mvc._
 import exceptions.AuthenticationException
 import persistence.repository.Users
 
-class AuthenticatedRequest[A](val username: String, val request: Request[A]) extends WrappedRequest[A](request) {
+class AuthenticatedRequest[A](val username: String, val request: Request[A]) extends WrappedRequest[A](request)
+{
 }
 
-object Authenticated {
+object Authenticated
+{
 
-  def async[A](block: (AuthenticatedRequest[AnyContent]) => Future[Result]): EssentialAction = async(parse.anyContent)(block)
+  type ControllerBlock[A] = (AuthenticatedRequest[A]) => Future[Result]
 
-  def async[A](bp: BodyParser[A])(block: (AuthenticatedRequest[A]) => Future[Result]): Action[A] = Action.async(bp) {
+  def async[A](block: ControllerBlock[AnyContent]): EssentialAction = async(parse.anyContent)(block)
+
+  def async[A](bp: BodyParser[A])(block: ControllerBlock[A]): Action[A] = Action.async(bp) {
     request =>
       validateSession(request).flatMap { valid =>
         if (valid) {
@@ -28,7 +32,8 @@ object Authenticated {
       }
   }
 
-  def validateSession(request: Request[Any]): Future[Boolean] = {
+  def validateSession(request: Request[Any]): Future[Boolean] =
+  {
     if (request.session.get("email").isEmpty) {
       return Future.successful(false)
     }

@@ -5,7 +5,8 @@ import java.sql.Timestamp
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-object Formats {
+object Formats
+{
 
   implicit val timeStampReads: Reads[Timestamp] = (__ \ "startTime").read[Long].map { long => new Timestamp(long) }
   implicit val timeStampWrites: Writes[Timestamp] = (__ \ "startTime").write[Long].contramap { (a: Timestamp) => a.getTime }
@@ -40,5 +41,5 @@ object Formats {
 
   implicit val hipChatMessageDtoFormat: OFormat[HipChatMessageDto] = Json.format[HipChatMessageDto]
 
-  implicit val hipChatInvitationFormat: OFormat[InvitationDto] = Json.format[InvitationDto]
+  implicit val hipChatInvitationFormat: OFormat[HipChatCommunication] = Json.format[HipChatCommunication]
 }
