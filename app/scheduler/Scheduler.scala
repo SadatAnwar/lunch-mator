@@ -9,7 +9,7 @@ import play.api.Logger
 import akka.actor.{ActorRef, ActorSystem}
 import com.google.inject.Inject
 import com.google.inject.name.Named
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, Seconds}
 
 class Scheduler @Inject()(system: ActorSystem, @Named("lunch-reminder-actor") lunchReminderActor: ActorRef)(implicit ec: ExecutionContext)
 {
@@ -17,10 +17,10 @@ class Scheduler @Inject()(system: ActorSystem, @Named("lunch-reminder-actor") lu
   def scheduleMessage(message: Any, deliveryTime: DateTime): Unit =
   {
     val now = DateTime.now()
-    val delayInterval = now.getSecondOfMinute - deliveryTime.getSecondOfMinute
+    val delayInterval = Seconds.secondsBetween(now, deliveryTime).getSeconds
 
     if (delayInterval > 0) {
-      Logger.debug(s"Message scheduled in $delayInterval seconds")
+      Logger.info(s"Message scheduled in $delayInterval seconds")
       system.scheduler.scheduleOnce(delayInterval.seconds, lunchReminderActor, message)
     }
   }
