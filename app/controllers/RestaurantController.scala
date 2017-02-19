@@ -22,7 +22,7 @@ class RestaurantController @Inject()(restaurantsService: RestaurantService) exte
 
   def addRestaurant(): Action[JsValue] = Authenticated.async(parse.json) { request =>
     val restaurant = request.body.as[CreateRestaurantDto]
-    restaurantsService.createNewRestaurant(restaurant, request.username).map {
+    restaurantsService.createNewRestaurant(restaurant, request.userRow).map {
       result => Created(Json.toJson(result))
     }
   }

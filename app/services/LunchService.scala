@@ -4,16 +4,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.Logger
 
-import actors.LunchReminderActor.LunchReminderMessage
+import actors.messages.{LunchReminderMessage, NewLunchCreatedMessage}
 import com.google.inject.Inject
-import exceptions.ParticipantService
 import mappers.LunchMapper
-import models.{CreateLunchDto, LunchRow, RestaurantRow}
+import models.{CreateLunchDto, LunchRow, RestaurantRow, UserRow}
 import org.joda.time.DateTime
 import persistence.repository.LunchTableRows
-import scheduler.Scheduler
 
-class LunchService @Inject()(participantService: ParticipantService, scheduler: Scheduler)(implicit ec: ExecutionContext)
+class LunchService @Inject()(scheduler: MessageService)(implicit ec: ExecutionContext)
 {
 
   def getAllLunchNotPast(email: String): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
@@ -29,19 +27,27 @@ class LunchService @Inject()(participantService: ParticipantService, scheduler: 
   }
 
   def getLunchAndRestaurant(id: Int): Future[(LunchRow, RestaurantRow)] = usingDB {
+    LunchTableRows.getLunchDetailsWithId(id)
+  }
+
+  def getLunch(id: Int): Future[LunchRow] = usingDB {
     LunchTableRows.getLunchWithId(id)
   }
 
-  def createLunch(email: String, lunchDto: CreateLunchDto): Future[Int] =
+  def deactivateLunch(lunchId: Int): Future[Int] = usingDB {
+    LunchTableRows.deactivateLunch(lunchId)
+  }
+
+  def createLunch(user: UserRow, lunchDto: CreateLunchDto): Future[Int] =
   {
-    Logger.info(s"New lunch created | User:[$email] | RestaurantId:[${lunchDto.restaurantId}]")
+    Logger.info(s"User:[${user.firstName} ${user.lastName}] | RestaurantId:[${lunchDto.restaurantId}] | New lunch created ")
 
     usingDB {
       val lunch = LunchMapper.map(lunchDto)
       LunchTableRows.createLunch(lunch)
     }.flatMap { lunchId =>
-      participantService.addUserToLunch(email, lunchId)
 
+      scheduler.publishMessage(NewLunchCreatedMessage(lunchId, user))
       val remindAt = new DateTime(lunchDto.startTime).minusMinutes(10)
       scheduler.scheduleMessage(LunchReminderMessage(lunchId), remindAt)
 

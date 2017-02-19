@@ -2,16 +2,16 @@ package services
 
 import javax.inject.Inject
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import play.api.db.slick.DatabaseConfigProvider
 
 import mappers.RestaurantMapper
-import models.{CreateRestaurantDto, RestaurantRow}
+import models.{CreateRestaurantDto, RestaurantRow, UserRow}
 import persistence.repository.Restaurants
 
-class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvider, val userService: UserService) {
+class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvider, val userService: UserService)
+{
 
   def searchRestaurant(name: String): Future[Seq[RestaurantRow]] = usingDB {
     Restaurants.searchRestaurant(name)
@@ -25,12 +25,9 @@ class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvid
     Restaurants.addRestraurant(restaurant)
   }
 
-  def createNewRestaurant(restaurantDto: CreateRestaurantDto, userName: String): Future[Int] = usingDB.async {
-    userService.getUserByEmail(userName).map {
-      user => RestaurantMapper.map(restaurantDto, user)
-    }.map {
-      restaurant => Restaurants.addRestraurant(restaurant)
-    }
+  def createNewRestaurant(restaurantDto: CreateRestaurantDto, user: UserRow): Future[Int] = usingDB {
+    val restaurantRow = RestaurantMapper.map(restaurantDto, user)
+    Restaurants.addRestraurant(restaurantRow)
   }
 
   def getRandomRestaurant(): Future[RestaurantRow] = usingDB {

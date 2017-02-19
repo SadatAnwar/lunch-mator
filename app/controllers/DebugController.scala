@@ -4,12 +4,11 @@ import scala.concurrent.ExecutionContext
 
 import play.api.mvc.{Action, AnyContent, Controller}
 
-import actors.LunchReminderActor.LunchReminderMessage
+import actors.messages.LunchReminderMessage
 import com.google.inject.Inject
-import scheduler.Scheduler
-import services.LunchService
+import services.{LunchService, MessageService}
 
-class DebugController @Inject()(lunchService: LunchService, scheduler: Scheduler)(implicit ec: ExecutionContext) extends Controller
+class DebugController @Inject()(lunchService: LunchService, scheduler: MessageService)(implicit ec: ExecutionContext) extends Controller
 {
   def rescheduleReminder(lunchId: Int): Action[AnyContent] = Action.async {
     lunchService.getLunchAndRestaurant(lunchId).map { a =>

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LunchDetailDto, ParticipantDto} from '../../../dto/types';
 import {ActivatedRoute, Params} from '@angular/router';
 import {LunchService} from '../../service/lunch.service';
@@ -11,10 +11,12 @@ import {Response} from '@angular/http';
   selector: 'lunch-detail',
   templateUrl: 'assets/javascripts/app/lunch/components/detail/lunch-detail.component.html'
 })
-export class LunchDetailComponent extends AlertDisplay {
+export class LunchDetailComponent extends AlertDisplay implements OnInit {
 
-  lunch: LunchDetailDto;
-  startTime: string;
+  private lunch: LunchDetailDto;
+  private startTime: string;
+  private title: string;
+  private hasMap = false;
 
   constructor(private route: ActivatedRoute,
               private calenderService: CalenderService,
@@ -27,9 +29,13 @@ export class LunchDetailComponent extends AlertDisplay {
       return params['id'];
     }).subscribe((lunchID: number) => {
       this.service.getLunchDetails(lunchID)
-        .subscribe((response: LunchDetailDto) => {
-          this.lunch = response;
+        .subscribe((lunchDetail: LunchDetailDto) => {
+          this.lunch = lunchDetail;
+          this.title = `${lunchDetail.lunchName ? lunchDetail.lunchName : "Lunch"} at ${lunchDetail.restaurant.name}`;
           this.startTime = this.calenderService.format(new Date(this.lunch.startTime));
+          if (lunchDetail.restaurant.website && lunchDetail.restaurant.website.startsWith('http')) {
+            this.hasMap = true;
+          }
           this.service.getParticipants(lunchID).subscribe((participants: ParticipantDto[]) => {
             this.lunch.participants = participants;
           })

@@ -1,4 +1,4 @@
-import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {Component, Input, EventEmitter, Output, OnInit} from '@angular/core';
 import {LunchDto} from '../../../dto/types';
 import {Router} from '@angular/router';
 import {CalenderService} from '../../service/calander.service';
@@ -7,23 +7,27 @@ import {CalenderService} from '../../service/calander.service';
   selector: 'lunch-item',
   templateUrl: 'assets/javascripts/app/lunch/components/item/lunch-item.component.html'
 })
-export class LunchItemComponent {
+export class LunchItemComponent implements OnInit {
+  @Input()
+  private lunch: LunchDto;
 
   @Input()
-  lunch: LunchDto;
-
-  @Input()
-  myLunch: boolean;
+  private myLunch: boolean;
 
   @Output()
-  requestJoined = new EventEmitter();
+  private requestJoined = new EventEmitter();
 
   @Output()
-  requestLeave = new EventEmitter();
+  private requestLeave = new EventEmitter();
 
-  startTime: string;
+  private startTime: string;
+  private title: string;
 
   constructor(private router: Router, private calenderService: CalenderService) {
+  }
+
+  ngOnInit(): void {
+    this.title = `${this.lunch.lunchName ? this.lunch.lunchName : "Lunch"} at ${this.lunch.restaurant.name}`;
   }
 
   ngAfterContentInit() {
