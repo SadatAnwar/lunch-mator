@@ -3,7 +3,7 @@
     {{title}}
     <span class="pull-right">
         <span *ngIf="!lunch.joined">
-          <button type="button" class="btn btn-success" (click)="join(lunch)"> Join </button>
+          <button type="button" [class.disabled]="!lunch.active" class="btn btn-success" (click)="join(lunch)"> Join </button>
         </span>
         <span *ngIf="lunch.joined">
           <button type="button" class="btn btn-danger" (click)="leave(lunch)"> Leave </button>

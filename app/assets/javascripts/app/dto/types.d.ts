@@ -6,6 +6,7 @@ export interface LunchDto {
   spotsLeft: number;
   startTime: number;
   joined: boolean;
+  active: boolean;
   anonymous: boolean;
 }
 
