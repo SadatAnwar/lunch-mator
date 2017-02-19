@@ -11,6 +11,10 @@ header {
   }
 }
 
+.disabled {
+  cursor: not-allowed;
+}
+
 .lm-btn-welcome {
   margin: 10px;
   width: 150px;

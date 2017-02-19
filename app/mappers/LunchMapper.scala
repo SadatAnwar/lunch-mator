@@ -23,11 +23,11 @@ object LunchMapper
 
   def map(l: LunchRow, r: RestaurantRow, joined: Int, participantCount: Int): LunchDto =
   {
-    LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, joined == 1, l.anonymous)
+    LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, joined == 1, l.active, l.anonymous)
   }
 
   def map(l: LunchRow, r: RestaurantRow): MyLunchDto =
   {
-    MyLunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.startTime, l.anonymous)
+    MyLunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, 0, l.startTime, joined = true, anonymous = l.active, active = l.anonymous)
   }
 }
