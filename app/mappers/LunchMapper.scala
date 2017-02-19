@@ -8,7 +8,7 @@ object LunchMapper
 
   def map(lunchDto: CreateLunchDto): LunchRow =
   {
-    LunchRow(None, lunchDto.lunchName, lunchDto.restaurantId, lunchDto.maxSize, new DateTime(lunchDto.startTime), lunchDto.anonymous.getOrElse(false))
+    LunchRow(None, lunchDto.lunchName, lunchDto.restaurantId, lunchDto.maxSize, new DateTime(lunchDto.startTime), lunchDto.anonymous.getOrElse(false), active = true)
   }
 
   def map(lunchRows: Seq[LunchRow]): Seq[CreateLunchDto] =
@@ -23,7 +23,7 @@ object LunchMapper
 
   def map(l: LunchRow, r: RestaurantRow, joined: Int, participantCount: Int): LunchDto =
   {
-    LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, joined == 0, l.anonymous)
+    LunchDto(l.id.getOrElse(-1), l.lunchName.getOrElse(""), RestaurantMapper.map(r), l.maxSize, l.maxSize - participantCount, l.startTime, joined == 1, l.anonymous)
   }
 
   def map(l: LunchRow, r: RestaurantRow): MyLunchDto =

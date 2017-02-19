@@ -5,7 +5,7 @@ export interface LunchDto {
   maxSize: number;
   spotsLeft: number;
   startTime: number;
-  canJoin: boolean;
+  joined: boolean;
   anonymous: boolean;
 }
 

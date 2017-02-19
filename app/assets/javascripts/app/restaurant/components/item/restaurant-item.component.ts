@@ -27,8 +27,4 @@ export class RestaurantItemComponent implements OnInit {
     this.requestStart.emit(restaurant);
   }
 
-  // details(restaurant: RestaurantDto) {
-  //   this.router.navigate(['/restaurant', restaurant.id]);
-  // }
-
 }
