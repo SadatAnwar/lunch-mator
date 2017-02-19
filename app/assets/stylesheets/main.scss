@@ -34,16 +34,15 @@ header {
   margin: -200px 0 0 -250px;
 }
 
-lunch-list {
-  .list-group-item {
-    border-left: 0;
-    border-right: 0;
-    &:first-child {
-      border-radius: 0;
-    }
-    &:last-child {
-      border-radius: 0;
-    }
+.list-group-item {
+  border-left: 0;
+  border-right: 0;
+  margin-bottom: 2px;
+  &:first-child {
+    border-radius: 0;
+  }
+  &:last-child {
+    border-radius: 0;
   }
 }
 
