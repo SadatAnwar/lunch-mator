@@ -7,12 +7,17 @@ import {RestaurantListComponent} from './restaurant/components/list/restaurant-l
 import {LunchDetailComponent} from './lunch/components/detail/lunch-detail.component';
 import {AddLunchComponent} from './lunch/components/addlunch/add-lunch.component';
 import {MyLunchListComponent} from './lunch/components/mylunch/my-lunch-list.component';
+import {LoginComponent} from './authentication/components/login/login.component';
 
 const appRoutes: Routes = [
   {
     path: '',
     redirectTo: '/welcome',
     pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   },
   {
     path: 'welcome',
