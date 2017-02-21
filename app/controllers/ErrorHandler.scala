@@ -10,7 +10,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc._
 
-import exceptions.AuthenticationException
+import exceptions.{AuthenticationException, EntityNotFoundException}
 import mappers.ErrorMessageMapper
 import models.Formats._
 import org.postgresql.util.PSQLException
@@ -30,6 +30,7 @@ class ErrorHandler extends HttpErrorHandler {
 
       case e: AuthenticationException => return Future.successful(makeLoginRedirect(e.origin))
       case _: java.util.NoSuchElementException => return Future.successful(NotFound("Requested content not found"))
+      case e: EntityNotFoundException => return Future.successful(NotFound(e.getMessage))
       case e: PSQLException => ErrorMessageMapper.map(e, request.path)
       case e: Exception => ErrorMessageMapper.map(e)
     }

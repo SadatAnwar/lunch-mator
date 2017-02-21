@@ -2,22 +2,42 @@ import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
-import {CreateRestaurantDto} from '../../lunch/dto/types';
+import {CreateRestaurantDto, RestaurantDto} from '../../dto/types';
 
 @Injectable()
 export class RestaurantService {
-  baseUrl: string;
+  private restaurants = '/rest/restaurants';
+  private restaurant = '/rest/restaurant';
 
   constructor(private http: Http) {
-    this.baseUrl = '/rest/restaurants'
   }
 
-  add(restaurantDto: CreateRestaurantDto): Observable<any> {
+  public getAllRestaurants(): Observable<RestaurantDto[]> {
+    return this.http.get(this.restaurants).map((response: Response) => {
+      return response.json();
+    });
+  }
+
+  public getRestaurant(restaurantId: number): Observable<RestaurantDto> {
+    return this.http.get(`${this.restaurant}/${restaurantId}`).map((response: Response) => {
+      return response.json();
+    });
+  }
+
+  public getRandomRestaurant(): Observable<RestaurantDto> {
+    return this.http.get(`${this.restaurants}/random`)
+      .map(response => response.json());
+  }
+
+  public add(restaurantDto: CreateRestaurantDto): Observable<void> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    console.log(restaurantDto);
-    return this.http.post(this.baseUrl, restaurantDto, {headers}).map((response: Response) => {
-      return response.json;
-    });
+
+    return this.http.post(this.restaurants, restaurantDto, {headers}).map(response => response.json());
+  }
+
+  public
+  getSerachUrl(): string {
+    return `${this.restaurants}/search/`
   }
 }

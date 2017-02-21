@@ -5,7 +5,8 @@ export interface LunchDto {
   maxSize: number;
   spotsLeft: number;
   startTime: number;
-  canJoin: boolean;
+  joined: boolean;
+  active: boolean;
   anonymous: boolean;
 }
 
@@ -44,10 +45,26 @@ export interface DateTime {
 }
 
 export interface ParticipantDto {
-  name: string;
+  firstName: string;
+  lastName: string;
   joined: Date;
 }
 
 export interface LunchDetailDto extends LunchDto {
   participants: ParticipantDto[];
+}
+
+export interface HipChatUser {
+  mention_name: string;
+  name: string;
+  text: string;
+}
+
+export interface HipChatPing {
+  mention_name: string;
+}
+
+export interface InvitationDto {
+  users: HipChatPing[];
+  lunchId: number;
 }

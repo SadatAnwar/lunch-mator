@@ -1,51 +1,61 @@
 package exceptions
 
-import java.util.Date
 import javax.inject.Inject
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 
-import mappers.ParticipantMapper
+import actors.messages.ParticipantLeftMessage
 import models._
 import org.joda.time.DateTime
-import persistence.repository.{Participants, Users}
-import services.{LunchNotFoundException, UserService, usingDB}
+import persistence.repository.Participants
+import services.{LunchService, MessageService, UserService, usingDB}
 
-class ParticipantService @Inject()(implicit dbConfigDataProvider: DatabaseConfigProvider, userService: UserService) {
+class ParticipantService @Inject()(userService: UserService, lunchService: LunchService, scheduler: MessageService)(implicit db: DatabaseConfigProvider, ec: ExecutionContext)
+{
 
-  def addUserToLunch(user: User, lunch: LunchRow): Future[Int] = usingDB {
-    val joined = new Date()
-    val lunchId = lunch.id.getOrElse(throw new LunchNotFoundException(lunch))
-    Logger.info(s"adding user [$user] as participant for lunch [$lunch]")
-    Participants.addParticipant(ParticipantRow(lunchId, user.id, new DateTime(joined.getTime)))
-  }
-
-  def addUserToLunch(email: String, lunchId: Int): Future[Int] = usingDB {
-    Users.getByEmail(email).flatMap { user =>
-      val joined = new DateTime()
-      Logger.info(s"adding user [${user.firstName}] as participant for lunch [$lunchId]")
-      val participant = ParticipantRow(lunchId, user.id.get, joined)
-      Participants.addParticipant(participant)
-    }
-  }
-
-  def removeUserFromLunch(email: String, lunchId: Int): Future[Int] = usingDB {
-    Users.getByEmail(email).flatMap { user =>
-      Logger.info(s"removing user [${user.firstName}] from lunch [$lunchId]")
-      Participants.deactivateParticipantForLunch(user.id.get, lunchId)
-    }
-  }
-
-  def getParticipants(lunchId: Int): Future[Seq[ParticipantDto]] = usingDB {
-    Participants.getParticipantsForLunch(lunchId)
-  }.map {
-    participants =>
-      participants.map { p =>
-        ParticipantMapper.map(p._1, p._2)
+  def addUserToLunch(user: UserRow, lunchId: Int): Future[Int] =
+  {
+    val joined = DateTime.now()
+    lunchService.getLunch(lunchId).flatMap { lunch =>
+      if (lunch.active) {
+        Logger.info(s"User:[${user.firstName}] | lunchId:[$lunchId] | Participant added")
+        addParticipant(ParticipantRow(lunchId, user.id.get, joined))
+      } else {
+        Logger.warn(s"User:[${user.firstName}] | lunchId:[$lunchId] | Attempt to join inactive lunch")
+        Future.successful(0)
       }
+    }
+  }
+
+  def removeUserFromLunch(user: UserRow, lunchId: Int): Future[Int] = usingDB {
+    Logger.info(s"User:[${user.firstName}] | LunchId:[$lunchId] | Removing user")
+    Participants.deactivateParticipantForLunch(user.id.get, lunchId).map { update =>
+      scheduler.publishMessage(ParticipantLeftMessage(lunchId))
+      update
+    }
+  }
+
+  def deactivateEmptyLunch(lunchId: Int): Future[Int] =
+  {
+    getParticipationDetails(lunchId).flatMap { result =>
+      if (result.forall(p => !p._1.active)) {
+        Logger.info(s"LunchId:[$lunchId] | no active users, deactivating")
+        lunchService.deactivateLunch(lunchId)
+      }
+      else {
+        Future.successful(0)
+      }
+    }
+  }
+
+  def getParticipationDetails(lunchId: Int): Future[Seq[(ParticipantRow, UserRow, LunchRow, RestaurantRow)]] = usingDB {
+    Participants.getParticipantsForLunch(lunchId)
+  }
+
+  private def addParticipant(participant: ParticipantRow): Future[Int] = usingDB {
+    Participants.addParticipant(participant)
   }
 }

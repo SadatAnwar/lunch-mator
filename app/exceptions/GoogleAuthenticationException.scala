@@ -1,4 +1,3 @@
 package exceptions
 
-class GoogleAuthenticationException(message: String = "") extends AuthenticationException(message) {
-}
+case class GoogleAuthenticationException(override val message: String = "") extends AuthenticationException(message)

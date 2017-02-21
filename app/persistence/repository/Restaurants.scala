@@ -25,7 +25,7 @@ object Restaurants {
   lazy val restaurants = TableQuery[Restaurants]
 
   def getAll = {
-    restaurants.result
+    restaurants.sortBy(a => a.name.toLowerCase).result
   }
 
   def searchRestaurant(name: String): FixedSqlStreamingAction[Seq[RestaurantRow], RestaurantRow, Read] = {
@@ -41,11 +41,11 @@ object Restaurants {
     restaurants += restaurant
   }
 
-  def getRestaurantsById(restaurant_id: Int): SqlAction[RestaurantRow, NoStream, Read] = {
-    restaurants.filter(_.id === restaurant_id).result.head
+  def getRestaurantsById(restaurant_id: Int): SqlAction[Option[RestaurantRow], NoStream, Read] = {
+    restaurants.filter(_.id === restaurant_id).result.headOption
   }
 
-  def getRestaurantsByName(name: String) = {
+  def getRestaurantsByName(name: String): SqlAction[Option[RestaurantRow], NoStream, Read] = {
     restaurants.filter(_.name === name).result.headOption
   }
 }

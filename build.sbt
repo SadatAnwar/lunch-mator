@@ -10,6 +10,7 @@ scalaVersion := "2.11.6"
 
 TypescriptKeys.configFile := "tsconfig.json"
 
+
 libraryDependencies ++= Seq(
   cache,
   ws,
@@ -42,7 +43,7 @@ libraryDependencies ++= Seq(
   "org.webjars.npm" % "zone.js" % "0.6.25",
   "org.webjars.npm" % "angular-in-memory-web-api" % "0.1.1",
   "org.webjars.npm" % "jquery" % "3.1.1",
-  "org.webjars.npm" % "bootstrap-sass" % "3.3.7",
+  "org.webjars.npm" % "bootstrap" % "3.3.7",
   "org.webjars.npm" % "ng2-completer" % "0.2.2",
   "org.webjars.npm" % "ng2-select" % "1.1.1"
 )
@@ -51,3 +52,6 @@ libraryDependencies ++= Seq(
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
 
+
+sources in(Compile, doc) := Seq.empty
+publishArtifact in(Compile, packageDoc) := false

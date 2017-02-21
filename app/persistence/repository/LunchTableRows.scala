@@ -3,12 +3,13 @@ package persistence.repository
 import com.github.tototoshi.slick.PostgresJodaSupport._
 import models.{LunchRow, RestaurantRow}
 import org.joda.time.DateTime
-import slick.dbio.Effect.Read
+import slick.dbio.Effect.{Read, Write}
 import slick.driver.PostgresDriver.api._
 import slick.jdbc.GetResult
-import slick.profile.{SqlAction, SqlStreamingAction}
+import slick.profile.{FixedSqlAction, SqlAction, SqlStreamingAction}
 
-class LunchTableRows(tag: Tag) extends Table[LunchRow](tag, Some("lunch_world"), "lunch_tables") {
+class LunchTableRows(tag: Tag) extends Table[LunchRow](tag, Some("lunch_world"), "lunch_tables")
+{
 
   def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
 
@@ -22,25 +23,26 @@ class LunchTableRows(tag: Tag) extends Table[LunchRow](tag, Some("lunch_world"),
 
   def anonymous = column[Boolean]("anonymous")
 
-  override def * = (id.?, name.?, restaurantId, maxSize, startTime, anonymous) <> (LunchRow.tupled, LunchRow.unapply _)
+  def active = column[Boolean]("active")
+
+  override def * = (id.?, name.?, restaurantId, maxSize, startTime, anonymous, active) <> (LunchRow.tupled, LunchRow.unapply _)
 }
 
-object LunchTableRows {
+object LunchTableRows
+{
 
-  implicit val compoundLunchRestaurantSize = GetResult[(LunchRow, RestaurantRow, Int, Int)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<), r.<<, r.<<))
-  implicit val compoundLunchRestaurant = GetResult[(LunchRow, RestaurantRow)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<)))
+  implicit val compoundLunchRestaurantSize = GetResult[(LunchRow, RestaurantRow, Int, Int)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<), r.<<, r.<<))
 
+  implicit val compoundLunchRestaurant = GetResult[(LunchRow, RestaurantRow)](r => (LunchRow(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<), RestaurantRow(r.<<, r.<<, r.<<, r.<<, r.<<)))
   lazy val lunchTableRows = TableQuery[LunchTableRows]
 
-  def createLunch(lunchTableRow: LunchRow) = {
+  def createLunch(lunchTableRow: LunchRow): FixedSqlAction[Int, NoStream, Write] =
+  {
     lunchTableRows returning lunchTableRows.map(_.id) += lunchTableRow
   }
 
-  def getAll = {
-    lunchTableRows.result
-  }
-
-  def getLunchWithRestaurant(email: String, lunchId: Int): SqlStreamingAction[Vector[(LunchRow, RestaurantRow, Int, Int)], (LunchRow, RestaurantRow, Int, Int), Effect] = {
+  def getLunchWithRestaurant(email: String, lunchId: Int): SqlStreamingAction[Vector[(LunchRow, RestaurantRow, Int, Int)], (LunchRow, RestaurantRow, Int, Int), Effect] =
+  {
     sql"""SELECT
           lt.id,
           lt.name,
@@ -48,6 +50,7 @@ object LunchTableRows {
           lt.max_size,
           lt.start_time,
           lt.anonymous,
+          lt.active,
 
           rt.id,
           rt.name,
@@ -72,11 +75,25 @@ object LunchTableRows {
       """.as[(LunchRow, RestaurantRow, Int, Int)]
   }
 
-  def filter() = {
-    lunchTableRows.filter(_.id === 1).result
+  def getLunchDetailsWithId(id: Int): SqlAction[(LunchRow, RestaurantRow), NoStream, Read] =
+  {
+    val q = for {
+      lunch <- lunchTableRows.filter(_.id === id)
+      restaurant <- Restaurants.restaurants filter (lunch.restaurantId === _.id)
+    } yield {
+      (lunch, restaurant)
+    }
+
+    q.result.head
   }
 
-  def getLunchForUserAfter(email: String, time: DateTime) = {
+  def getLunchWithId(id: Int): SqlAction[LunchRow, NoStream, Read] =
+  {
+    lunchTableRows.filter(_.id === id).result.head
+  }
+
+  def getLunchForUserAfter(email: String, time: DateTime) =
+  {
     sql"""SELECT
             lt.id,
             lt.name,
@@ -84,6 +101,7 @@ object LunchTableRows {
             lt.max_size,
             lt.start_time,
             lt.anonymous,
+            lt.active,
 
             rt.id,
             rt.name,
@@ -95,12 +113,14 @@ object LunchTableRows {
             JOIN lunch_world.participants p ON lt.id = p.lunch_table_id
             JOIN lunch_world.users u on p.user_id = u.id
             WHERE lt.start_time > ${time}
+            AND lt.active = 'true'
             AND p.active = 'true'
             AND u.email = ${email};
       """.as[(LunchRow, RestaurantRow)]
   }
 
-  def getLunchAfter(time: DateTime) = {
+  def getLunchAfter(time: DateTime) =
+  {
     val q = for {
       lunch <- lunchTableRows.filter(_.startTime > time)
       restaurant <- Restaurants.restaurants filter (lunch.restaurantId === _.id)
@@ -111,7 +131,8 @@ object LunchTableRows {
     q.result
   }
 
-  def getLunchWithOpenSpotsAfter(email: String, time: DateTime) = {
+  def getLunchWithOpenSpotsAfter(email: String, time: DateTime) =
+  {
     sql"""SELECT
           lt.id,
           lt.name,
@@ -119,6 +140,7 @@ object LunchTableRows {
           lt.max_size,
           lt.start_time,
           lt.anonymous,
+          lt.active,
 
           rt.id,
           rt.name,
@@ -139,8 +161,17 @@ object LunchTableRows {
                GROUP BY p.lunch_table_id) pt ON lt.id = pt.lunch_table_id
             JOIN lunch_world.restaurants rt ON rt.id = lt.restaurant_id
           WHERE lt.start_time > ${time}
+          AND lt.active = 'true'
           AND lt.max_size > coalesce(pt.participants, 0)
          ;
       """.as[(LunchRow, RestaurantRow, Int, Int)]
+  }
+
+  def deactivateLunch(lunchId: Int): FixedSqlAction[Int, NoStream, Write] =
+  {
+    val q = for {l <- lunchTableRows if l.id === lunchId} yield {
+      l.active
+    }
+    q.update(false)
   }
 }

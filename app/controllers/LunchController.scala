@@ -12,24 +12,29 @@ import models.Formats._
 import models._
 import services.{Authenticated, LunchService}
 
-class LunchController @Inject()(lunchService: LunchService, participantService: ParticipantService) extends Controller {
+class LunchController @Inject()(lunchService: LunchService, participantService: ParticipantService) extends Controller
+{
 
   def createLunch(): Action[JsValue] = Authenticated.async(parse.json) { request =>
     val lunchDto = request.body.as[CreateLunchDto]
-    lunchService.createLunch(request.username, lunchDto).map(lunchId =>
+    lunchService.createLunch(request.userRow, lunchDto).map(lunchId =>
       Created(Json.toJson(lunchId))
     )
   }
 
   def joinLunch(lunchId: Int): EssentialAction = Authenticated.async { request =>
-    participantService.addUserToLunch(request.username, lunchId).map(participant =>
-      Ok(Json.toJson(participant))
+    participantService.addUserToLunch(request.userRow, lunchId).map(participant =>
+      if (participant == 1) {
+        Ok(Json.toJson(participant))
+      } else {
+        Conflict("Unable to join as lunch is inactive.")
+      }
     )
   }
 
   def leaveLunch: Action[JsValue] = Authenticated.async(parse.json) { request =>
     val lunchDto = request.body.as[MyLunchDto]
-    participantService.removeUserFromLunch(request.username, lunchDto.id).map(rowsUpdated =>
+    participantService.removeUserFromLunch(request.userRow, lunchDto.id).map(rowsUpdated =>
       Ok(Json.toJson("Success"))
     )
   }

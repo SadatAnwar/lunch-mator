@@ -10,7 +10,8 @@ import slick.dbio.Effect.{Read, Write}
 import slick.driver.PostgresDriver.api._
 import slick.profile.{FixedSqlAction, FixedSqlStreamingAction, SqlAction}
 
-class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") {
+class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users")
+{
 
   def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
 
@@ -29,27 +30,33 @@ class Users(tag: Tag) extends Table[UserRow](tag, Some("lunch_world"), "users") 
   override def * = (id.?, firstName, lastName, email, picture, lastLogin, active) <> (UserRow.tupled, UserRow.unapply)
 }
 
-object Users {
+object Users
+{
 
   val users = TableQuery[Users]
 
-  def getByEmail(email: String): SqlAction[UserRow, NoStream, Read] = {
-    users.filter(_.email === email).result.head
+  def getByEmail(email: String): SqlAction[Option[UserRow], NoStream, Read] =
+  {
+    users.filter(_.email === email).result.headOption
   }
 
-  def isPresent(email: String): FixedSqlAction[Boolean, _root_.slick.driver.PostgresDriver.api.NoStream, Read] = {
+  def isPresent(email: String): FixedSqlAction[Boolean, _root_.slick.driver.PostgresDriver.api.NoStream, Read] =
+  {
     users.filter(_.email === email).exists.result
   }
 
-  def findById(userId: Int): SqlAction[UserRow, NoStream, Read] = {
+  def findById(userId: Int): SqlAction[UserRow, NoStream, Read] =
+  {
     users.filter(_.id === userId).result.head
   }
 
-  def findByName(name: String): FixedSqlStreamingAction[Seq[UserRow], UserRow, Read] = {
+  def findByName(name: String): FixedSqlStreamingAction[Seq[UserRow], UserRow, Read] =
+  {
     users.filter(_.firstName === name).result
   }
 
-  def addNewUser(user: UserRow): DBIOAction[Int, NoStream, Read with Write] = {
+  def addNewUser(user: UserRow): DBIOAction[Int, NoStream, Read with Write] =
+  {
     users.filter(_.email === user.email).exists.result.flatMap { exists =>
       if (!exists) {
         users += user
@@ -64,7 +71,8 @@ object Users {
     }
   }
 
-  def getAll: FixedSqlStreamingAction[Seq[UserRow], UserRow, Read] = {
+  def getAll: FixedSqlStreamingAction[Seq[UserRow], UserRow, Read] =
+  {
     users.result
   }
 }
