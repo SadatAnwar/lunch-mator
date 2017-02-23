@@ -21,6 +21,10 @@ GET         /rest/my-lunch                        controllers.LunchController.ge
 # REST Participants
 GET         /rest/participants/:lunchId           controllers.ParticipantController.getParticipants(lunchId: Int)
 
+# REST Chat Messages
+GET         /rest/messages/:lunchId                       controllers.ChatMessagesController.getMessages(lunchId: Int)
+POST        /rest/messages/:lunchId                       controllers.ChatMessagesController.postMessage(lunchId: Int)
+
 
 # REST User session
 GET         /rest/logOut                          controllers.AuthenticationController.logOut()
