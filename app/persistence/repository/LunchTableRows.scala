@@ -115,7 +115,8 @@ object LunchTableRows
             WHERE lt.start_time > ${time}
             AND lt.active = 'true'
             AND p.active = 'true'
-            AND u.email = ${email};
+            AND u.email = ${email}
+          ORDER BY lt.start_time;
       """.as[(LunchRow, RestaurantRow)]
   }
 
