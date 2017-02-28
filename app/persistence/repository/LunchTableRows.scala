@@ -163,7 +163,8 @@ object LunchTableRows
           WHERE lt.start_time > ${time}
           AND lt.active = 'true'
           AND lt.max_size > coalesce(pt.participants, 0)
-         ;
+          ORDER BY lt.start_time
+          ;
       """.as[(LunchRow, RestaurantRow, Int, Int)]
   }
 
