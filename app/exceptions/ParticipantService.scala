@@ -7,13 +7,13 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 
-import actors.messages.ParticipantLeftMessage
+import actors.ParticipantLeftMessage
 import models._
 import org.joda.time.DateTime
 import persistence.repository.Participants
-import services.{LunchService, MessageService, UserService, usingDB}
+import services._
 
-class ParticipantService @Inject()(userService: UserService, lunchService: LunchService, scheduler: MessageService)(implicit db: DatabaseConfigProvider, ec: ExecutionContext)
+class ParticipantService @Inject()(userService: UserService, lunchService: LunchService, scheduler: MessageService)(implicit db: DatabaseConfigProvider, ec: ExecutionContext) extends Service
 {
 
   def addUserToLunch(user: UserRow, lunchId: Int): Future[Int] =

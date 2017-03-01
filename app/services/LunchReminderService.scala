@@ -3,19 +3,23 @@ package services
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
+import play.api.Logger
+
+import actors.LunchReminderMessage
 import com.google.inject.Inject
 import exceptions.ParticipantService
 import mappers.HipChatMapper
 import models.{HipChatCommunication, HipChatUser, UserRow}
 
-class LunchReminderService @Inject()(participantService: ParticipantService, hipChatService: HipChatService, userMatcherService: UserMatcherService)(implicit ec: ExecutionContext)
+class LunchReminderService @Inject()(lunchService: LunchService, participantService: ParticipantService, hipChatService: HipChatService, userMatcherService: UserMatcherService, messageService: MessageService)(implicit ec: ExecutionContext)
 {
 
-  def sendReminderFroLunch(lunchId: Int): Unit =
+  def sendReminderForLunch(lunchId: Int): Unit =
   {
     getUsers(lunchId).foreach { users =>
       val pings = users.map(HipChatMapper.mapUsers)
       val future = hipChatService.sendReminder(HipChatCommunication(pings, lunchId))
+      Logger.info(s"Users:[$users] | Sending reminder")
       Await.result(future, 30000 millis);
     }
   }

@@ -3,7 +3,7 @@ package actors
 import play.api.libs.concurrent.AkkaGuiceSupport
 
 import com.google.inject.AbstractModule
-import services.MessageService
+import services.{MessageService, StartupService}
 
 class Module extends AbstractModule with AkkaGuiceSupport
 {
@@ -11,5 +11,6 @@ class Module extends AbstractModule with AkkaGuiceSupport
   {
     bindActor[ActorSystem]("lunch-mator-actor")
     bind(classOf[MessageService]).asEagerSingleton()
+    bind(classOf[StartupService]).asEagerSingleton()
   }
 }

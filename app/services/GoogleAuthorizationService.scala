@@ -2,11 +2,11 @@ package services
 
 import java.util.Base64
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 import play.Configuration
 import play.api.Logger
+import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 
 import client.GoogleAuthenticationClient
@@ -16,7 +16,7 @@ import mappers.UserMapper
 import models.GoogleModels._
 import persistence.repository.OAuthUser
 
-class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: GoogleAuthenticationClient, userService: UserService)
+class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: GoogleAuthenticationClient, userService: UserService)(implicit val dbConfigDataProvider: DatabaseConfigProvider, ec: ExecutionContext) extends Service
 {
 
   def getGoogleSignInPage(origin: String = "/welcome"): String =

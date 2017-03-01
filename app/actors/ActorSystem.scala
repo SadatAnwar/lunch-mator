@@ -4,7 +4,6 @@ import scala.concurrent.ExecutionContext
 
 import play.api.Logger
 
-import actors.messages.{LunchReminderMessage, NewLunchCreatedMessage, ParticipantLeftMessage}
 import akka.actor._
 import com.google.inject.{Inject, Singleton}
 import exceptions.ParticipantService
@@ -16,7 +15,7 @@ class ActorSystem @Inject()(lunchReminderService: LunchReminderService, particip
   def receive: PartialFunction[Any, Unit] =
   {
     case NewLunchCreatedMessage(lunchId, user) => participantService.addUserToLunch(user, lunchId)
-    case LunchReminderMessage(lunchId) => lunchReminderService.sendReminderFroLunch(lunchId)
+    case LunchReminderMessage(lunchId) => lunchReminderService.sendReminderForLunch(lunchId)
     case ParticipantLeftMessage(lunchId) => participantService.deactivateEmptyLunch(lunchId)
     case any => Logger.warn(s"[$any] | Unidentified message")
   }

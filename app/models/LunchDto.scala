@@ -34,3 +34,5 @@ case class LunchDetailDto(override val id: Int, override val lunchName: String, 
 case class CreateLunchDto(restaurantId: Int, lunchName: Option[String], startTime: Long, anonymous: Option[Boolean], maxSize: Int)
 
 case class LunchRow(id: Option[Int], lunchName: Option[String], restaurantId: Int, maxSize: Int, startTime: DateTime, anonymous: Boolean, active: Boolean)
+
+case class LunchDetail(lunch: LunchRow, restaurant: RestaurantRow)
