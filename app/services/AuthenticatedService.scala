@@ -1,20 +1,17 @@
 package services
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
+import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.BodyParsers.parse
 import play.api.mvc._
 
+import com.google.inject.Inject
 import exceptions.AuthenticationException
 import models.UserRow
 import persistence.repository.Users
 
-class AuthenticatedRequest[A](val username: String, val userRow: UserRow, val request: Request[A]) extends WrappedRequest[A](request)
-{
-}
-
-object Authenticated
+class AuthenticatedService @Inject()(implicit db: DatabaseConfigProvider, ec: ExecutionContext) extends Service
 {
 
   type ControllerBlock[A] = (AuthenticatedRequest[A]) => Future[Result]
@@ -46,3 +43,5 @@ object Authenticated
     Users.getByEmail(email)
   }
 }
+
+case class AuthenticatedRequest[A](username: String, userRow: UserRow, request: Request[A]) extends WrappedRequest[A](request)

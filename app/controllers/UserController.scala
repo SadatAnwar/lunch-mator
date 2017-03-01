@@ -1,27 +1,30 @@
 package controllers
 
-import com.google.inject.Inject
-import models.Formats._
-import models.UserRow
-import play.api.libs.json._
-import play.api.mvc.Controller
-import services.{Authenticated, UserService}
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UserController @Inject()(userService: UserService) extends Controller {
+import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json._
+import play.api.mvc.{Action, Controller, EssentialAction}
 
-  def getAllUsers = Authenticated.async {
+import com.google.inject.Inject
+import models.Formats._
+import models.UserRow
+import services.{AuthenticatedService, UserService}
+
+class UserController @Inject()(userService: UserService)(implicit db: DatabaseConfigProvider) extends AuthenticatedService with Controller
+{
+
+  def getAllUsers: EssentialAction = async {
     request =>
       userService.getAllUsers.map(restaurants =>
         Ok(Json.toJson(restaurants))
       )
   }
 
-  def createUser() = Authenticated.async(parse.json) { request =>
+  def createUser(): Action[JsValue] = async(parse.json) { request =>
     val user = request.body.as[UserRow]
-     userService.addUser(user).map {
+    userService.addUser(user).map {
       result => Created
     }.recoverWith {
       case e: Exception => Future(InternalServerError("Already exists " + e.getMessage))

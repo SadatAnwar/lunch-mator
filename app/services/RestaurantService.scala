@@ -2,7 +2,7 @@ package services
 
 import javax.inject.Inject
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.db.slick.DatabaseConfigProvider
 
@@ -10,7 +10,7 @@ import mappers.RestaurantMapper
 import models.{CreateRestaurantDto, RestaurantRow, UserRow}
 import persistence.repository.Restaurants
 
-class RestaurantService @Inject()(val dbConfigDataProvider: DatabaseConfigProvider, val userService: UserService)
+class RestaurantService @Inject()(val userService: UserService)(implicit val dbConfigDataProvider: DatabaseConfigProvider, ec: ExecutionContext) extends Service
 {
 
   def searchRestaurant(name: String): Future[Seq[RestaurantRow]] = usingDB {
