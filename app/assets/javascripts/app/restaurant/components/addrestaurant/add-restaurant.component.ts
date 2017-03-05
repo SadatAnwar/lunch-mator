@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {CompleterService, CompleterData} from 'ng2-completer';
 import {ErrorMapper} from '../../../mappers/ErrorMapper';
-import {RestaurantService} from '../../services/restaurant.services';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {RestaurantService} from '../../../services/restaurant.services';
+import {AlertDisplay} from '../../../services/AlertDisplay';
 import {ErrorDetail} from '../../../common/types/ErrorDetail';
 import {AlertLevel} from '../../../common/types/Alert';
 

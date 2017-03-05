@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
+import {CreateRestaurantDto, RestaurantDto} from '../dto/types';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
-import {CreateRestaurantDto, RestaurantDto} from '../../dto/types';
 
 @Injectable()
 export class RestaurantService {

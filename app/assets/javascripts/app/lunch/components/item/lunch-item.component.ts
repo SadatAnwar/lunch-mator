@@ -1,7 +1,7 @@
 import {Component, Input, EventEmitter, Output, OnInit} from '@angular/core';
 import {LunchDto} from '../../../dto/types';
 import {Router} from '@angular/router';
-import {CalenderService} from '../../service/calander.service';
+import {CalenderService} from '../../../services/calander.service';
 
 @Component({
   selector: 'lunch-item',

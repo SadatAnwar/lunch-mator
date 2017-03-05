@@ -48,14 +48,14 @@ class LunchController @Inject()(lunchService: LunchService, participantService: 
   }
 
   def getMyLunch: EssentialAction = async { request =>
-    lunchService.getLunchForUserNotPast(request.username).map { lunchRestSeq =>
+    lunchService.getLunchForUserNotPast(request.userRow.email).map { lunchRestSeq =>
       val lunchSeq = lunchRestSeq.map(a => LunchMapper.map(a._1, a._2))
       Ok(Json.toJson(lunchSeq))
     }
   }
 
   def getLunch(lunchId: Int): EssentialAction = async { request =>
-    lunchService.getLunchDetail(request.username, lunchId)
+    lunchService.getLunchDetail(request.userRow.email, lunchId)
       .map { lunchRestSeq =>
         val lunchSeq = lunchRestSeq.map(a => LunchMapper.map(a._1, a._2, a._3, a._4))
         if (lunchSeq.size == 1) {

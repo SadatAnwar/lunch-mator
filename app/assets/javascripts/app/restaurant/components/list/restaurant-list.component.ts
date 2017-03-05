@@ -1,7 +1,7 @@
 import {Component, OnInit, Injectable} from '@angular/core';
 import {RestaurantDto} from '../../../dto/types';
-import {RestaurantService} from '../../services/restaurant.services';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {RestaurantService} from '../../../services/restaurant.services';
+import {AlertDisplay} from '../../../services/AlertDisplay';
 import {AlertLevel} from '../../../common/types/Alert';
 import {Router} from '@angular/router';
 

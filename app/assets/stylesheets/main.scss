@@ -88,3 +88,17 @@ header {
   width: 100%;
   float: none;
 }
+
+.message-input {
+  textarea {
+    width: 100%;
+  }
+}
+
+.message-content{
+  padding-left: 3em;
+  padding-bottom: 1em;
+}
+
+.messages {
+}

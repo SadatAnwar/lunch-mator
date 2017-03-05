@@ -42,4 +42,7 @@ object Formats
   implicit val hipChatMessageDtoFormat: OFormat[HipChatMessageDto] = Json.format[HipChatMessageDto]
 
   implicit val hipChatInvitationFormat: OFormat[HipChatCommunication] = Json.format[HipChatCommunication]
+
+  implicit val chatMessage: OFormat[LunchComment] = Json.format[LunchComment]
+  implicit val newMessage: OFormat[NewComment] = Json.format[NewComment]
 }

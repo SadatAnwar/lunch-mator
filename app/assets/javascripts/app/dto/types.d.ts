@@ -68,3 +68,17 @@ export interface InvitationDto {
   users: HipChatPing[];
   lunchId: number;
 }
+
+export interface CommentDto {
+  id: number;
+  createdAt?: string;
+  lunchId: number;
+  authorId: number;
+  author?:string;
+  replyToMessage: number;
+  message: string;
+}
+
+export interface NewCommentDto{
+  text: string
+}

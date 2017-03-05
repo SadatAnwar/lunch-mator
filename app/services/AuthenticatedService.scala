@@ -22,7 +22,7 @@ class AuthenticatedService @Inject()(implicit db: DatabaseConfigProvider, ec: Ex
     request =>
       validateSession(request).flatMap { validUser =>
         if (validUser.isDefined) {
-          block(new AuthenticatedRequest(request.session.get("email").get, validUser.get, request))
+          block(AuthenticatedRequest(validUser.get, request))
         }
         else {
           throw new AuthenticationException(origin = request.path)
@@ -44,4 +44,4 @@ class AuthenticatedService @Inject()(implicit db: DatabaseConfigProvider, ec: Ex
   }
 }
 
-case class AuthenticatedRequest[A](username: String, userRow: UserRow, request: Request[A]) extends WrappedRequest[A](request)
+case class AuthenticatedRequest[A](userRow: UserRow, request: Request[A]) extends WrappedRequest[A](request)

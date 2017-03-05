@@ -5,14 +5,22 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 
 import play.api.Logger
 
-import actors.LunchReminderMessage
 import com.google.inject.Inject
 import exceptions.ParticipantService
 import mappers.HipChatMapper
-import models.{HipChatCommunication, HipChatUser, UserRow}
+import models._
 
-class LunchReminderService @Inject()(lunchService: LunchService, participantService: ParticipantService, hipChatService: HipChatService, userMatcherService: UserMatcherService, messageService: MessageService)(implicit ec: ExecutionContext)
+class NotificationService @Inject()(participantService: ParticipantService, hipChatService: HipChatService, userMatcherService: UserMatcherService, lunchService: LunchService)(implicit ec: ExecutionContext)
 {
+
+  def sendNewMessageNotification(lunchId: Int, authorName: String, comment: String): Unit =
+  {
+    getUsers(lunchId).foreach { users =>
+      val pings = users.map(HipChatMapper.mapUsers)
+      val future = hipChatService.sendMessage(HipChatMessageDto(pings, HipChatMessage(s"$authorName commented on lunch: ${lunchService.getLunchUrl(lunchId)}: $comment")))
+      Await.result(future, 30000 millis);
+    }
+  }
 
   def sendReminderForLunch(lunchId: Int): Unit =
   {

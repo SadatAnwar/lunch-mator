@@ -1,9 +1,9 @@
 import {Component, OnInit, Injectable} from '@angular/core';
 import {LunchDto} from '../../../dto/types';
-import {LunchService} from '../../service/lunch.service';
+import {LunchService} from '../../../services/lunch.service';
 import {AlertLevel} from '../../../common/types/Alert';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
-import {CalenderService} from '../../service/calander.service';
+import {AlertDisplay} from '../../../services/AlertDisplay';
+import {CalenderService} from '../../../services/calander.service';
 
 @Component({
   selector: 'lunch-list',
