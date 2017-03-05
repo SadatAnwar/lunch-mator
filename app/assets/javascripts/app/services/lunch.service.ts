@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
-import {CreateLunchDto, LunchDto, LunchDetailDto} from '../../dto/types';
+import {CreateLunchDto, LunchDto, LunchDetailDto} from '../dto/types';
 
 @Injectable()
 export class LunchService {

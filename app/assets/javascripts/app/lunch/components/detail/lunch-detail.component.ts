@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {LunchDetailDto, ParticipantDto} from '../../../dto/types';
 import {ActivatedRoute, Params} from '@angular/router';
-import {LunchService} from '../../service/lunch.service';
+import {LunchService} from '../../../services/lunch.service';
 import {AlertLevel} from '../../../common/types/Alert';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
-import {CalenderService} from '../../service/calander.service';
+import {AlertDisplay} from '../../../services/AlertDisplay';
+import {CalenderService} from '../../../services/calander.service';
 import {Response} from '@angular/http';
 
 @Component({

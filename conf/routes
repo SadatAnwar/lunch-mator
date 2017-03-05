@@ -18,12 +18,15 @@ POST        /rest/lunch/leave                     controllers.LunchController.le
 PUT         /rest/lunch/:id                       controllers.LunchController.joinLunch(id: Int)
 GET         /rest/my-lunch                        controllers.LunchController.getMyLunch()
 
+# REST Users
+GET         /rest/users/:id                               controllers.UserController.getUser(id: Int)
+
 # REST Participants
 GET         /rest/participants/:lunchId           controllers.ParticipantController.getParticipants(lunchId: Int)
 
 # REST Chat Messages
-GET         /rest/messages/:lunchId                       controllers.ChatMessagesController.getMessages(lunchId: Int)
-POST        /rest/messages/:lunchId                       controllers.ChatMessagesController.postMessage(lunchId: Int)
+GET         /rest/comments/:lunchId                       controllers.CommentController.getComments(lunchId: Int)
+POST        /rest/comments/:lunchId                       controllers.CommentController.postComment(lunchId: Int)
 
 
 # REST User session

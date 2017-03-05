@@ -30,7 +30,7 @@ class HipChatController @Inject()(hipChatService: HipChatService)(implicit db: D
 
   def invite(): Action[JsValue] = async(parse.json) { request =>
     val invitation = request.body.as[HipChatCommunication]
-    implicit val userName = request.username
+    implicit val userName = request.userRow.email
 
     hipChatService.sendInvitation(invitation).map(_ => NoContent)
   }

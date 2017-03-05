@@ -7,7 +7,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 
-import actors.ParticipantLeftMessage
+import actors.messages.Message
 import models._
 import org.joda.time.DateTime
 import persistence.repository.Participants
@@ -33,7 +33,7 @@ class ParticipantService @Inject()(userService: UserService, lunchService: Lunch
   def removeUserFromLunch(user: UserRow, lunchId: Int): Future[Int] = usingDB {
     Logger.info(s"User:[${user.firstName}] | LunchId:[$lunchId] | Removing user")
     Participants.deactivateParticipantForLunch(user.id.get, lunchId).map { update =>
-      scheduler.publishMessage(ParticipantLeftMessage(lunchId))
+      scheduler.publishMessage(Message.ParticipantLeftMessage(lunchId))
       update
     }
   }

@@ -2,18 +2,20 @@ package services
 
 import scala.concurrent.{ExecutionContext, Future}
 
+import play.Configuration
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 
-import actors.{LunchReminderMessage, NewLunchCreatedMessage}
+import actors.messages.Message.{LunchReminderMessage, NewLunchCreatedMessage}
 import com.google.inject.Inject
 import mappers.LunchMapper
 import models._
 import org.joda.time.DateTime
 import persistence.repository.LunchTableRows
 
-class LunchService @Inject()(scheduler: MessageService)(implicit ec: ExecutionContext, implicit val dbConfigDataProvider: DatabaseConfigProvider) extends Service
+class LunchService @Inject()(scheduler: MessageService, configuration: Configuration)(implicit ec: ExecutionContext, implicit val dbConfigDataProvider: DatabaseConfigProvider) extends Service
 {
+  private val lunchMatorHost = configuration.getString("lunchmator.host")
 
   def getLunchWithOpenSpotsAfter(user: UserRow): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
     LunchTableRows.getLunchWithOpenSpotsAfter(user.email, new DateTime().withDurationAdded(30 * 60 * 1000, -1))
@@ -58,5 +60,10 @@ class LunchService @Inject()(scheduler: MessageService)(implicit ec: ExecutionCo
 
       Future.successful(lunchId)
     }
+  }
+
+  def getLunchUrl(lunchId: Int): String =
+  {
+    s"$lunchMatorHost/lunch/$lunchId"
   }
 }

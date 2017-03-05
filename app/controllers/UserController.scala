@@ -22,6 +22,12 @@ class UserController @Inject()(userService: UserService)(implicit db: DatabaseCo
       )
   }
 
+  def getUser(id: Int): EssentialAction = async { request =>
+    userService.getUserById(id).map { user =>
+      Ok(Json.toJson(user))
+    }
+  }
+
   def createUser(): Action[JsValue] = async(parse.json) { request =>
     val user = request.body.as[UserRow]
     userService.addUser(user).map {

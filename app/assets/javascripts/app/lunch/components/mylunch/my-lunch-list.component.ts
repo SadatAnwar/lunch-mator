@@ -1,7 +1,7 @@
 import {Component, OnInit, Injectable} from '@angular/core';
 import {LunchDto} from '../../../dto/types';
-import {LunchService} from '../../service/lunch.service';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {LunchService} from '../../../services/lunch.service';
+import {AlertDisplay} from '../../../services/AlertDisplay';
 import {AlertLevel} from '../../../common/types/Alert';
 
 @Component({

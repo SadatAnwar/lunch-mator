@@ -1,4 +1,4 @@
-import {Alert, AlertLevel} from '../types/Alert';
+import {Alert, AlertLevel} from '../common/types/Alert';
 
 export abstract class AlertDisplay {
   private alert = new Alert();

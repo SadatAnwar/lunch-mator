@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Headers, Http} from '@angular/http';
 import {Observable} from 'rxjs';
-import {InvitationDto} from '../../dto/types';
+import {InvitationDto} from '../dto/types';
 
 @Injectable()
 export class InvitationService {

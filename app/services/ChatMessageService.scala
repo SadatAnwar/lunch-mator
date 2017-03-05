@@ -2,17 +2,21 @@ package services
 
 import scala.concurrent.{ExecutionContext, Future}
 
-import com.google.inject.Inject
-import models.{ChatMessage, UserRow}
-import persistence.repository.ChatMessages
+import play.api.db.slick.DatabaseConfigProvider
 
-class ChatMessageService @Inject()(implicit ec: ExecutionContext)
+import com.google.inject.Inject
+import mappers.LunchMessageMapper
+import models.{LunchComment, UserRow}
+import persistence.repository.LunchComments
+
+class ChatMessageService @Inject()(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider) extends Service
 {
-  def getMessagesForLunch(lunchId: Int): Future[Seq[ChatMessage]] = usingDB {
-    ChatMessages.getMessagesForLunch(lunchId)
+  def getCommentsForLunch(lunchId: Int): Future[Seq[LunchComment]] = usingDB {
+    LunchComments.getMessagesForLunch(lunchId)
   }
 
-  def postMessage(message: String)(implicit user: UserRow) =
-  {
+  def postComment(messageText: String, lunchId: Int)(implicit user: UserRow): Future[Int] = usingDB {
+    val message = LunchMessageMapper.map(messageText, lunchId, user.id.get)
+    LunchComments.postNewMessage(message)
   }
 }

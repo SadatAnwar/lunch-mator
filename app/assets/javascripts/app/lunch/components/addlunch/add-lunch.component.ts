@@ -1,15 +1,15 @@
 import {Component, OnInit, EventEmitter} from '@angular/core';
 import {CompleterService, CompleterData, CompleterItem} from 'ng2-completer';
-import {AlertDisplay} from '../../../common/services/AlertDisplay';
+import {AlertDisplay} from '../../../services/AlertDisplay';
 import {AlertLevel} from '../../../common/types/Alert';
 import {RestaurantDto, CreateLunchDto, HipChatUser, HipChatPing, InvitationDto} from '../../../dto/types';
-import {LunchService} from '../../service/lunch.service';
-import {CalenderService} from '../../service/calander.service';
+import {LunchService} from '../../../services/lunch.service';
+import {CalenderService} from '../../../services/calander.service';
 import {Router, Params, ActivatedRoute} from '@angular/router';
-import {RestaurantService} from '../../../restaurant/services/restaurant.services';
+import {RestaurantService} from '../../../services/restaurant.services';
 import {Response} from '@angular/http';
-import {UserLookupService} from '../../service/user-lookup.service';
-import {InvitationService} from '../../service/invitation.service';
+import {UserLookupService} from '../../../services/user-lookup.service';
+import {InvitationService} from '../../../services/invitation.service';
 
 @Component({
   selector: 'add-lunch',

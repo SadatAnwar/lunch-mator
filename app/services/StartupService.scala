@@ -4,7 +4,7 @@ import scala.concurrent.ExecutionContext
 
 import play.api.Logger
 
-import actors.LunchReminderMessage
+import actors.messages.Message.LunchReminderMessage
 import com.google.inject.{Inject, Singleton}
 
 @Singleton
