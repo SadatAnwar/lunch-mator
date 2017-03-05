@@ -1,14 +1,47 @@
-@import "registration-form";
 @import "theme";
 
+$font-stack: Helvetica, sans-serif;
+$primary-dark: #24292e;
+$primary-light: #d3d3d3;
+$primary-accept: #2cbe4e;
+$primary-reject: #d73a49;
+$light-text: rgba(255, 255, 255, 0.75);
+
 html, body {
+  font-family: $font-stack;
   height: 100vh;
+  background-color: $primary-light;
+  color: $primary-dark;
 }
 
 header {
   .navbar {
     margin-bottom: 0;
+    background-color: $primary-dark;
+    color: $light-text;
+    a:hover {
+      background-color: lighten($primary-dark, 10%);
+    }
+    .navbar-nav > li > .dropdown-menu {
+      background-color: $primary-dark;
+      color: $light-text;
+    }
+    .navbar-nav .dropdown-toggle {
+      background-color: $primary-dark;
+      color: $light-text;
+    }
   }
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  background-color: $primary-dark;
+  color: $light-text;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus,
+.panel-default > .panel-heading {
+  background-color: lighten($primary-dark, 10%);
+  color: $light-text;
 }
 
 .disabled {
@@ -42,6 +75,8 @@ header {
   border-left: 0;
   border-right: 0;
   margin-bottom: 2px;
+  background-color: lighten($primary-dark, 5%);
+  color: $light-text;
   &:first-child {
     border-radius: 0;
   }
@@ -88,3 +123,36 @@ header {
   width: 100%;
   float: none;
 }
+
+.centered-form .panel {
+  border: solid 2px $primary-dark;
+  background: lighten($primary-dark, 10%);
+  color: whitesmoke;
+}
+
+label.label-floatlabel {
+  font-weight: bold;
+  color: #46b8da;
+  font-size: 11px;
+}
+
+.btn-success {
+  background-color: #2cbe4e;
+}
+
+.lunch-detail-container {
+  border: 2px solid $primary-dark;
+}
+
+.btn-danger {
+  background-color: #d73a49;
+}
+
+*::-webkit-input-placeholder {
+  color: #838383;
+}
+
+*:-moz-placeholder {
+  color: #838383;
+}
+
