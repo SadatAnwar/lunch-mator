@@ -3,19 +3,15 @@ import {BrowserModule} from '@angular/platform-browser';
 import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './common/header.component';
-import {LunchModule} from './lunch/lunch.module';
-import {AuthenticationModule} from './authentication/authentication.module';
-import {RestaurantModule} from './restaurant/restaurant.module';
 import {AppRoutingModule} from './app.routing';
+import {CommonModules} from './common/common.modules';
 
 @NgModule({
   imports: [
     BrowserModule,
     HttpModule,
-    LunchModule,
-    AuthenticationModule,
-    RestaurantModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CommonModules
   ],
   declarations: [AppComponent, HeaderComponent],
   bootstrap: [AppComponent]

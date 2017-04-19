@@ -1,14 +1,12 @@
-import com.arpnetworking.sbt.typescript.Import.TypescriptKeys
+import scala.language.postfixOps
 
 name := """lunch-mator"""
 
-version := "1.0-SNAPSHOT"
+version := "0.1-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.6"
-
-TypescriptKeys.configFile := "tsconfig.json"
+scalaVersion := "2.11.8"
 
 
 libraryDependencies ++= Seq(
@@ -27,13 +25,9 @@ libraryDependencies ++= Seq(
   "com.pauldijou" %% "jwt-play" % "0.9.2"
 )
 
-// Play provides two styles of routers, one expects its actions to be injected, the
-// other, legacy style, accesses its actions statically.
-routesGenerator := InjectedRoutesGenerator
+resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-
-sources in(Compile, doc) := Seq.empty
-publishArtifact in(Compile, packageDoc) := false
+fork in run := true
 
 
 /*
