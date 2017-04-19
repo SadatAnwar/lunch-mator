@@ -19,14 +19,14 @@ PUT         /rest/lunch/:id                       controllers.LunchController.jo
 GET         /rest/my-lunch                        controllers.LunchController.getMyLunch()
 
 # REST Users
-GET         /rest/users/:id                               controllers.UserController.getUser(id: Int)
+GET         /rest/users/:id                       controllers.UserController.getUser(id: Int)
 
 # REST Participants
 GET         /rest/participants/:lunchId           controllers.ParticipantController.getParticipants(lunchId: Int)
 
 # REST Chat Messages
-GET         /rest/comments/:lunchId                       controllers.CommentController.getComments(lunchId: Int)
-POST        /rest/comments/:lunchId                       controllers.CommentController.postComment(lunchId: Int)
+GET         /rest/comments/:lunchId               controllers.CommentController.getComments(lunchId: Int)
+POST        /rest/comments/:lunchId               controllers.CommentController.postComment(lunchId: Int)
 
 
 # REST User session
@@ -60,5 +60,3 @@ GET         /lunch/:id                            controllers.Application.secure
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
-GET         /webjars/search/*file                 controllers.Application.findWebJar(file)
-GET         /webjars/*file                        controllers.WebJarAssets.at(file)

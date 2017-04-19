@@ -6,7 +6,7 @@ import {Component, OnInit} from '@angular/core';
 })
 
 export class HeaderComponent implements OnInit {
-  private login: boolean = true;
+  login: boolean = true;
 
   ngOnInit(): void {
     if ('/login' == window.location.pathname) {

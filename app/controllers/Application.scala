@@ -10,7 +10,7 @@ import play.api.mvc.{Action, AnyContent, Controller, EssentialAction}
 
 import services.{AuthenticatedService, UserService}
 
-class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userService: UserService, webJarAssets: WebJarAssets)(implicit db: DatabaseConfigProvider) extends AuthenticatedService with Controller
+class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userService: UserService)(implicit db: DatabaseConfigProvider) extends AuthenticatedService with Controller
 {
 
   def secured(): EssentialAction = async {
@@ -37,12 +37,5 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userServic
     } else {
       Future.successful(Ok(views.html.index()))
     }
-  }
-
-  def findWebJar(file: String): Action[AnyContent] =
-  {
-    val split = file.split("/")
-    val path = webJarAssets.locate("rxjs", split(split.length - 1))
-    webJarAssets.at(path)
   }
 }
