@@ -1,7 +1,7 @@
 import {Alert, AlertLevel} from '../common/types/Alert';
 
 export abstract class AlertDisplay {
-  private alert = new Alert();
+  alert = new Alert();
 
   protected displaySuccessWithTimeOut(message: string, clearAfter: number) {
     this.alert.successMessage = message;

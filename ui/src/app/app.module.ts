@@ -1,21 +1,25 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
-import {HeaderComponent} from './common/header.component';
-import {AuthenticationModule} from './authentication/authentication.module';
 import {AppRoutingModule} from './app.routing';
-import {CommonModules} from './common/common.modules';
+import {AuthenticationModule} from './authentication/authentication.module';
+import {BrowserModule} from '@angular/platform-browser';
+import {HeaderComponent} from './common/header.component';
+import {HttpModule} from '@angular/http';
+import {LunchModule} from './lunch/lunch.module';
+import {NgModule} from '@angular/core';
+import {RestaurantModule} from './restaurant/restaurant.module';
+import {BsDropdownModule} from 'ngx-bootstrap';
 
 @NgModule({
+  declarations: [AppComponent, HeaderComponent],
   imports: [
     AppRoutingModule,
     AuthenticationModule,
     BrowserModule,
-    CommonModules,
-    HttpModule
+    HttpModule,
+    LunchModule,
+    BsDropdownModule.forRoot(),
+    RestaurantModule
   ],
-  declarations: [AppComponent, HeaderComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {

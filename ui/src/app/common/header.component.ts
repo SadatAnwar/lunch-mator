@@ -9,9 +9,9 @@ export class HeaderComponent implements OnInit {
   login: boolean = true;
 
   ngOnInit(): void {
-    if ('/login' == window.location.pathname) {
-      this.login = false;
-    }
+    // if ('/login' == window.location.pathname) {
+    //   this.login = false;
+    // }
   }
 
   loginSucces() {
@@ -20,5 +20,9 @@ export class HeaderComponent implements OnInit {
 
   logOut() {
     this.login = false;
+  }
+
+  dropdownToggle() {
+
   }
 }

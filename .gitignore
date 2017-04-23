@@ -12,6 +12,7 @@
 .idea/
 project/project
 project/target
+public/ui
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids
