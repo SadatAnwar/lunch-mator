@@ -1,7 +1,8 @@
 import {Component, OnInit, EventEmitter} from '@angular/core';
 import {CompleterItem, CompleterData} from 'ng2-completer';
+import {InvitationService} from '../../services/invitation.service';
 import {UserLookupService} from '../../services/user-lookup.service';
-import {HipChatUser, HipChatPing} from '../../types';
+import {HipChatUser, HipChatPing, InvitationDto} from '../../types';
 
 @Component({
   selector: 'user-select',
@@ -9,25 +10,23 @@ import {HipChatUser, HipChatPing} from '../../types';
   styleUrls: ['./user-select.component.scss']
 })
 export class UserSelectComponent implements OnInit {
-  inviteUsers: HipChatPing[] = [];
-  items$: EventEmitter<any> = new EventEmitter<any>();
-  protected captains = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
 
-  constructor(private userLookupService: UserLookupService) {
+  inviteUsers: HipChatPing[] = [];
+
+  items$: EventEmitter<any> = new EventEmitter<any>();
+
+  constructor(private userLookupService: UserLookupService, private invitationService: InvitationService) {
   }
 
   ngOnInit() {
   }
 
-  protected searchStr: string;
   protected dataService: CompleterData;
   protected selectedColor: string;
-  protected searchData = ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow', 'black'];
 
   protected onSelected(item: CompleterItem) {
     this.selectedColor = item ? item.title : "";
   }
-
 
   private value: HipChatUser[];
 
@@ -61,6 +60,12 @@ export class UserSelectComponent implements OnInit {
       let hipChatPing: HipChatPing = {mention_name: item.id};
       this.inviteUsers.push(hipChatPing);
     });
+  }
 
+  public sendInvitation(lunchId: number) {
+    if (this.inviteUsers.length > 0) {
+      let invitation: InvitationDto = {users: this.inviteUsers, lunchId: lunchId};
+      this.invitationService.invite(invitation).subscribe(() => console.log("invitation success for ", invitation));
+    }
   }
 }

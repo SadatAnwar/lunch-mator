@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Response} from '@angular/http';
 import {Router, Params, ActivatedRoute} from '@angular/router';
 import {CompleterData, CompleterService, CompleterItem} from 'ng2-completer';
 import 'rxjs/add/observable/of';
+import {UserSelectComponent} from '../../common/user-select/user-select.component';
 import {AlertService} from '../../services/alert.service';
 import {CalenderService} from '../../services/calander.service';
 import {LunchService} from '../../services/lunch.service';
 import {RestaurantService} from '../../services/restaurant.services';
-import {CreateLunchDto, HipChatPing, RestaurantDto} from '../../types';
+import {CreateLunchDto, RestaurantDto} from '../../types';
 
 @Component({
   selector: 'add-lunch',
@@ -22,7 +23,6 @@ export class AddLunchComponent implements OnInit {
   restaurantName: string;
   selectedRestaurant: RestaurantDto;
   anonymous: boolean = false;
-  inviteUsers: HipChatPing[] = [];
 
   //Time
   startYY: number;
@@ -31,6 +31,8 @@ export class AddLunchComponent implements OnInit {
   startHH: number;
   startMin: number;
   dataService: CompleterData;
+  @ViewChild(UserSelectComponent)
+  private userSelectComponent: UserSelectComponent;
 
   constructor(private alertService: AlertService,
               private lunchService: LunchService,
@@ -86,11 +88,11 @@ export class AddLunchComponent implements OnInit {
       .subscribe((lunchId: number) => {
         this.waiting = false;
         this.alertService.success("New lunch started", true);
+        this.userSelectComponent.sendInvitation(lunchId);
 
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
-
         this.router.navigateByUrl(`s/lunch/${lunchId}`);
-        console.info(`Lunch ID: ${lunchId}`);
+        
       }, (error: any) => {
         this.waiting = false;
         this.alertService.error(`Error: [${error}]`)
