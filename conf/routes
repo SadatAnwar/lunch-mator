@@ -41,6 +41,8 @@ GET         /rest/hipchat-users/:name             controllers.HipChatController.
 POST        /rest/hipchat-message                 controllers.HipChatController.sendMessage()
 POST        /rest/hipchat-invite                  controllers.HipChatController.invite()
 
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
 
 # Make HTML5 links work
 # Unsecured welcome pages
@@ -49,14 +51,4 @@ GET         /about                                controllers.Application.unSecu
 
 # Secured endpoints
 GET         /                                     controllers.Application.secured()
-GET         /welcome                              controllers.Application.secured()
-GET         /add-restaurant                       controllers.Application.secured()
-GET         /restaurants                          controllers.Application.secured()
-GET         /add-lunch                            controllers.Application.secured()
-GET         /lunch                                controllers.Application.secured()
-GET         /lunch/list                           controllers.Application.secured()
-GET         /lunch/my-lunch                       controllers.Application.secured()
-GET         /lunch/:id                            controllers.Application.securedWithParam(id: Int)
-
-# Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
+GET         /*route                               controllers.Application.securedWithParam(route: String)

@@ -9,8 +9,7 @@ import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
 import slick.jdbc.JdbcBackend
 
-class Service @Inject()(implicit val dbConfigProvider: DatabaseConfigProvider)
-{
+abstract class Service @Inject()(implicit val dbConfigProvider: DatabaseConfigProvider) {
 
   private val dbConfig: DatabaseConfig[JdbcProfile] = dbConfigProvider.get[JdbcProfile]
 
@@ -18,8 +17,7 @@ class Service @Inject()(implicit val dbConfigProvider: DatabaseConfigProvider)
 
   import dbConfig.driver.api._
 
-  def usingDB[T](f: => DBIOAction[T, NoStream, Nothing]): Future[T] =
-  {
+  def usingDB[T](f: => DBIOAction[T, NoStream, Nothing]): Future[T] = {
     db.run(f)
   }
 }

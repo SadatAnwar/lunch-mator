@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
-import {CreateRestaurantDto, RestaurantDto} from '../types';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
+import {CreateRestaurantDto, RestaurantDto} from '../types';
 
 @Injectable()
 export class RestaurantService {
   private restaurants = '/rest/restaurants';
   private restaurant = '/rest/restaurant';
+  restaurantSearch = `${this.restaurants}/search`;
 
   constructor(private http: Http) {
   }
@@ -24,6 +25,13 @@ export class RestaurantService {
     });
   }
 
+  public searchRestaurant(name: string): Observable<RestaurantDto[]> {
+    console.log("Searching for ", name);
+    return this.http.get(`${this.restaurantSearch}/${name}`).map((response: Response) => {
+      return response.json();
+    });
+  }
+
   public getRandomRestaurant(): Observable<RestaurantDto> {
     return this.http.get(`${this.restaurants}/random`)
       .map(response => response.json());
@@ -34,10 +42,5 @@ export class RestaurantService {
     headers.append('Content-Type', 'application/json');
 
     return this.http.post(this.restaurants, restaurantDto, {headers}).map(response => response.json());
-  }
-
-  public
-  getSerachUrl(): string {
-    return `${this.restaurants}/search/`
   }
 }

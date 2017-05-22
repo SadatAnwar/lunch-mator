@@ -2,7 +2,7 @@ import scala.language.postfixOps
 
 name := """lunch-mator"""
 
-version := "0.1-SNAPSHOT"
+version := "2.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -44,11 +44,18 @@ def runScript(script: String)(implicit dir: File): Int = Process(script, dir) !
 def uiWasInstalled(implicit dir: File): Boolean = (dir / "node_modules").exists()
 
 def runNpmInstall(implicit dir: File): Int =
-  if (uiWasInstalled) Success else runScript("npm install")
+  if (uiWasInstalled) {
+    Success
+  } else {
+    runScript("npm install")
+  }
 
 def ifUiInstalled(task: => Int)(implicit dir: File): Int =
-  if (runNpmInstall == Success) task
-  else Error
+  if (runNpmInstall == Success) {
+    task
+  } else {
+    Error
+  }
 
 def runProdBuild(implicit dir: File): Int = ifUiInstalled(runScript("npm run build-prod"))
 
@@ -60,21 +67,30 @@ lazy val `ui-dev-build` = TaskKey[Unit]("Run UI build when developing the applic
 
 `ui-dev-build` := {
   implicit val UIroot = baseDirectory.value / "ui"
-  if (runDevBuild != Success) throw new Exception("Oops! UI Build crashed.")
+
+  if (runDevBuild != Success) {
+    throw new Exception("Oops! UI Build crashed.")
+  }
 }
 
 lazy val `ui-prod-build` = TaskKey[Unit]("Run UI build when packaging the application.")
 
 `ui-prod-build` := {
   implicit val UIroot = baseDirectory.value / "ui"
-  if (runProdBuild != Success) throw new Exception("Oops! UI Build crashed.")
+
+  if (runProdBuild != Success) {
+    throw new Exception("Oops! UI Build crashed.")
+  }
 }
 
 lazy val `ui-test` = TaskKey[Unit]("Run UI tests when testing application.")
 
 `ui-test` := {
   implicit val UIroot = baseDirectory.value / "ui"
-  if (runUiTests != 0) throw new Exception("UI tests failed!")
+
+  if (runUiTests != 0) {
+    throw new Exception("UI tests failed!")
+  }
 }
 
 `ui-test` <<= `ui-test` dependsOn `ui-dev-build`

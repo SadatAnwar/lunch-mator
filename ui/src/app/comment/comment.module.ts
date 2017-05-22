@@ -1,10 +1,10 @@
-import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CommentListComponent} from './comment-list.component';
-import {CommentService} from '../services/comment.service';
-import {CommentMessageComponent} from './comment-message.component';
-import {CommentInputComponent} from './comment-input.component';
+import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import {CommentService} from '../services/comment.service';
+import {CommentInputComponent} from './comment-input.component';
+import {CommentListComponent} from './comment-list.component';
+import {CommentMessageComponent} from './comment-message.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule],

@@ -25,7 +25,7 @@ class GoogleAuthenticationClient @Inject()(configuration: Configuration, clientW
       "response_type=code&" +
       s"client_id=$lunchMatorClientId&" +
       s"redirect_uri=$tokenRedirect&" +
-      "scope=profile+email&" +
+      "scope=profile+email+https://www.googleapis.com/auth/calendar&" +
       "access_type=online&" +
       "include_granted_scopes=true&" +
       s"state=$origin"

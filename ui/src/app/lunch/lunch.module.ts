@@ -1,29 +1,28 @@
-import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {LunchItemComponent} from './lunch-item.component';
-import {LunchListComponent} from './lunch-list.component';
-import {CommonModules} from '../common/common.modules';
-import {AddLunchComponent} from './add-lunch.component';
+import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {LunchService} from '../services/lunch.service';
-import {MyLunchListComponent} from './my-lunch-list.component';
-import {LunchDetailComponent} from './lunch-detail.component';
-import {CalenderService} from '../services/calander.service';
-import {SelectModule} from 'ng2-select';
-import {UserLookupService} from '../services/user-lookup.service';
-import {InvitationService} from '../services/invitation.service';
+import {Ng2CompleterModule} from 'ng2-completer';
+import {TypeaheadModule} from 'ngx-bootstrap';
 import {AppRoutingModule} from '../app.routing';
 import {CommentModule} from '../comment/comment.module';
-import { TypeaheadModule } from 'ngx-bootstrap';
+import {CommonModules} from '../common/common.modules';
+import {CalenderService} from '../services/calander.service';
+import {InvitationService} from '../services/invitation.service';
+import {LunchService} from '../services/lunch.service';
+import {AddLunchComponent} from './add/add-lunch.component';
+import {LunchDetailComponent} from './details/lunch-detail.component';
+import {LunchItemComponent} from './item/lunch-item.component';
+import {LunchListComponent} from './list/lunch-list.component';
+import {MyLunchListComponent} from './my-lunch/my-lunch-list.component';
 
 @NgModule({
   imports: [
     CommonModule,
     CommonModules,
-    SelectModule,
     FormsModule,
     AppRoutingModule,
     CommentModule,
+    Ng2CompleterModule,
     TypeaheadModule
   ],
   declarations: [
@@ -33,7 +32,7 @@ import { TypeaheadModule } from 'ngx-bootstrap';
     MyLunchListComponent,
     AddLunchComponent
   ],
-  providers: [LunchService, CalenderService, UserLookupService, InvitationService]
+  providers: [LunchService, CalenderService, InvitationService]
 })
 export class LunchModule {
 }

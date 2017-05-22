@@ -1,15 +1,16 @@
+import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
-import {AddRestaurantComponent} from './add-restaurant.component';
-import {RestaurantService} from '../services/restaurant.services';
-import {CommonModules} from '../common/common.modules';
-import {RestaurantListComponent} from './restaurant-list.component';
-import {RestaurantItemComponent} from './restaurant-item.component';
+import {Ng2CompleterModule} from 'ng2-completer';
 import {AppRoutingModule} from '../app.routing';
+import {CommonModules} from '../common/common.modules';
+import {RestaurantService} from '../services/restaurant.services';
+import {AddRestaurantComponent} from './add/add-restaurant.component';
+import {RestaurantItemComponent} from './item/restaurant-item.component';
+import {RestaurantListComponent} from './list/restaurant-list.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, CommonModules, AppRoutingModule],
+  imports: [CommonModule, FormsModule, CommonModules, AppRoutingModule, Ng2CompleterModule],
   declarations: [AddRestaurantComponent, RestaurantListComponent, RestaurantItemComponent],
   providers: [RestaurantService]
 })
