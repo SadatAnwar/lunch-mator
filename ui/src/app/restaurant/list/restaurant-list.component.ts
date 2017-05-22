@@ -24,7 +24,7 @@ export class RestaurantListComponent extends AlertDisplay implements OnInit {
   }
 
   public start(restaurant: RestaurantDto) {
-    this.router.navigateByUrl(`/add-lunch?restaurantId=${restaurant.id}`)
+    this.router.navigateByUrl(`s/lunch/add?restaurantId=${restaurant.id}`)
   }
 
   private getRestaurants() {

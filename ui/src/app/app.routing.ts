@@ -23,7 +23,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'restaurant',
-    redirectTo: 'restaurant/list',
+    redirectTo: 's/restaurant/list',
     pathMatch: 'full'
   },
   {

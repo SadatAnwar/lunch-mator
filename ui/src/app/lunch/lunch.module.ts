@@ -6,6 +6,7 @@ import {TypeaheadModule} from 'ngx-bootstrap';
 import {AppRoutingModule} from '../app.routing';
 import {CommentModule} from '../comment/comment.module';
 import {CommonModules} from '../common/common.modules';
+import {AlertService} from '../services/alert.service';
 import {CalenderService} from '../services/calander.service';
 import {InvitationService} from '../services/invitation.service';
 import {LunchService} from '../services/lunch.service';
@@ -32,7 +33,7 @@ import {MyLunchListComponent} from './my-lunch/my-lunch-list.component';
     MyLunchListComponent,
     AddLunchComponent
   ],
-  providers: [LunchService, CalenderService, InvitationService]
+  providers: [LunchService, CalenderService, InvitationService, AlertService]
 })
 export class LunchModule {
 }

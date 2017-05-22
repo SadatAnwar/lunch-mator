@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Response} from '@angular/http';
 import {ActivatedRoute, Params} from '@angular/router';
-import {AlertLevel} from '../../common/types/Alert';
-import {AlertDisplay} from '../../services/AlertDisplay';
+import {AlertService} from '../../services/alert.service';
 import {CalenderService} from '../../services/calander.service';
 import {LunchService} from '../../services/lunch.service';
 import {LunchDetailDto, ParticipantDto} from '../../types';
@@ -11,7 +10,7 @@ import {LunchDetailDto, ParticipantDto} from '../../types';
   selector: 'lunch-detail',
   templateUrl: './lunch-detail.component.html'
 })
-export class LunchDetailComponent extends AlertDisplay implements OnInit {
+export class LunchDetailComponent implements OnInit {
 
   lunch: LunchDetailDto;
   startTime: string;
@@ -19,9 +18,9 @@ export class LunchDetailComponent extends AlertDisplay implements OnInit {
   hasMap = false;
 
   constructor(private route: ActivatedRoute,
+              private alertService: AlertService,
               private calenderService: CalenderService,
               private service: LunchService) {
-    super();
   }
 
   ngOnInit() {
@@ -40,7 +39,7 @@ export class LunchDetailComponent extends AlertDisplay implements OnInit {
             this.lunch.participants = participants;
           })
         }, (error: Response) => {
-          this.displayAlert(AlertLevel.ERROR, `Error:  ${error.text()}`);
+          this.alertService.error(`Error:  ${error.text()}`);
         });
     });
   }
@@ -48,20 +47,20 @@ export class LunchDetailComponent extends AlertDisplay implements OnInit {
   join(lunch: LunchDetailDto) {
     this.service.requestJoin(lunch,
       (response: any) => {
-        this.displayAlert(AlertLevel.SUCCESS, `Joined lunch at ${lunch.restaurant.name}`, 3);
+        this.alertService.success(`Joined lunch at ${lunch.restaurant.name}`);
         this.calenderService.createCalander(lunch.lunchName, lunch.restaurant.name, lunch.restaurant.website, new Date(lunch.startTime));
         this.ngOnInit();
       }, (error: any) => {
-        this.displayAlert(AlertLevel.ERROR, `Error:  ${error.text()}`, 3);
+        this.alertService.error(`Error:  ${error.text()}`);
       });
   }
 
   leave(lunch: LunchDetailDto) {
     this.service.requestLeave(lunch, (response: any) => {
-      this.displayAlert(AlertLevel.SUCCESS, "Left lunch at " + lunch.restaurant.name, 3);
+      this.alertService.success("Left lunch at " + lunch.restaurant.name);
       this.ngOnInit();
     }, (error: any) => {
-      this.displayAlert(AlertLevel.ERROR, `Error:  ${error}`, 3);
+      this.alertService.error(`Error:  ${error}`);
     });
   }
 }

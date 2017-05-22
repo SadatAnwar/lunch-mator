@@ -9,18 +9,13 @@ export class AuthenticationGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log("in guard");
     let authenticated = this.authenticationService.authenticate();
     if (authenticated) {
-      this.alertService.success("authenticated", true);
-      return true;
-    }
-    else if (state.url.startsWith('/login')) {
       return true;
     }
     // Explicit navigation to any URL while not being authenticated
+    this.alertService.error("Please log-in first", true);
     this.router.navigate(['/login']);
     return false;
   }
-
 }

@@ -1,10 +1,10 @@
 import {Component, Injectable, Input, OnInit} from '@angular/core';
-import {UserLookupService} from '../services/user-lookup.service';
-import {CommentDto} from '../types';
+import {UserLookupService} from '../../services/user-lookup.service';
+import {CommentDto} from '../../types';
 
 @Component({
   selector: 'message',
-  templateUrl: 'comment-message.component.html'
+  templateUrl: './comment-message.component.html'
 })
 
 @Injectable()

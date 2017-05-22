@@ -11,7 +11,7 @@ import {LunchDto} from '../../types';
 
 @Injectable()
 export class MyLunchListComponent extends AlertDisplay implements OnInit {
-  lunchs: LunchDto[];
+  lunches: LunchDto[];
 
   constructor(private lunchService: LunchService) {
     super();
@@ -24,7 +24,7 @@ export class MyLunchListComponent extends AlertDisplay implements OnInit {
   private getMyLunchList() {
     this.lunchService.getMyLunchList()
       .subscribe((response: LunchDto[]) => {
-        this.lunchs = response;
+        this.lunches = response;
       }, (error: any) => {
         this.displayAlert(AlertLevel.ERROR, `Error:  ${error.text()}`, 3);
       });

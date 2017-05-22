@@ -5,7 +5,7 @@
                                                                                         aria-hidden="true"></i></a>
       </small>
       <span *ngIf="!lunch.joined">
-        <button [class.disabled]="!lunch.active" class="btn-lg btn-success pull-right"
+        <button [disabled]="!lunch.active" [class.btn-disabled]="!lunch.active" class="btn-lg pull-right"
                 (click)="join(lunch)">Join</button>
       </span>
       <span *ngIf="lunch.joined">

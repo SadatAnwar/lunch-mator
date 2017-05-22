@@ -3,8 +3,7 @@ import {Response} from '@angular/http';
 import {Router, Params, ActivatedRoute} from '@angular/router';
 import {CompleterData, CompleterService, CompleterItem} from 'ng2-completer';
 import 'rxjs/add/observable/of';
-import {AlertLevel} from '../../common/types/Alert';
-import {AlertDisplay} from '../../services/AlertDisplay';
+import {AlertService} from '../../services/alert.service';
 import {CalenderService} from '../../services/calander.service';
 import {LunchService} from '../../services/lunch.service';
 import {RestaurantService} from '../../services/restaurant.services';
@@ -16,7 +15,7 @@ import {CreateLunchDto, HipChatPing, RestaurantDto} from '../../types';
   styleUrls: ["./add-lunch.component.scss"]
 })
 
-export class AddLunchComponent extends AlertDisplay implements OnInit {
+export class AddLunchComponent implements OnInit {
   waiting: boolean = false;
   lunchName: string = "";
   maxSize: number;
@@ -31,15 +30,15 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
   startMM: number;
   startHH: number;
   startMin: number;
-  private dataService: CompleterData;
+  dataService: CompleterData;
 
-  constructor(private lunchService: LunchService,
+  constructor(private alertService: AlertService,
+              private lunchService: LunchService,
               private completerService: CompleterService,
               private restaurantService: RestaurantService,
               private calenderService: CalenderService,
               private activatedRoute: ActivatedRoute,
               private router: Router) {
-    super();
     this.dataService = completerService.remote("/rest/restaurants/search/", "name", 'name');
 
   }
@@ -61,14 +60,14 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
               this.selectedRestaurant = restaurant;
             },
             (error: Response) => {
-              this.displayAlert(AlertLevel.ERROR, `Error:  ${error.text()}`, 5);
+              this.alertService.error(`Error:  ${error.text()}`);
             });
       });
   }
 
   createTable() {
     if (!this.selectedRestaurant) {
-      this.displayAlert(AlertLevel.ERROR, "Make sure you select a valid restaurant. You can add one by going to add restaurant. If this error persists, try reloading the page", 5);
+      this.alertService.error("Make sure you select a valid restaurant. You can add one by going to add restaurant. If this error persists, try reloading the page");
 
       return;
     }
@@ -86,15 +85,15 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
     this.lunchService.createLunch(createLunchDto)
       .subscribe((lunchId: number) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.SUCCESS, "New lunch started", 3);
+        this.alertService.success("New lunch started", true);
 
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
 
-        this.router.navigateByUrl(`/lunch/${lunchId}`);
+        this.router.navigateByUrl(`s/lunch/${lunchId}`);
         console.info(`Lunch ID: ${lunchId}`);
       }, (error: any) => {
         this.waiting = false;
-        this.displayAlert(AlertLevel.ERROR, `Error: [${error}]`)
+        this.alertService.error(`Error: [${error}]`)
       });
     this.waiting = true;
   }
@@ -119,7 +118,7 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
 
   private validateForm(createLunchDto: CreateLunchDto): boolean {
     if (createLunchDto.lunchName.length > 40) {
-      this.displayAlert(AlertLevel.ERROR, "Lunch name cannot be more than 20 characters", 5);
+      this.alertService.error("Lunch name cannot be more than 20 characters");
       return false;
     }
 
@@ -130,12 +129,12 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
       createLunchDto.maxSize = 5;
     }
     if (createLunchDto.maxSize > 50 || createLunchDto.maxSize < 2) {
-      this.displayAlert(AlertLevel.ERROR, "You surely cant have a place that takes so many people? oO", 5);
+      this.alertService.error("You surely cant have a place that takes so many people? oO");
       return false;
     }
 
     if (createLunchDto.startTime < new Date().getMilliseconds()) {
-      this.displayAlert(AlertLevel.ERROR, "Pretty sure time travel ain't invented yet! Your lunch cant be in the past", 5);
+      this.alertService.error("Pretty sure time travel ain't invented yet! Your lunch cant be in the past");
       return false;
     }
 
@@ -152,7 +151,7 @@ export class AddLunchComponent extends AlertDisplay implements OnInit {
         this.restaurantName = restaurant.name;
         this.selectedRestaurant = restaurant;
       }, (error: any) => {
-        this.displayAlert(AlertLevel.ERROR, `Error occured: [${error}]`);
+        this.alertService.error(`Error occured: [${error}]`);
       });
 
   }
