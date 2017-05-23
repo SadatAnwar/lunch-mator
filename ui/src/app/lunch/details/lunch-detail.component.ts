@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Response} from '@angular/http';
 import {ActivatedRoute, Params} from '@angular/router';
 import {AlertService} from '../../services/alert.service';
 import {CalenderService} from '../../services/calander.service';
@@ -16,6 +15,7 @@ export class LunchDetailComponent implements OnInit {
   startTime: string;
   title: string;
   hasMap = false;
+  isActive = true;
 
   constructor(private route: ActivatedRoute,
               private alertService: AlertService,
@@ -28,19 +28,10 @@ export class LunchDetailComponent implements OnInit {
       return params['id'];
     }).subscribe((lunchID: number) => {
       this.service.getLunchDetails(lunchID)
-        .subscribe((lunchDetail: LunchDetailDto) => {
-          this.lunch = lunchDetail;
-          this.title = `${lunchDetail.lunchName ? lunchDetail.lunchName : "Lunch"} at ${lunchDetail.restaurant.name}`;
-          this.startTime = this.calenderService.format(new Date(this.lunch.startTime));
-          if (lunchDetail.restaurant.website && lunchDetail.restaurant.website.startsWith('http')) {
-            this.hasMap = true;
-          }
-          this.service.getParticipants(lunchID).subscribe((participants: ParticipantDto[]) => {
-            this.lunch.participants = participants;
-          })
-        }, (error: Response) => {
-          this.alertService.error(`Error:  ${error.text()}`);
-        });
+        .subscribe((resp) => this.populateLunchDetails(resp),
+          (error: any) => {
+            this.alertService.error(`Error:  ${error.text()}`);
+          });
     });
   }
 
@@ -62,5 +53,23 @@ export class LunchDetailComponent implements OnInit {
     }, (error: any) => {
       this.alertService.error(`Error:  ${error}`);
     });
+  }
+
+  private populateLunchDetails(lunchDetail: LunchDetailDto): void {
+
+    this.lunch = lunchDetail;
+    this.title = `${lunchDetail.lunchName ? lunchDetail.lunchName : "Lunch"} at ${lunchDetail.restaurant.name}`;
+    this.startTime = this.calenderService.format(new Date(this.lunch.startTime));
+    if (lunchDetail.restaurant.website && lunchDetail.restaurant.website.startsWith('http')) {
+      this.hasMap = true;
+    }
+
+    if (!lunchDetail.active || new Date().getTime() - new Date(this.lunch.startTime).getTime() > 600000) {
+      this.isActive = false;
+    }
+
+    this.service.getParticipants(lunchDetail.id).subscribe((participants: ParticipantDto[]) => {
+      this.lunch.participants = participants;
+    })
   }
 }

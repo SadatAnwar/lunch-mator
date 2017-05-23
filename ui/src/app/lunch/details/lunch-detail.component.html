@@ -5,11 +5,11 @@
                                                                                         aria-hidden="true"></i></a>
       </small>
       <span *ngIf="!lunch.joined">
-        <button [disabled]="!lunch.active" [class.btn-disabled]="!lunch.active" class="btn-lg pull-right"
+        <button [disabled]="!isActive" [class.btn-success]="isActive" class="btn-lg pull-right"
                 (click)="join(lunch)">Join</button>
       </span>
       <span *ngIf="lunch.joined">
-        <button class="btn-lg btn-danger pull-right" (click)="leave(lunch)">Leave</button>
+        <button [disabled]="!isActive" [class.btn-danger]="isActive" class="btn-lg pull-right" (click)="leave(lunch)">Leave</button>
       </span>
     </h4>
     <div>
