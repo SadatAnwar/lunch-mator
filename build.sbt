@@ -1,14 +1,12 @@
-import com.arpnetworking.sbt.typescript.Import.TypescriptKeys
+import scala.language.postfixOps
 
 name := """lunch-mator"""
 
-version := "1.0-SNAPSHOT"
+version := "2.0"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.6"
-
-TypescriptKeys.configFile := "tsconfig.json"
+scalaVersion := "2.11.8"
 
 
 libraryDependencies ++= Seq(
@@ -24,34 +22,81 @@ libraryDependencies ++= Seq(
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
-  "com.pauldijou" %% "jwt-play" % "0.9.2",
-
-  "org.webjars" %% "webjars-play" % "2.4.0-2",
-  "org.webjars.npm" % "angular__common" % "2.0.1",
-  "org.webjars.npm" % "angular__compiler" % "2.0.1",
-  "org.webjars.npm" % "angular__core" % "2.0.1",
-  "org.webjars.npm" % "angular__http" % "2.0.1",
-  "org.webjars.npm" % "angular__platform-browser" % "2.0.1",
-  "org.webjars.npm" % "angular__platform-browser-dynamic" % "2.0.1",
-  "org.webjars.npm" % "angular__upgrade" % "2.0.1",
-  "org.webjars.npm" % "angular__forms" % "2.0.1",
-  "org.webjars.npm" % "angular__router" % "3.0.1",
-  "org.webjars.npm" % "core-js" % "2.4.1",
-  "org.webjars.npm" % "reflect-metadata" % "0.1.8",
-  "org.webjars.npm" % "rxjs" % "5.0.0-beta.12",
-  "org.webjars.npm" % "systemjs" % "0.19.39",
-  "org.webjars.npm" % "zone.js" % "0.6.25",
-  "org.webjars.npm" % "angular-in-memory-web-api" % "0.1.1",
-  "org.webjars.npm" % "jquery" % "3.1.1",
-  "org.webjars.npm" % "bootstrap" % "3.3.7",
-  "org.webjars.npm" % "ng2-completer" % "0.2.2",
-  "org.webjars.npm" % "ng2-select" % "1.1.1"
+  "com.pauldijou" %% "jwt-play" % "0.9.2"
 )
 
-// Play provides two styles of routers, one expects its actions to be injected, the
-// other, legacy style, accesses its actions statically.
-routesGenerator := InjectedRoutesGenerator
+resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+
+fork in run := true
 
 
-sources in(Compile, doc) := Seq.empty
-publishArtifact in(Compile, packageDoc) := false
+/*
+ * UI Build Scripts
+ */
+
+val Success = 0 // 0 exit code
+val Error = 1 // 1 exit code
+
+PlayKeys.playRunHooks <+= baseDirectory.map(UIBuild.apply)
+
+def runScript(script: String)(implicit dir: File): Int = Process(script, dir) !
+
+def uiWasInstalled(implicit dir: File): Boolean = (dir / "node_modules").exists()
+
+def runNpmInstall(implicit dir: File): Int =
+  if (uiWasInstalled) {
+    Success
+  } else {
+    runScript("npm install")
+  }
+
+def ifUiInstalled(task: => Int)(implicit dir: File): Int =
+  if (runNpmInstall == Success) {
+    task
+  } else {
+    Error
+  }
+
+def runProdBuild(implicit dir: File): Int = ifUiInstalled(runScript("npm run build-prod"))
+
+def runDevBuild(implicit dir: File): Int = ifUiInstalled(runScript("npm run build"))
+
+def runUiTests(implicit dir: File): Int = ifUiInstalled(runScript("npm run test-no-watch"))
+
+lazy val `ui-dev-build` = TaskKey[Unit]("Run UI build when developing the application.")
+
+`ui-dev-build` := {
+  implicit val UIroot = baseDirectory.value / "ui"
+
+  if (runDevBuild != Success) {
+    throw new Exception("Oops! UI Build crashed.")
+  }
+}
+
+lazy val `ui-prod-build` = TaskKey[Unit]("Run UI build when packaging the application.")
+
+`ui-prod-build` := {
+  implicit val UIroot = baseDirectory.value / "ui"
+
+  if (runProdBuild != Success) {
+    throw new Exception("Oops! UI Build crashed.")
+  }
+}
+
+lazy val `ui-test` = TaskKey[Unit]("Run UI tests when testing application.")
+
+`ui-test` := {
+  implicit val UIroot = baseDirectory.value / "ui"
+
+  if (runUiTests != 0) {
+    throw new Exception("UI tests failed!")
+  }
+}
+
+`ui-test` <<= `ui-test` dependsOn `ui-dev-build`
+
+dist <<= dist dependsOn `ui-prod-build`
+
+stage <<= stage dependsOn `ui-prod-build`
+
+test <<= (test in Test) dependsOn `ui-test`

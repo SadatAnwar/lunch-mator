@@ -12,7 +12,6 @@ import play.mvc.Http
 import com.google.inject.Inject
 import models.Formats._
 import models.{HipChatUser, Page}
-import org.apache.commons.compress.utils.CharsetNames
 
 class HipChatUserCacheClient @Inject()(configuration: Configuration,
                                        @NamedCache("hipchat-user-cache") cache: CacheApi,
@@ -35,7 +34,7 @@ class HipChatUserCacheClient @Inject()(configuration: Configuration,
   {
     val headers = List(
       Http.HeaderNames.AUTHORIZATION -> s"Bearer $readToken",
-      Http.HeaderNames.ACCEPT_CHARSET -> CharsetNames.UTF_8
+      Http.HeaderNames.ACCEPT_CHARSET -> "UTF-8"
     )
     Logger.info(s"Requesting HipChat for userList | URL:[$link]")
     restClientWrapper.get[Page[HipChatUser]](link, headers).flatMap { page =>

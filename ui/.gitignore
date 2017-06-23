@@ -1,0 +1,10 @@
+node_modules
+target
+!protractor.conf.js
+!karma.conf.js
+*.js
+*.js.map
+dist
+*.log
+.idea
+*.iml

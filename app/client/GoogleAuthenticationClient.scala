@@ -9,7 +9,6 @@ import play.mvc.Http
 import com.google.inject.Inject
 import exceptions.GoogleAuthenticationException
 import models.GoogleModels.GoogleAuthorization
-import org.apache.commons.compress.utils.CharsetNames
 
 class GoogleAuthenticationClient @Inject()(configuration: Configuration, clientWrapper: RestClientWrapper)(implicit ec: ExecutionContext)
 {
@@ -26,7 +25,7 @@ class GoogleAuthenticationClient @Inject()(configuration: Configuration, clientW
       "response_type=code&" +
       s"client_id=$lunchMatorClientId&" +
       s"redirect_uri=$tokenRedirect&" +
-      "scope=profile+email&" +
+      "scope=profile+email+https://www.googleapis.com/auth/calendar&" +
       "access_type=online&" +
       "include_granted_scopes=true&" +
       s"state=$origin"
@@ -36,7 +35,7 @@ class GoogleAuthenticationClient @Inject()(configuration: Configuration, clientW
   {
     val headers = List(
       Http.HeaderNames.CONTENT_TYPE -> Http.MimeTypes.FORM,
-      Http.HeaderNames.ACCEPT_CHARSET -> CharsetNames.UTF_8
+      Http.HeaderNames.ACCEPT_CHARSET -> "UTF-8"
     )
 
     val formData = Map(

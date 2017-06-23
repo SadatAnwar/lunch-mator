@@ -1,7 +1,0 @@
-<div class="message-input">
-  <textarea type="text" name="lunch-name" id="lunch-name" [(ngModel)]="messageText" placeholder="Enter new message"></textarea><br>
-  <button type="submit" (click)="postMessage()" class="btn btn-success btn-block">
-    <div *ngIf="!waiting">comment</div>
-    <i *ngIf="waiting" class="fa fa-spinner fa-spin"></i>
-  </button>
-</div>
