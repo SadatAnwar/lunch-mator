@@ -17,7 +17,7 @@ class MessageService @Inject()(system: ActorSystem, @Named("lunch-mator-actor") 
 
   def publishMessage(message: Any): Unit =
   {
-    system.scheduler.scheduleOnce(0 seconds, actorSystem, message)
+    actorSystem ! message
   }
 
   def scheduleMessage(message: Any, deliveryTime: DateTime): Unit =

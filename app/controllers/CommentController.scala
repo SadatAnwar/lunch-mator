@@ -1,14 +1,16 @@
 package controllers
 
+import scala.concurrent.ExecutionContext
+
+import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json.{Json, JsValue}
+import play.api.mvc.{Action, Controller, EssentialAction}
+
 import actors.messages.Message.NewCommentMessage
 import com.google.inject.Inject
-import models.Formats._
 import models.NewComment
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, Controller, EssentialAction}
+import models.Formats._
 import services.{AuthenticatedService, LunchCommentService, MessageService}
-import scala.concurrent.ExecutionContext
 
 class CommentController @Inject()(chatMessageService: LunchCommentService, messageService: MessageService)(implicit ec: ExecutionContext, db: DatabaseConfigProvider) extends AuthenticatedService with Controller {
 

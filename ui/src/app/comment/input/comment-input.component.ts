@@ -44,4 +44,8 @@ export class CommentInputComponent implements OnInit {
       }));
     this.waiting = true;
   }
+
+  public ifWindows(): boolean {
+    return navigator.platform.toLowerCase().indexOf('mac') < 0
+  }
 }
