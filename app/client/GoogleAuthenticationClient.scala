@@ -21,12 +21,12 @@ class GoogleAuthenticationClient @Inject()(configuration: Configuration, clientW
 
   def getGoogleSignInPage(origin: String): String =
   {
+    val calender = "+https://www.googleapis.com/auth/calendar"
     authorizationUrl +
       "response_type=code&" +
       s"client_id=$lunchMatorClientId&" +
       s"redirect_uri=$tokenRedirect&" +
-      "scope=profile+email+" +
-//      "https://www.googleapis.com/auth/calendar&" +
+      "scope=profile+email" + "&" +
       "access_type=online&" +
       "include_granted_scopes=true&" +
       s"state=$origin"
