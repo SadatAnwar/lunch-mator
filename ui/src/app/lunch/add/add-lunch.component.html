@@ -6,7 +6,9 @@
           <h1 class="panel-title">Start new lunch</h1>
         </div>
         <form name="start-lunch" class="panel-body">
-          <div class="col-xs-12">
+          <div class="col-xs-12"
+               (keydown.control.Enter)="createTable()" (keydown.meta.Enter)="createTable()"
+          >
             <div class="form-group">
               <input [(ngModel)]="lunchName" name="lunch-name" type="text" name="lunch-name" id="lunch-name" class="form-control"
                      placeholder="Give your lunch name">
@@ -81,7 +83,10 @@
             <div class="form-group">
               <user-select></user-select>
             </div>
-            <button type="submit" (click)="createTable()" class="btn btn-info btn-block"> Create lunch table</button>
+            <button type="submit" (click)="createTable()" class="btn btn-info btn-block"> Create lunch table
+              <span *ngIf="!isWindows()" class="shortcut">(⌘ + ⏎)</span>
+              <span *ngIf="isWindows()" class="shortcut">(ctrl + ⏎)</span>
+            </button>
           </div>
         </form>
       </div>

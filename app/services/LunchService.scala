@@ -64,6 +64,6 @@ class LunchService @Inject()(scheduler: MessageService, configuration: Configura
 
   def getLunchUrl(lunchId: Int): String =
   {
-    s"$lunchMatorHost/lunch/$lunchId"
+    s"$lunchMatorHost/s/lunch/$lunchId"
   }
 }

@@ -9,6 +9,7 @@ import {CalenderService} from '../../services/calander.service';
 import {LunchService} from '../../services/lunch.service';
 import {RestaurantService} from '../../services/restaurant.services';
 import {CreateLunchDto, RestaurantDto} from '../../types';
+import {PlatformIdentificationService} from '../../services/platform-identification.service';
 
 @Component({
   selector: 'add-lunch',
@@ -36,6 +37,7 @@ export class AddLunchComponent implements OnInit {
 
   constructor(private alertService: AlertService,
               private lunchService: LunchService,
+              private platformIdentificationService: PlatformIdentificationService,
               private completerService: CompleterService,
               private restaurantService: RestaurantService,
               private calenderService: CalenderService,
@@ -92,7 +94,7 @@ export class AddLunchComponent implements OnInit {
 
         this.calenderService.createCalander(createLunchDto.lunchName, this.selectedRestaurant.name, this.selectedRestaurant.website, new Date(createLunchDto.startTime));
         this.router.navigateByUrl(`s/lunch/${lunchId}`);
-        
+
       }, (error: any) => {
         this.waiting = false;
         this.alertService.error(`Error: [${error}]`)
@@ -171,6 +173,11 @@ export class AddLunchComponent implements OnInit {
     this.startHH = 12;
     this.startMin = 0;
   }
+
+  public isWindows(){
+    return this.platformIdentificationService.isWindows();
+  }
+
 
   private yearYY(date: Date) {
     return date.getFullYear() - 2000;
