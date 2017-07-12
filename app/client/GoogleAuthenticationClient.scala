@@ -22,7 +22,6 @@ class GoogleAuthenticationClient @Inject()(configuration: Configuration, clientW
   def getGoogleSignInPage(origin: String): String =
   {
     val calender = "+https://www.googleapis.com/auth/calendar"
-
     authorizationUrl +
       "response_type=code&" +
       s"client_id=$lunchMatorClientId&" +

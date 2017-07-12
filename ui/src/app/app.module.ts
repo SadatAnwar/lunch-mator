@@ -11,6 +11,7 @@ import {HeaderComponent} from './common/header/header.component';
 import {LunchModule} from './lunch/lunch.module';
 import {RestaurantModule} from './restaurant/restaurant.module';
 import {AlertService} from './services/alert.service';
+import {PlatformIdentificationService} from './services/platform-identification.service';
 
 @NgModule({
   imports: [
@@ -25,7 +26,7 @@ import {AlertService} from './services/alert.service';
     RestaurantModule
   ],
   declarations: [AppComponent, HeaderComponent],
-  providers: [AlertService],
+  providers: [AlertService, PlatformIdentificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

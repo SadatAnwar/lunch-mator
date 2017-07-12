@@ -2,6 +2,7 @@ import {Component, EventEmitter, Injectable, Input, OnInit, Output} from '@angul
 import {AlertService} from '../../services/alert.service';
 import {CommentService} from '../../services/comment.service';
 import {LunchDto} from '../../types';
+import {PlatformIdentificationService} from '../../services/platform-identification.service';
 
 @Component({
   selector: 'message-input',
@@ -25,7 +26,7 @@ export class CommentInputComponent implements OnInit {
     this.messageText = "";
   }
 
-  constructor(private alertService: AlertService, private messageService: CommentService) {
+  constructor(private alertService: AlertService, private messageService: CommentService, private platformIdentificationService: PlatformIdentificationService) {
   }
 
   public postMessage() {
@@ -46,6 +47,6 @@ export class CommentInputComponent implements OnInit {
   }
 
   public ifWindows(): boolean {
-    return navigator.platform.toLowerCase().indexOf('mac') < 0
+    return this.platformIdentificationService.isWindows();
   }
 }
