@@ -2,23 +2,25 @@ package controllers
 
 import javax.inject.Inject
 
+import play.api.Logger
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent, Controller, EssentialAction}
+import services.{AuthenticatedService, UserService}
 
-import services.{Authenticated, UserService}
+class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userService: UserService)(implicit db: DatabaseConfigProvider) extends AuthenticatedService with Controller
+{
 
-class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userService: UserService, webJarAssets: WebJarAssets) extends Controller {
-
-  def secured(): EssentialAction = Authenticated.async {
+  def secured(): EssentialAction = async {
     request =>
       Future.successful(Ok(views.html.index()))
   }
 
-  def securedWithParam(id: Any): EssentialAction = Authenticated.async {
+  def securedWithParam(id: Any): EssentialAction = async {
     request =>
+      Logger.info(s"Secured route:[$id] requested")
       Future.successful(Ok(views.html.index()))
   }
 
@@ -36,11 +38,5 @@ class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userServic
     } else {
       Future.successful(Ok(views.html.index()))
     }
-  }
-
-  def findWebJar(file: String): Action[AnyContent] = {
-    val split = file.split("/")
-    val path = webJarAssets.locate("rxjs",  split(split.length - 1))
-    webJarAssets.at(path)
   }
 }

@@ -6,7 +6,6 @@ import java.util.Date
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-import play.Configuration
 import play.api.Logger
 
 import client.{HipChatMessagingClient, HipChatUserCacheClient}
@@ -14,15 +13,12 @@ import com.google.inject.Inject
 import models._
 import org.joda.time.{DateTime, Days, Minutes}
 
-class HipChatService @Inject()(configuration: Configuration,
-                               hipChatUserClient: HipChatUserCacheClient,
+class HipChatService @Inject()(hipChatUserClient: HipChatUserCacheClient,
                                hipChatMessagingClient: HipChatMessagingClient,
                                lunchService: LunchService,
                                userMatcherService: UserMatcherService,
                                userService: UserService)
 {
-  private val lunchMatorHost = configuration.getString("lunchmator.host")
-
   def getUsersWithNameIn(name: String): Future[Seq[HipChatUser]] =
   {
     hipChatUserClient.getAllUsers.map { users =>
@@ -62,7 +58,7 @@ class HipChatService @Inject()(configuration: Configuration,
     val timeLeft = Minutes.minutesBetween(DateTime.now(), lunch.startTime).getMinutes
     val timeFormat = new SimpleDateFormat("hh:mm a")
 
-    val reminderMessage = s"Hey! Just wanted to remind you about your lunch ($lunchMatorHost/lunch/${lunch.id.get}) " +
+    val reminderMessage = s"Hey! Just wanted to remind you about your lunch (${lunchService.getLunchUrl(lunch.id.get)}) " +
       s"in $timeLeft min (${timeFormat.format(new Date(lunch.startTime.getMillis))}) at ${restaurant.name} ${restaurant.website}."
 
     HipChatMessage(reminderMessage, color = HipChatMessageColor.YELLOW)
@@ -86,7 +82,7 @@ class HipChatService @Inject()(configuration: Configuration,
     }
 
     val invitationMessage = s"Hello! You have been invited for a lunch $when at ${restaurant.name}, " +
-      s"to join, click $lunchMatorHost/lunch/${lunch.id.get}"
+      s"to join, click ${lunchService.getLunchUrl(lunch.id.get)}"
 
     HipChatMessage(invitationMessage)
   }

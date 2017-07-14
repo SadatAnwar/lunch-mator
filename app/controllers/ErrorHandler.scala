@@ -34,13 +34,13 @@ class ErrorHandler extends HttpErrorHandler {
       case e: PSQLException => ErrorMessageMapper.map(e, request.path)
       case e: Exception => ErrorMessageMapper.map(e)
     }
-    Logger.error(s"Server side error for request [$request] exception thrown: [$exception] ${exception.printStackTrace()}")
+    Logger.error(s"Server side error for request [$request] exception thrown: [$exception] ${exception.getMessage} ${exception.printStackTrace()}")
     Future.successful(
-      InternalServerError(Json.toJson(errorMessage))
+        InternalServerError(Json.toJson(errorMessage))
     )
   }
 
-  private def makeLoginRedirect(origin: String) = {
+  private def makeLoginRedirect(origin: String): Result = {
     Redirect(s"/login?origin=$origin").withNewSession
   }
 }

@@ -3,57 +3,52 @@
 # ~~~~
 
 # REST Restaurant
-GET         /rest/restaurants                             controllers.RestaurantController.listRestaurants()
-GET         /rest/restaurants/random                      controllers.RestaurantController.getRandomRestaurant()
-GET         /rest/restaurants/:name                       controllers.RestaurantController.findRestaurant(name)
-GET         /rest/restaurants/search/:name                controllers.RestaurantController.searchRestaurant(name)
-POST        /rest/restaurants                             controllers.RestaurantController.addRestaurant()
-GET         /rest/restaurant/:id                          controllers.RestaurantController.loadRestaurant(id: Int)
+GET         /rest/restaurants                     controllers.RestaurantController.listRestaurants()
+GET         /rest/restaurants/random              controllers.RestaurantController.getRandomRestaurant()
+GET         /rest/restaurants/:name               controllers.RestaurantController.findRestaurant(name)
+GET         /rest/restaurants/search/:name        controllers.RestaurantController.searchRestaurant(name)
+POST        /rest/restaurants                     controllers.RestaurantController.addRestaurant()
+GET         /rest/restaurant/:id                  controllers.RestaurantController.loadRestaurant(id: Int)
 
 # REST Lunch
-GET         /rest/lunch                                   controllers.LunchController.getAllAvailableLunch()
-GET         /rest/lunch/:id                               controllers.LunchController.getLunch(id: Int)
-POST        /rest/lunch                                   controllers.LunchController.createLunch()
-POST        /rest/lunch/leave                             controllers.LunchController.leaveLunch()
-PUT         /rest/lunch/:id                               controllers.LunchController.joinLunch(id: Int)
-GET         /rest/my-lunch                                controllers.LunchController.getMyLunch()
+GET         /rest/lunch                           controllers.LunchController.getAllAvailableLunch()
+GET         /rest/lunch/:id                       controllers.LunchController.getLunch(id: Int)
+POST        /rest/lunch                           controllers.LunchController.createLunch()
+POST        /rest/lunch/leave                     controllers.LunchController.leaveLunch()
+PUT         /rest/lunch/:id                       controllers.LunchController.joinLunch(id: Int)
+GET         /rest/my-lunch                        controllers.LunchController.getMyLunch()
+
+# REST Users
+GET         /rest/users/:id                       controllers.UserController.getUser(id: Int)
 
 # REST Participants
-GET         /rest/participants/:lunchId                   controllers.ParticipantController.getParticipants(lunchId: Int)
+GET         /rest/participants/:lunchId           controllers.ParticipantController.getParticipants(lunchId: Int)
+
+# REST Chat Messages
+GET         /rest/comments/:lunchId               controllers.CommentController.getComments(lunchId: Int)
+POST        /rest/comments/:lunchId               controllers.CommentController.postComment(lunchId: Int)
 
 
 # REST User session
-GET         /rest/logOut                                  controllers.AuthenticationController.logOut()
+GET         /rest/logOut                          controllers.AuthenticationController.logOut()
 
 # REST Google signin
-GET         /google-login                                 controllers.GoogleAuthenticationController.redirectToGoogle()
-GET         /google-token                                 controllers.GoogleAuthenticationController.authorize()
+GET         /google-login                         controllers.GoogleAuthenticationController.redirectToGoogle()
+GET         /google-token                         controllers.GoogleAuthenticationController.authorize()
 
 # REST HipChat
-GET         /rest/hipchat-users/:name                     controllers.HipChatController.searchUsers(name: String)
-POST        /rest/hipchat-message                         controllers.HipChatController.sendMessage()
-POST        /rest/hipchat-invite                          controllers.HipChatController.invite()
+GET         /rest/hipchat-users/:name             controllers.HipChatController.searchUsers(name: String)
+POST        /rest/hipchat-message                 controllers.HipChatController.sendMessage()
+POST        /rest/hipchat-invite                  controllers.HipChatController.invite()
 
-# REST debug controller
-GET         /rest/debug/reschedule-invite/:lunchId        controllers.DebugController.rescheduleReminder(lunchId: Int)
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
 
 # Make HTML5 links work
 # Unsecured welcome pages
-GET         /login                                        controllers.Application.unSecure()
-GET         /about                                        controllers.Application.unSecure()
+GET         /login                                controllers.Application.unSecure()
+GET         /about                                controllers.Application.unSecure()
 
 # Secured endpoints
-GET         /                                             controllers.Application.secured()
-GET         /welcome                                      controllers.Application.secured()
-GET         /add-restaurant                               controllers.Application.secured()
-GET         /restaurants                                  controllers.Application.secured()
-GET         /add-lunch                                    controllers.Application.secured()
-GET         /lunch                                        controllers.Application.secured()
-GET         /lunch/list                                   controllers.Application.secured()
-GET         /lunch/my-lunch                               controllers.Application.secured()
-GET         /lunch/:id                                    controllers.Application.securedWithParam(id: Int)
-
-# Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                                 controllers.Assets.versioned(path="/public", file: Asset)
-GET         /webjars/search/*file                         controllers.Application.findWebJar(file)
-GET         /webjars/*file                                controllers.WebJarAssets.at(file)
+GET         /                                     controllers.Application.secured()
+GET         /*route                               controllers.Application.securedWithParam(route: String)

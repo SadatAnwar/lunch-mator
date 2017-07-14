@@ -2,20 +2,27 @@ package services
 
 import scala.concurrent.{ExecutionContext, Future}
 
+import play.Configuration
 import play.api.Logger
+import play.api.db.slick.DatabaseConfigProvider
 
-import actors.messages.{LunchReminderMessage, NewLunchCreatedMessage}
+import actors.messages.Message.{LunchReminderMessage, NewLunchCreatedMessage}
 import com.google.inject.Inject
 import mappers.LunchMapper
-import models.{CreateLunchDto, LunchRow, RestaurantRow, UserRow}
+import models._
 import org.joda.time.DateTime
 import persistence.repository.LunchTableRows
 
-class LunchService @Inject()(scheduler: MessageService)(implicit ec: ExecutionContext)
+class LunchService @Inject()(scheduler: MessageService, configuration: Configuration)(implicit ec: ExecutionContext, implicit val dbConfigDataProvider: DatabaseConfigProvider) extends Service
 {
+  private val lunchMatorHost = configuration.getString("lunchmator.host")
 
-  def getAllLunchNotPast(email: String): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
-    LunchTableRows.getLunchWithOpenSpotsAfter(email, new DateTime().withDurationAdded(30 * 60 * 1000, -1))
+  def getLunchWithOpenSpotsAfter(user: UserRow): Future[Vector[(LunchRow, RestaurantRow, Int, Int)]] = usingDB {
+    LunchTableRows.getLunchWithOpenSpotsAfter(user.email, new DateTime().withDurationAdded(30 * 60 * 1000, -1))
+  }
+
+  def getAllActiveLunch: Future[Seq[LunchDetail]] = usingDB {
+    LunchTableRows.getLunchAfter(DateTime.now())
   }
 
   def getLunchForUserNotPast(email: String): Future[Vector[(LunchRow, RestaurantRow)]] = usingDB {
@@ -53,5 +60,10 @@ class LunchService @Inject()(scheduler: MessageService)(implicit ec: ExecutionCo
 
       Future.successful(lunchId)
     }
+  }
+
+  def getLunchUrl(lunchId: Int): String =
+  {
+    s"$lunchMatorHost/s/lunch/$lunchId"
   }
 }

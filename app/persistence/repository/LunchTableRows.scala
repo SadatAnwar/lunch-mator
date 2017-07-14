@@ -1,8 +1,11 @@
 package persistence.repository
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import com.github.tototoshi.slick.PostgresJodaSupport._
-import models.{LunchRow, RestaurantRow}
+import models.{LunchDetail, LunchRow, RestaurantRow}
 import org.joda.time.DateTime
+import slick.dbio.DBIOAction
 import slick.dbio.Effect.{Read, Write}
 import slick.driver.PostgresDriver.api._
 import slick.jdbc.GetResult
@@ -115,20 +118,21 @@ object LunchTableRows
             WHERE lt.start_time > ${time}
             AND lt.active = 'true'
             AND p.active = 'true'
-            AND u.email = ${email};
+            AND u.email = ${email}
+          ORDER BY lt.start_time;
       """.as[(LunchRow, RestaurantRow)]
   }
 
-  def getLunchAfter(time: DateTime) =
+  def getLunchAfter(time: DateTime): DBIOAction[Seq[LunchDetail], NoStream, Read] =
   {
     val q = for {
-      lunch <- lunchTableRows.filter(_.startTime > time)
+      lunch <- lunchTableRows.filter(_.startTime > time).filter(_.active === true)
       restaurant <- Restaurants.restaurants filter (lunch.restaurantId === _.id)
     } yield {
       (lunch, restaurant)
     }
 
-    q.result
+    q.result.map(a => a.map(b => LunchDetail(b._1, b._2)))
   }
 
   def getLunchWithOpenSpotsAfter(email: String, time: DateTime) =
@@ -163,7 +167,8 @@ object LunchTableRows
           WHERE lt.start_time > ${time}
           AND lt.active = 'true'
           AND lt.max_size > coalesce(pt.participants, 0)
-         ;
+          ORDER BY lt.start_time
+          ;
       """.as[(LunchRow, RestaurantRow, Int, Int)]
   }
 

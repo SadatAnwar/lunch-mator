@@ -9,7 +9,8 @@ import play.api.mvc.{Action, AnyContent}
 import com.google.inject.Inject
 import services.GoogleAuthorizationService
 
-class GoogleAuthenticationController @Inject()(googleAuthorizationService: GoogleAuthorizationService) extends AuthorizationController {
+class GoogleAuthenticationController @Inject()(googleAuthorizationService: GoogleAuthorizationService) extends AuthorizationController
+{
 
   def authorize(): Action[AnyContent] = Action.async { request =>
     val params = request.queryString.map { case (k, v) => k -> v.mkString }
