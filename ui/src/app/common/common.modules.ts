@@ -8,17 +8,20 @@ import {InvitationService} from '../services/invitation.service';
 import {UserLookupService} from '../services/user-lookup.service';
 import {AboutComponent} from './about/about.component';
 import {AlertComponent} from './alert/alert.component';
-import {AutoCompleteComponent} from './auto-complete/auto-complete.component';
 import {ErrorDetailComponent} from './error-details/error-detail.component';
 import {UserSelectComponent} from './user-select/user-select.component';
 import {WelcomeComponent} from './welcome/welcome.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, AppRoutingModule, SelectModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AppRoutingModule,
+    SelectModule,
+  ],
   declarations: [
     AboutComponent,
     AlertComponent,
-    AutoCompleteComponent,
     ErrorDetailComponent,
     UserSelectComponent,
     WelcomeComponent
@@ -26,7 +29,6 @@ import {WelcomeComponent} from './welcome/welcome.component';
   exports: [
     AboutComponent,
     AlertComponent,
-    AutoCompleteComponent,
     ErrorDetailComponent,
     UserSelectComponent,
     WelcomeComponent

@@ -1,4 +1,5 @@
-import {Component, trigger, state, animate, transition, style} from '@angular/core';
+import {Component} from '@angular/core';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import {AlertService} from '../../services/alert.service';
 import {Alert} from '../types/Alert';
 

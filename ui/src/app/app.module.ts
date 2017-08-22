@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CollapseModule} from 'ngx-bootstrap/collapse';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {AppComponent} from './app.component';
@@ -19,6 +20,7 @@ import {PlatformIdentificationService} from './services/platform-identification.
     AuthenticationModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
+    BrowserAnimationsModule,
     CollapseModule.forRoot(),
     CommonModules,
     HttpModule,

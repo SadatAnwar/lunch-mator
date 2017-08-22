@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http} from '@angular/http';
+import {Headers, Http, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs';
 import {InvitationDto} from '../types';
 
@@ -14,8 +14,6 @@ export class InvitationService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(`${this.invitationUrl}`, invite, headers).map(() => {
-      return
-    })
+    return this.http.post(`${this.invitationUrl}`, invite, new RequestOptions({headers: headers}));
   }
 }
