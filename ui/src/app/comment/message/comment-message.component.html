@@ -1,4 +1,6 @@
 <div class="message">
-  <div class="message-author">{{message.author}} <small style="font-size: 80%">at {{message.createdAt | date:"h:mm a"}}</small></div>
+  <div class="comment-header">{{message.author}}
+    <small style="font-size: 80%">wrote at {{message.createdAt | date:"h:mm a"}}</small>
+  </div>
   <div class="message-content">{{message.message}}</div>
 </div>

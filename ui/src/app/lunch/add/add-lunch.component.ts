@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Response} from '@angular/http';
-import {Router, Params, ActivatedRoute} from '@angular/router';
-import {CompleterData, CompleterService, CompleterItem} from 'ng2-completer';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {CompleterData, CompleterItem, CompleterService} from 'ng2-completer';
 import 'rxjs/add/observable/of';
 import {UserSelectComponent} from '../../common/user-select/user-select.component';
 import {AlertService} from '../../services/alert.service';
@@ -122,7 +122,7 @@ export class AddLunchComponent implements OnInit {
 
   private validateForm(createLunchDto: CreateLunchDto): boolean {
     if (createLunchDto.lunchName.length > 40) {
-      this.alertService.error("Lunch name cannot be more than 20 characters");
+      this.alertService.error("Lunch name cannot be more than 40 characters");
       return false;
     }
 
@@ -137,8 +137,14 @@ export class AddLunchComponent implements OnInit {
       return false;
     }
 
-    if (createLunchDto.startTime < new Date().getMilliseconds()) {
+    if (createLunchDto.startTime < new Date().getTime()) {
       this.alertService.error("Pretty sure time travel ain't invented yet! Your lunch cant be in the past");
+      return false;
+    }
+    let twoMonths = new Date();
+    twoMonths.setDate(twoMonths.getDate() + 60);
+    if (createLunchDto.startTime > twoMonths.getTime()) {
+      this.alertService.error("You can't surely plan that far ahead? your lunch is too far in the future");
       return false;
     }
 
@@ -174,10 +180,9 @@ export class AddLunchComponent implements OnInit {
     this.startMin = 0;
   }
 
-  public isWindows(){
+  public isWindows() {
     return this.platformIdentificationService.isWindows();
   }
-
 
   private yearYY(date: Date) {
     return date.getFullYear() - 2000;
