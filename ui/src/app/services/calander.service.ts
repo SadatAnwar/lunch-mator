@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+
 declare var ics: any;
 
 @Injectable()
@@ -16,20 +17,21 @@ export class CalenderService {
   }
 
   format(date: Date) {
+    let now = new Date();
+
     let mm = this.format2Digit(date.getMonth() + 1); // getMonth() is zero-based
     let dd = this.format2Digit(date.getDate());
     let HH = this.format2Digit(date.getHours());
     let MM = this.format2Digit(date.getMinutes());
     let mmdd = [dd, mm].join('.');
     let hhmm = [HH, MM].join(':');
-    return mmdd + " (" + CalenderService.DAYS[date.getDay()] + ") " + hhmm;
-  }
+    let day = CalenderService.DAYS[date.getDay()];
 
-  private getEndDateTime(start: Date): Date {
-    let endDate = new Date(start.getTime());
-    let endHour = endDate.getHours() + 1;
-    endDate.setHours(endHour);
-    return endDate;
+    if (date.getFullYear() == now.getFullYear() && date.getMonth() == now.getMonth()) {
+      day = date.getDate() == now.getDate() ? 'Today' : date.getDate() - now.getDate() == 1 ? 'Tomorrow' : CalenderService.DAYS[date.getDay()];
+    }
+
+    return mmdd + " (" + day + ") " + hhmm;
   }
 
   private format2Digit(n: number): string {
