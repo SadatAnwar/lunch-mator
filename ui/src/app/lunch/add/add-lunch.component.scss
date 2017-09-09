@@ -1,3 +1,33 @@
 .typeahead-container.dropdown-menu {
- width: 100%;
+  width: 100%;
+}
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 17px;
+  color: inherit;
+}
+
+.completer-row {
+  display: inherit;
+}
+
+.completer-selected-row {
+  background-color: lightblue;
+  color: #ffffff;
+}
+
+.completer-row p {
+  position: relative;
+  top: 50%;
+  transform: translateY(50%);
+}
+
+.completer-dropdown-holder {
+  position: absolute;
+  background: white;
+  border: solid #000;
+  border-width: 1px 1px;
+  width: 20em;
 }

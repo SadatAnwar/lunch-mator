@@ -11,6 +11,14 @@ import {AlertComponent} from './alert/alert.component';
 import {ErrorDetailComponent} from './error-details/error-detail.component';
 import {UserSelectComponent} from './user-select/user-select.component';
 import {WelcomeComponent} from './welcome/welcome.component';
+import {
+  MdButtonModule,
+  MdCardModule,
+  MdDatepickerModule,
+  MdInputModule,
+  MdNativeDateModule,
+  MdToolbarModule
+} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -18,6 +26,12 @@ import {WelcomeComponent} from './welcome/welcome.component';
     FormsModule,
     AppRoutingModule,
     SelectModule,
+    MdCardModule,
+    MdToolbarModule,
+    MdButtonModule,
+    MdNativeDateModule,
+    MdDatepickerModule,
+    MdInputModule,
   ],
   declarations: [
     AboutComponent,
@@ -31,7 +45,13 @@ import {WelcomeComponent} from './welcome/welcome.component';
     AlertComponent,
     ErrorDetailComponent,
     UserSelectComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    MdCardModule,
+    MdToolbarModule,
+    MdButtonModule,
+    MdNativeDateModule,
+    MdDatepickerModule,
+    MdInputModule
   ],
   providers: [UserLookupService, AlertService, InvitationService]
 })

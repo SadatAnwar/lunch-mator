@@ -2,16 +2,15 @@ package controllers
 
 import javax.inject.Inject
 
-import play.api.Logger
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+
+import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent, Controller, EssentialAction}
+
 import services.{AuthenticatedService, UserService}
 
-class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userService: UserService)(implicit db: DatabaseConfigProvider) extends AuthenticatedService with Controller
-{
+class Application @Inject()(dbConfigProvider: DatabaseConfigProvider, userService: UserService)(implicit db: DatabaseConfigProvider) extends AuthenticatedService with Controller {
 
   def secured(): EssentialAction = async {
     request =>

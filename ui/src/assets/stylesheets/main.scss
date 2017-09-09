@@ -1,6 +1,3 @@
-@import url("registration-form.scss");
-@import url("theme.scss");
-
 html, body {
   height: 100vh;
 }
@@ -95,7 +92,7 @@ header {
   }
 }
 
-.message-content{
+.message-content {
   padding-left: 3em;
   padding-bottom: 1em;
 }
