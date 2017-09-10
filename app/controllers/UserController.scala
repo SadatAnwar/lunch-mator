@@ -30,7 +30,7 @@ class UserController @Inject()(userService: UserService)(implicit db: DatabaseCo
 
   def createUser(): Action[JsValue] = async(parse.json) { request =>
     val user = request.body.as[UserRow]
-    userService.addUser(user).map {
+    userService.addOrUpdateUser(user).map {
       result => Created
     }.recoverWith {
       case e: Exception => Future(InternalServerError("Already exists " + e.getMessage))
