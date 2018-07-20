@@ -1,41 +1,39 @@
 package controllers
 
 import javax.inject.Inject
-
-import scala.concurrent.{ExecutionContext, Future}
-
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
-import play.api.mvc.{Action, AnyContent, Controller, EssentialAction}
+import play.api.mvc.{Action, AnyContent, EssentialAction}
+import scala.concurrent.{ExecutionContext, Future}
+import services.UserService
 
-import services.{AuthenticatedService, UserService}
-
-class Application @Inject()(userService: UserService)(implicit db: DatabaseConfigProvider, ec: ExecutionContext) extends AuthenticatedService with Controller {
+class Application @Inject()(userService: UserService, assets: Assets)(implicit db: DatabaseConfigProvider, ec: ExecutionContext) extends AuthenticatedController {
+  val uiResourceRoot = "/public/ui/"
 
   def secured(): EssentialAction = async {
     request =>
-      Future.successful(Ok(views.html.index()))
+      assets.at(uiResourceRoot, "index.html").apply(request)
   }
 
   def securedWithParam(id: Any): EssentialAction = async {
     request =>
       Logger.info(s"Secured route:[$id] requested")
-      Future.successful(Ok(views.html.index()))
+      assets.at(uiResourceRoot, "index.html").apply(request)
   }
 
   def unSecure(): Action[AnyContent] = Action.async { request =>
     val params = request.queryString.map { case (k, v) => k -> v.mkString }
     val origin = params.getOrElse("origin", "/welcome")
     if (request.session.get("email").isDefined) {
-      userService.validateUser(request.session.get("email").get).map { valid =>
+      userService.validateUser(request.session.get("email").get).flatMap { valid =>
         if (valid) {
-          Redirect("/welcome")
+          Future.successful(Redirect("/welcome"))
         } else {
-          Ok(views.html.index())
+          assets.at(uiResourceRoot, "index.html").apply(request)
         }
       }
     } else {
-      Future.successful(Ok(views.html.index()))
+      assets.at(uiResourceRoot, "index.html").apply(request)
     }
   }
 }
