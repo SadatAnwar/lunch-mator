@@ -8,15 +8,18 @@ import com.google.inject.Inject
 import models.UserRow
 import persistence.repository.Users
 
-class UserService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider) extends Service
-{
+class UserService @Inject()(implicit val dbConfigDataProvider: DatabaseConfigProvider) extends Service {
 
   def getUserById(userId: Int): Future[UserRow] = usingDB {
     Users.findById(userId)
   }
 
-  def addUser(user: UserRow): Future[Int] = usingDB {
-    Users.addNewUser(user)
+  def addOrUpdateUser(user: UserRow): Future[Int] = usingDB {
+    Users.addOrUpdateUser(user)
+  }
+
+  def findUserWithEmail(email: String): Future[Option[UserRow]] = usingDB {
+    Users.findUserByEmail(email)
   }
 
   def getAllUsers: Future[Seq[UserRow]] = usingDB {

@@ -4,7 +4,8 @@ import {CommentDto} from '../../types';
 
 @Component({
   selector: 'message',
-  templateUrl: './comment-message.component.html'
+  templateUrl: './comment-message.component.html',
+  styleUrls: ['./comment-message.component.scss']
 })
 
 @Injectable()
@@ -19,7 +20,7 @@ export class CommentMessageComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getUser(this.message.authorId)
       .subscribe((response: any) => {
-        this.message.author  = `${response.firstName} ${response.lastName}`;
+        this.message.author = `${response.firstName} ${response.lastName}`;
       });
   }
 

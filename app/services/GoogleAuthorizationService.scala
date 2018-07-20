@@ -4,48 +4,48 @@ import java.util.Base64
 
 import scala.concurrent.{ExecutionContext, Future}
 
-import play.Configuration
 import play.api.Logger
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 
 import client.GoogleAuthenticationClient
 import com.google.inject.Inject
-import exceptions.GoogleAuthenticationException
+import exceptions.{GoogleAuthenticationException, InvalidDomainException}
 import mappers.UserMapper
 import models.GoogleModels._
 import persistence.repository.OAuthUser
 
-class GoogleAuthorizationService @Inject()(configuration: Configuration, googleAuthenticationClient: GoogleAuthenticationClient, userService: UserService)(implicit val dbConfigDataProvider: DatabaseConfigProvider, ec: ExecutionContext) extends Service
-{
+class GoogleAuthorizationService @Inject()(googleAuthenticationClient: GoogleAuthenticationClient, userService: UserService)(implicit val df: DatabaseConfigProvider, ec: ExecutionContext) extends Service {
 
-  def getGoogleSignInPage(origin: String = "/welcome"): String =
-  {
+  def getGoogleSignInPage(origin: String = "/welcome"): String = {
     googleAuthenticationClient.getGoogleSignInPage(origin)
   }
 
-  def getGoogleAuthorization(authorizationCode: String): Future[GoogleAuthorization] =
-  {
+  def getGoogleAuthorization(authorizationCode: String): Future[GoogleAuthorization] = {
     googleAuthenticationClient.getGoogleAuthorization(authorizationCode)
   }
 
-  def googleAuthorize(params: Map[String, String]): Future[GoogleUserInformation] =
-  {
-    val authorizationCode = params.getOrElse("code", throw new GoogleAuthenticationException)
+  def googleAuthorize(params: Map[String, String]): Future[GoogleUserInformation] = {
+    val authorizationCode = params.getOrElse("code", throw GoogleAuthenticationException("/"))
+
     val googleUserData = getGoogleAuthorization(authorizationCode)
-    googleUserData.map { googleAuthorization =>
+
+    googleUserData.flatMap { googleAuthorization =>
       val googleUserInformation = decodeUserData(googleAuthorization)
-      saveNewUser(googleUserInformation).map { insertCount =>
-        if (insertCount != 0) {
-          saveOAuth(googleUserInformation, googleAuthorization)
+
+      if (googleUserInformation.email.endsWith("rebuy.com")) {
+        saveUser(googleUserInformation).map { userRow =>
+          Logger.info(s"User:[$userRow] logged-in")
+          googleUserInformation
         }
       }
-      googleUserInformation
+      else {
+        throw InvalidDomainException(googleUserInformation.email)
+      }
     }
   }
 
-  private def decodeUserData(googleAuthorization: GoogleAuthorization) =
-  {
+  private def decodeUserData(googleAuthorization: GoogleAuthorization) = {
     val tokens = googleAuthorization.id_token.split("\\.")
     Logger.debug(s"Google response: [${googleAuthorization.toString}]")
     Logger.debug(s"Decoding: [${tokens(1)}]")
@@ -56,8 +56,7 @@ class GoogleAuthorizationService @Inject()(configuration: Configuration, googleA
     OAuthUser.addNewUser(UserMapper.map(googleUserInformation, googleAuthorization))
   }
 
-  private def saveNewUser(googleUserInformation: GoogleUserInformation) =
-  {
-    userService.addUser(UserMapper.map(googleUserInformation))
+  private def saveUser(googleUserInformation: GoogleUserInformation) = {
+    userService.addOrUpdateUser(UserMapper.map(googleUserInformation))
   }
 }
